@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { api } from "../../convex/_generated/api";
-import { ConvexHttpClient } from "convex/browser";
-
-const convex = new ConvexHttpClient(process.env.VITE_CONVEX_URL!);
+import { convex } from "./convex";
+import { Id } from "convex/_generated/dataModel";
+import z from "zod";
 
 export const saveDogAction = createServerFn({ method: "POST" })
   .inputValidator((data: FormData) => {
@@ -18,7 +18,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
     const gender = data.get("gender") as string;
     const hdbApproved = data.get("hdbApproved") as string;
     const birthday = data.get("birthday") as string;
-    const welfareGroupId = data.get("welfareGroupId") as string;
+    const welfareGroupId = data.get("welfareGroupId") as Id<"welfareGroups">;
 
     let storageId = data.get("existingStorageId") as string | undefined;
 
@@ -50,5 +50,13 @@ export const saveDogAction = createServerFn({ method: "POST" })
       await convex.mutation(api.dogs.add, payload);
     }
 
+    return { success: true };
+  });
+
+export const deleteDogAction = createServerFn({ method: "POST" })
+  .inputValidator(z.string())
+  .handler(async ({ data: dogId }) => {
+    console.log(dogId);
+    await convex.mutation(api.dogs.remove, { id: dogId as Id<"dogs"> });
     return { success: true };
   });

@@ -13,8 +13,8 @@ import { contactAction } from "~/funcs/email";
 
 export const Route = createFileRoute("/dogs/$dogId")({
   //loader: ({ params: { dogId } }) => useSuspenseQuery(convexQuery(api.dogs.list, {})),
-  loader: async ({ params, context: { queryClient } }) => {
-    return await queryClient.ensureQueryData(
+  loader: async ({ params, context }) => {
+    return await context.queryClient.ensureQueryData(
       convexQuery(api.dogs.get, { id: params.dogId as Id<"dogs"> })
     );
   },
@@ -35,8 +35,8 @@ function PostComponent() {
       email: "",
       message: "",
     },
-    //validatorAdapter: zodValidator(),
     onSubmit: async ({ value }) => {
+      //TODO add dogId
       await contactAction({ data: value });
       alert("Message sent successfully!");
       form.reset();

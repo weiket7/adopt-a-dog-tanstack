@@ -6,3 +6,11 @@ export const list = query({
     return await ctx.db.query("welfareGroups").collect();
   },
 });
+
+export const getById = query({
+  args: { id: v.id("welfareGroups") },
+  handler: async (ctx, args) => {
+    const group = await ctx.db.get(args.id);
+    return group;
+  },
+});

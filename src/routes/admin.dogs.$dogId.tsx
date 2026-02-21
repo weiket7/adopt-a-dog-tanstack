@@ -1,13 +1,14 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { useMutation } from "@tanstack/react-query";
-import { saveDogAction } from "~/funcs/dog-actions";
+import { deleteDogAction, saveDogAction } from "~/funcs/dog-actions";
 import { useMutation as useConvexMutation } from "convex/react";
 import { api } from "convex/_generated/api";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 import { FieldError } from "~/components/FieldError";
 import { Id } from "convex/_generated/dataModel";
+import { ConvexHttpClient } from "convex/browser";
 
 export const Route = createFileRoute("/admin/dogs/$dogId")({
   component: DogFormPage,
@@ -18,21 +19,36 @@ function DogFormPage() {
   const router = useRouter();
 
   const isEdit = dogId !== "add";
-  // Fetch existing data if we have an ID
+
   const existingDog = useQuery(
     api.dogs.get,
     isEdit ? { id: dogId as any } : "skip"
   );
 
-  const welfareGroups = useQuery(api.welfareGroups.list) || [];
+  const welfareGroups = useQuery(api.welfareGroups.list, {}) || [];
 
-  const { mutate, isPending } = useMutation<
-    { success: boolean },
-    Error,
-    FormData
-  >({
-    mutationFn: async (variables) => {
-      return saveDogAction({ data: variables });
+  const { mutate: deleteDog, isPending: isDeleting } = useMutation({
+    mutationFn: async (variables: string) => {
+      return await deleteDogAction({ data: variables });
+    },
+    onSuccess: () => {
+      router.invalidate().then(() => {
+        router.navigate({ to: "/admin/dogs" });
+      });
+    },
+  });
+
+  //You should use mutateAsync only if you need to do something in your onClick function immediately after the deletion finishes,
+  //but before the onSuccess logic kicks in, or if you want to use a try/catch block inside the component.
+  const {
+    mutate: upsertDog,
+    isPending,
+    isError,
+    error,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async (variables: FormData) => {
+      return await saveDogAction({ data: variables });
     },
     onSuccess: () => {
       router.invalidate().then(() => {
@@ -40,21 +56,8 @@ function DogFormPage() {
       });
     },
     onError: (error) => {
-      // This will tell you if it's a 500 error or a network issue
       console.error("Submission Error:", error);
       alert("Submission failed. Check console for details.");
-    },
-  });
-
-  const removeDog = useConvexMutation(api.dogs.remove);
-  const { mutateAsync: deleteDog, isPending: isDeleting } = useMutation({
-    mutationFn: async (id: string) => {
-      return await removeDog({ id: id as Id<"dogs"> });
-    },
-    onSuccess: () => {
-      router.invalidate().then(() => {
-        router.navigate({ to: "/admin/dogs" });
-      });
     },
   });
 
@@ -82,7 +85,7 @@ function DogFormPage() {
         formData.append("existingStorageId", existingDog.imageStorageId);
       }
 
-      mutate(formData);
+      upsertDog(formData);
     },
   });
 
@@ -94,7 +97,7 @@ function DogFormPage() {
       <div className="row justify-content-center">
         <div className="col-lg-8">
           <h4 className="mb-3">
-            {isEdit ? `Update ${existingDog?.name}` : "Register New Dog"}
+            {isEdit ? `Update ${existingDog?.name}` : "Add Dog"}
           </h4>
 
           <form

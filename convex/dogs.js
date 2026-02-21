@@ -76,7 +76,6 @@ export const list = query({
     },
     handler: async (ctx, args) => {
       const { id, ...data } = args;
-      // .patch actually saves the new data to the existing record
       await ctx.db.patch(id, data); 
       return id;
     },
@@ -89,7 +88,8 @@ export const list = query({
       if (!dog) return;
   
       if (dog.imageStorageId) {
-        await ctx.storage.delete({ storageId: dog.imageStorageId });
+        // NOT await ctx.storage.delete({ storageId: dog.imageStorageId });
+        await ctx.storage.delete(dog.imageStorageId);
       }
   
       await ctx.db.delete(args.id);

@@ -2,12 +2,7 @@
 
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext } from "@tanstack/react-router";
-import {
-  HeadContent,
-  Link,
-  Scripts,
-  createRootRoute,
-} from "@tanstack/react-router";
+import { HeadContent, Link, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import * as React from "react";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
@@ -34,7 +29,7 @@ export const Route = createRootRouteWithContext<{
       }),
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
+      //{ rel: "stylesheet", href: appCss },
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
@@ -83,6 +78,40 @@ const menu = [
   {
     name: "Events",
     link: "/events",
+  },
+  {
+    name: "Listings",
+    link: "",
+    subMenu: [
+      {
+        name: "Dog Runs",
+        link: "/dog-runs",
+      },
+      {
+        name: "Pet Stores",
+        link: "/pet-stores",
+      },
+      {
+        name: "Vets",
+        link: "/vets",
+      },
+      {
+        name: "Pet Cafes",
+        link: "/pet-cafes",
+      },
+      {
+        name: "Pet Transport",
+        link: "/pet-transport",
+      },
+      {
+        name: "Grooming",
+        link: "/grooming",
+      },
+      {
+        name: "Services", //boarding, training, portraits (rachel)
+        link: "/services",
+      },
+    ],
   },
   // {
   //   name: ".NET Starter Kit",
@@ -173,6 +202,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <div className="body">
           <header
             id="header"
+            className="header-effect-shrink"
             suppressHydrationWarning={true}
             data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyChangeLogo': false, 'stickyStartAt': 0}"
           >
@@ -196,9 +226,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                   </div>
                   <div className="header-column justify-content-end">
                     <div className="header-row">
-                      <div className="header-nav header-nav-links order-2 order-lg-1">
+                      <div className="header-nav header-nav-line header-nav-top-line header-nav-top-line-with-border order-2 order-lg-1">
                         <div className="header-nav-main header-nav-main-square header-nav-main-effect-2 header-nav-main-sub-effect-1">
-                          <nav className="">
+                          <nav className="collapse">
                             {/* <nav className="collapse"> */}
                             <ul className="nav nav-pills" id="mainNav">
                               {menu.map((x) => (
@@ -211,6 +241,21 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                                   >
                                     {x.name}
                                   </Link>
+                                  {x.subMenu && (
+                                    <ul className="dropdown-menu">
+                                      {x.subMenu.map((sub) => (
+                                        <li key={sub.link}>
+                                          <Link
+                                            to={sub.link}
+                                            suppressHydrationWarning={true}
+                                            className="dropdown-item"
+                                          >
+                                            {sub.name}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
                                 </li>
                               ))}
                             </ul>
@@ -223,45 +268,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                         >
                           <i className="fas fa-bars"></i>
                         </button>
-                      </div>
-                      <div className="header-nav-features header-nav-features-no-border header-nav-features-lg-show-border order-1 order-lg-2">
-                        <div className="header-nav-feature header-nav-features-search d-inline-flex">
-                          {/* <!-- <a
-                            href="#"
-                            className="header-nav-features-toggle text-decoration-none"
-                            data-focus="headerSearch"
-                            aria-label="Search"
-                            ><i className="fas fa-search header-nav-top-icon"></i></a
-                          >
-                          <div
-                            className="header-nav-features-dropdown header-nav-features-dropdown-mobile-fixed"
-                            id="headerTopSearchDropdown"
-                          >
-                            <form
-                              role="search"
-                              action="page-search-results.html"
-                              method="get"
-                            >
-                              <div className="simple-search input-group">
-                                <input
-                                  className="form-control text-1"
-                                  id="headerSearch"
-                                  name="q"
-                                  type="search"
-                                  value=""
-                                  placeholder="Search..."
-                                />
-                                <button
-                                  className="btn"
-                                  type="submit"
-                                  aria-label="Search"
-                                >
-                                  <i className="fas fa-search header-nav-top-icon"></i>
-                                </button>
-                              </div>
-                            </form>
-                          </div> --> */}
-                        </div>
                       </div>
                     </div>
                   </div>

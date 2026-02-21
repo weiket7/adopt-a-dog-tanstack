@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelfareGroupsRouteImport } from './routes/welfare-groups'
+import { Route as VetsRouteImport } from './routes/vets'
 import { Route as UsersRouteImport } from './routes/users'
 import { Route as RedirectRouteImport } from './routes/redirect'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DogRunsRouteImport } from './routes/dog-runs'
 import { Route as DeferredRouteImport } from './routes/deferred'
 import { Route as CustomScriptDotjsRouteImport } from './routes/customScript[.]js'
 import { Route as PathlessLayoutRouteImport } from './routes/_pathlessLayout'
@@ -37,6 +39,11 @@ const WelfareGroupsRoute = WelfareGroupsRouteImport.update({
   path: '/welfare-groups',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VetsRoute = VetsRouteImport.update({
+  id: '/vets',
+  path: '/vets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsersRoute = UsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -55,6 +62,11 @@ const PostsRoute = PostsRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DogRunsRoute = DogRunsRouteImport.update({
+  id: '/dog-runs',
+  path: '/dog-runs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DeferredRoute = DeferredRouteImport.update({
@@ -148,10 +160,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/deferred': typeof DeferredRoute
+  '/dog-runs': typeof DogRunsRoute
   '/login': typeof LoginRoute
   '/posts': typeof PostsRouteWithChildren
   '/redirect': typeof RedirectRoute
   '/users': typeof UsersRouteWithChildren
+  '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
   '/api/users': typeof ApiUsersRouteWithChildren
   '/dogs/$dogId': typeof DogsDogIdRoute
@@ -170,8 +184,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/deferred': typeof DeferredRoute
+  '/dog-runs': typeof DogRunsRoute
   '/login': typeof LoginRoute
   '/redirect': typeof RedirectRoute
+  '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
   '/api/users': typeof ApiUsersRouteWithChildren
   '/dogs/$dogId': typeof DogsDogIdRoute
@@ -192,10 +208,12 @@ export interface FileRoutesById {
   '/_pathlessLayout': typeof PathlessLayoutRouteWithChildren
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/deferred': typeof DeferredRoute
+  '/dog-runs': typeof DogRunsRoute
   '/login': typeof LoginRoute
   '/posts': typeof PostsRouteWithChildren
   '/redirect': typeof RedirectRoute
   '/users': typeof UsersRouteWithChildren
+  '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
   '/_pathlessLayout/_nested-layout': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/api/users': typeof ApiUsersRouteWithChildren
@@ -217,10 +235,12 @@ export interface FileRouteTypes {
     | '/'
     | '/customScript.js'
     | '/deferred'
+    | '/dog-runs'
     | '/login'
     | '/posts'
     | '/redirect'
     | '/users'
+    | '/vets'
     | '/welfare-groups'
     | '/api/users'
     | '/dogs/$dogId'
@@ -239,8 +259,10 @@ export interface FileRouteTypes {
     | '/'
     | '/customScript.js'
     | '/deferred'
+    | '/dog-runs'
     | '/login'
     | '/redirect'
+    | '/vets'
     | '/welfare-groups'
     | '/api/users'
     | '/dogs/$dogId'
@@ -260,10 +282,12 @@ export interface FileRouteTypes {
     | '/_pathlessLayout'
     | '/customScript.js'
     | '/deferred'
+    | '/dog-runs'
     | '/login'
     | '/posts'
     | '/redirect'
     | '/users'
+    | '/vets'
     | '/welfare-groups'
     | '/_pathlessLayout/_nested-layout'
     | '/api/users'
@@ -285,10 +309,12 @@ export interface RootRouteChildren {
   PathlessLayoutRoute: typeof PathlessLayoutRouteWithChildren
   CustomScriptDotjsRoute: typeof CustomScriptDotjsRoute
   DeferredRoute: typeof DeferredRoute
+  DogRunsRoute: typeof DogRunsRoute
   LoginRoute: typeof LoginRoute
   PostsRoute: typeof PostsRouteWithChildren
   RedirectRoute: typeof RedirectRoute
   UsersRoute: typeof UsersRouteWithChildren
+  VetsRoute: typeof VetsRoute
   WelfareGroupsRoute: typeof WelfareGroupsRoute
   ApiUsersRoute: typeof ApiUsersRouteWithChildren
   DogsDogIdRoute: typeof DogsDogIdRoute
@@ -304,6 +330,13 @@ declare module '@tanstack/react-router' {
       path: '/welfare-groups'
       fullPath: '/welfare-groups'
       preLoaderRoute: typeof WelfareGroupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vets': {
+      id: '/vets'
+      path: '/vets'
+      fullPath: '/vets'
+      preLoaderRoute: typeof VetsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/users': {
@@ -332,6 +365,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dog-runs': {
+      id: '/dog-runs'
+      path: '/dog-runs'
+      fullPath: '/dog-runs'
+      preLoaderRoute: typeof DogRunsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/deferred': {
@@ -527,10 +567,12 @@ const rootRouteChildren: RootRouteChildren = {
   PathlessLayoutRoute: PathlessLayoutRouteWithChildren,
   CustomScriptDotjsRoute: CustomScriptDotjsRoute,
   DeferredRoute: DeferredRoute,
+  DogRunsRoute: DogRunsRoute,
   LoginRoute: LoginRoute,
   PostsRoute: PostsRouteWithChildren,
   RedirectRoute: RedirectRoute,
   UsersRoute: UsersRouteWithChildren,
+  VetsRoute: VetsRoute,
   WelfareGroupsRoute: WelfareGroupsRoute,
   ApiUsersRoute: ApiUsersRouteWithChildren,
   DogsDogIdRoute: DogsDogIdRoute,

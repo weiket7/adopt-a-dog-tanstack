@@ -79,3 +79,17 @@ export const list = query({
       return id;
     },
   });
+
+  export const remove = mutation({
+    args: { id: v.id("dogs") },
+    handler: async (ctx, args) => {
+      const dog = await ctx.db.get(args.id);
+      if (!dog) return;
+  
+      if (dog.imageStorageId) {
+        await ctx.storage.delete({ storageId: dog.imageStorageId });
+      }
+  
+      await ctx.db.delete(args.id);
+    },
+  });

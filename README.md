@@ -19,6 +19,10 @@ npx @convex-dev/auth generate-keys
 As of Feb 2026, latest version is 13
 https://preview.themeforest.net/item/porto-responsive-html5-template/full_screen_preview/4106987
 
+Services like artist
+Recommended products
+Boarding
+
 # TanStack Start - Basic Example
 
 This is the basic TanStack Start example, demonstrating the fundamentals of building applications with TanStack Router and TanStack Start.

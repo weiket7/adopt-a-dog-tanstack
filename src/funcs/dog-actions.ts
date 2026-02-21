@@ -12,12 +12,11 @@ export const saveDogAction = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }: { data: FormData }) => {
-    console.log("Server received dog data for:", data.get("name"));
     const dogId = data.get("dogId") as string | null;
     const imageFile = data.get("image") as File;
     const name = data.get("name") as string;
     const gender = data.get("gender") as string;
-    const hdbApproved = data.get("hdb-approved") as string;
+    const hdbApproved = data.get("hdbApproved") as string;
     const birthday = data.get("birthday") as string;
 
     let storageId = data.get("existingStorageId") as string | undefined;

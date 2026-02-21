@@ -1,9 +1,13 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { useMutation } from "@tanstack/react-query";
-import * as React from "react";
 import { saveDogAction } from "~/funcs/dog-actions";
+import { useMutation as useConvexMutation } from "convex/react";
 import { api } from "convex/_generated/api";
+import { useForm } from "@tanstack/react-form";
+import { z } from "zod";
+import { FieldError } from "~/components/FieldError";
+import { Id } from "convex/_generated/dataModel";
 
 export const Route = createFileRoute("/admin/dogs/$dogId")({
   component: DogFormPage,
@@ -20,15 +24,11 @@ function DogFormPage() {
     isEdit ? { id: dogId as any } : "skip"
   );
 
-  console.log(existingDog);
-
-  // Use TanStack Query's useMutation to wrap the Server Function
   const { mutate, isPending } = useMutation<
     { success: boolean },
     Error,
     FormData
   >({
-    // 2. Variables here is now correctly inferred as FormData
     mutationFn: async (variables) => {
       return saveDogAction({ data: variables });
     },
@@ -44,133 +44,218 @@ function DogFormPage() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  const removeDog = useConvexMutation(api.dogs.remove);
+  const { mutateAsync: deleteDog, isPending: isDeleting } = useMutation({
+    mutationFn: async (id: string) => {
+      return await removeDog({ id: id as Id<"dogs"> });
+    },
+    onSuccess: () => {
+      router.invalidate().then(() => {
+        router.navigate({ to: "/admin/dogs" });
+      });
+    },
+  });
 
-    // Append context metadata for the server function
-    if (dogId) formData.append("dogId", dogId);
-    if (existingDog?.imageStorageId)
-      formData.append("existingStorageId", existingDog.imageStorageId);
+  const form = useForm({
+    defaultValues: {
+      name: existingDog?.name || "",
+      gender: existingDog?.gender || "Male",
+      hdbApproved: existingDog?.hdbApproved || "Yes",
+      birthday: existingDog?.birthday || "",
+      image: null as File | null,
+    },
+    onSubmit: async ({ value }) => {
+      const formData = new FormData();
 
-    mutate(formData);
-  };
+      formData.append("name", value.name);
+      formData.append("gender", value.gender);
+      formData.append("hdbApproved", value.hdbApproved);
+      formData.append("birthday", value.birthday);
+      if (value.image) formData.append("image", value.image);
+
+      if (isEdit) formData.append("dogId", dogId);
+      if (existingDog?.imageStorageId) {
+        formData.append("existingStorageId", existingDog.imageStorageId);
+      }
+
+      mutate(formData);
+    },
+  });
 
   if (isEdit && existingDog === undefined)
     return <div className="container p-5">Loading...</div>;
 
   return (
-    <div className="container py-4">
+    <div className="container">
       <div className="row justify-content-center">
         <div className="col-lg-8">
-          <h2 className="font-weight-bold mb-4">
+          <h4 className="mb-3">
             {isEdit ? `Update ${existingDog?.name}` : "Register New Dog"}
-          </h2>
+          </h4>
 
-          <form onSubmit={handleSubmit}>
-            <div className="card shadow-sm border-0 p-4">
-              <div className="mb-3">
-                <label className="form-label font-weight-bold">Name</label>
-                <input
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              form.handleSubmit();
+            }}
+          >
+            <div className="card">
+              <div className="card-body">
+                <form.Field
                   name="name"
-                  className="form-control"
-                  defaultValue={existingDog?.name}
-                  required
-                />
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label className="form-label font-weight-bold">Gender</label>
-                  <select
-                    name="gender"
-                    className="form-select"
-                    defaultValue={existingDog?.gender || "Male"}
-                  >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label font-weight-bold">
-                    HDB Approved
-                  </label>
-                  <select
-                    name="hdb-approved"
-                    className="form-select"
-                    defaultValue={existingDog?.hdbApproved || "Yes"}
-                  >
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label font-weight-bold">Birthday</label>
-                <input
-                  name="birthday"
-                  className="form-control"
-                  defaultValue={existingDog?.birthday}
-                  placeholder="YYYY-MM-DD"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="form-label font-weight-bold">Image</label>
-                {existingDog?.imageUrl && (
-                  <div className="mb-2">
-                    <img
-                      src={existingDog.imageUrl}
-                      className="rounded"
-                      style={{ width: 120, height: 120, objectFit: "cover" }}
-                      alt="Dog"
-                    />
-                    <p className="text-muted small mt-1">
-                      Leave blank to keep current image
-                    </p>
-                  </div>
-                )}
-                <input
-                  name="image"
-                  type="file"
-                  className="form-control"
-                  accept="image/*"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary btn-lg"
-                disabled={isPending}
-              >
-                {isPending ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2" />
-                    Saving...
-                  </>
-                ) : isEdit ? (
-                  "SAVE CHANGES"
-                ) : (
-                  "ADD DOG"
-                )}
-              </button>
-              {isEdit && (
-                <button
-                  type="button"
-                  className="btn btn-danger btn-lg"
-                  disabled={isPending}
-                  onClick={() => {
-                    if (confirm("Are you sure you want to delete this dog?")) {
-                      // Call your delete function here, e.g.:
-                      // deleteDogAction(dogId);
-                      alert("Delete functionality not implemented yet.");
-                    }
+                  validators={{
+                    onChange: z.string().min(1, "Name is required"),
                   }}
-                >
-                  Delete
-                </button>
-              )}
+                  children={(field) => (
+                    <div className="mb-3">
+                      <label className="">Name</label>
+                      <input
+                        className={`form-control ${field.state.meta.errors.length ? "is-invalid" : ""}`}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                />
+
+                <div className="row mb-3">
+                  <form.Field
+                    name="gender"
+                    children={(field) => (
+                      <div className="col-md-6">
+                        <label className="">Gender</label>
+                        <select
+                          className="form-control form-select"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </div>
+                    )}
+                  />
+
+                  <form.Field
+                    name="hdbApproved"
+                    children={(field) => (
+                      <div className="col-md-6">
+                        <label className="">HDB Approved</label>
+                        <select
+                          className="form-control form-select"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        >
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </div>
+                    )}
+                  />
+                </div>
+
+                <form.Field
+                  name="birthday"
+                  children={(field) => (
+                    <div className="mb-3">
+                      <label className="">Birthday</label>
+                      <input
+                        className="form-control"
+                        placeholder="YYYY-MM-DD"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                    </div>
+                  )}
+                />
+
+                <form.Field
+                  name="image"
+                  children={(field) => (
+                    <div className="mb-4">
+                      <label className="">Image</label>
+                      {existingDog?.imageUrl && (
+                        <div className="mb-2">
+                          <img
+                            src={existingDog.imageUrl}
+                            className="rounded"
+                            style={{
+                              width: 120,
+                              height: 120,
+                              objectFit: "cover",
+                            }}
+                            alt="Dog"
+                          />
+                          <p className="text-muted small mt-1">
+                            Leave blank to keep current
+                          </p>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        className="form-control"
+                        accept="image/*"
+                        onChange={(e) =>
+                          field.handleChange(e.target.files?.[0] || null)
+                        }
+                      />
+                    </div>
+                  )}
+                />
+
+                <form.Subscribe
+                  selector={(state) => [state.canSubmit]}
+                  children={([canSubmit]) => (
+                    <div className="d-grid gap-2">
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-lg"
+                        disabled={!canSubmit || isPending}
+                      >
+                        {isPending ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-2" />
+                            Saving...
+                          </>
+                        ) : isEdit ? (
+                          "Save"
+                        ) : (
+                          "Add"
+                        )}
+                      </button>
+
+                      {isEdit && (
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger"
+                          disabled={isPending || isDeleting}
+                          onClick={async () => {
+                            if (
+                              confirm(
+                                `Are you sure you want to delete ${existingDog?.name}?`
+                              )
+                            ) {
+                              await deleteDog(dogId);
+                            }
+                          }}
+                        >
+                          {isDeleting ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm me-2" />
+                              Deleting...
+                            </>
+                          ) : (
+                            "DELETE DOG"
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                />
+              </div>
             </div>
           </form>
         </div>

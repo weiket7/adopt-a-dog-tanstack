@@ -207,7 +207,7 @@ function Home() {
                     <i className="fa-solid fa-mars" />
                   ) : (
                     <i className="fa-solid fa-venus" />
-                  )}
+                  )}{" "}
                   <span>{x.gender}</span>
                   <br />
                   <i className="fa-solid fa-cake-candles" /> {toAge(x.birthday)}

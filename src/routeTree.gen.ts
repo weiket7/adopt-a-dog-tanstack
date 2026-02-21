@@ -11,24 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelfareGroupsRouteImport } from './routes/welfare-groups'
 import { Route as VetsRouteImport } from './routes/vets'
-import { Route as UsersRouteImport } from './routes/users'
-import { Route as RedirectRouteImport } from './routes/redirect'
-import { Route as PostsRouteImport } from './routes/posts'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DogRunsRouteImport } from './routes/dog-runs'
-import { Route as DeferredRouteImport } from './routes/deferred'
 import { Route as CustomScriptDotjsRouteImport } from './routes/customScript[.]js'
-import { Route as PathlessLayoutRouteImport } from './routes/_pathlessLayout'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UsersIndexRouteImport } from './routes/users.index'
-import { Route as PostsIndexRouteImport } from './routes/posts.index'
-import { Route as UsersUserIdRouteImport } from './routes/users.$userId'
-import { Route as PostsPostIdRouteImport } from './routes/posts.$postId'
 import { Route as DogsDogIdRouteImport } from './routes/dogs.$dogId'
 import { Route as ApiUsersRouteImport } from './routes/api/users'
 import { Route as PathlessLayoutNestedLayoutRouteImport } from './routes/_pathlessLayout/_nested-layout'
 import { Route as AdminDogsIndexRouteImport } from './routes/admin.dogs.index'
-import { Route as PostsPostIdDeepRouteImport } from './routes/posts_.$postId.deep'
 import { Route as ApiUsersUserIdRouteImport } from './routes/api/users.$userId'
 import { Route as AdminDogsDogIdRouteImport } from './routes/admin.dogs.$dogId'
 import { Route as PathlessLayoutNestedLayoutRouteBRouteImport } from './routes/_pathlessLayout/_nested-layout/route-b'
@@ -44,21 +34,6 @@ const VetsRoute = VetsRouteImport.update({
   path: '/vets',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UsersRoute = UsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RedirectRoute = RedirectRouteImport.update({
-  id: '/redirect',
-  path: '/redirect',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PostsRoute = PostsRouteImport.update({
-  id: '/posts',
-  path: '/posts',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -69,44 +44,15 @@ const DogRunsRoute = DogRunsRouteImport.update({
   path: '/dog-runs',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DeferredRoute = DeferredRouteImport.update({
-  id: '/deferred',
-  path: '/deferred',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CustomScriptDotjsRoute = CustomScriptDotjsRouteImport.update({
   id: '/customScript.js',
   path: '/customScript.js',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PathlessLayoutRoute = PathlessLayoutRouteImport.update({
-  id: '/_pathlessLayout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const UsersIndexRoute = UsersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => UsersRoute,
-} as any)
-const PostsIndexRoute = PostsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PostsRoute,
-} as any)
-const UsersUserIdRoute = UsersUserIdRouteImport.update({
-  id: '/$userId',
-  path: '/$userId',
-  getParentRoute: () => UsersRoute,
-} as any)
-const PostsPostIdRoute = PostsPostIdRouteImport.update({
-  id: '/$postId',
-  path: '/$postId',
-  getParentRoute: () => PostsRoute,
 } as any)
 const DogsDogIdRoute = DogsDogIdRouteImport.update({
   id: '/dogs/$dogId',
@@ -120,17 +66,12 @@ const ApiUsersRoute = ApiUsersRouteImport.update({
 } as any)
 const PathlessLayoutNestedLayoutRoute =
   PathlessLayoutNestedLayoutRouteImport.update({
-    id: '/_nested-layout',
-    getParentRoute: () => PathlessLayoutRoute,
+    id: '/_pathlessLayout/_nested-layout',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const AdminDogsIndexRoute = AdminDogsIndexRouteImport.update({
   id: '/admin/dogs/',
   path: '/admin/dogs/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PostsPostIdDeepRoute = PostsPostIdDeepRouteImport.update({
-  id: '/posts_/$postId/deep',
-  path: '/posts/$postId/deep',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiUsersUserIdRoute = ApiUsersUserIdRouteImport.update({
@@ -159,74 +100,48 @@ const PathlessLayoutNestedLayoutRouteARoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
-  '/deferred': typeof DeferredRoute
   '/dog-runs': typeof DogRunsRoute
   '/login': typeof LoginRoute
-  '/posts': typeof PostsRouteWithChildren
-  '/redirect': typeof RedirectRoute
-  '/users': typeof UsersRouteWithChildren
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
   '/api/users': typeof ApiUsersRouteWithChildren
   '/dogs/$dogId': typeof DogsDogIdRoute
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/posts/': typeof PostsIndexRoute
-  '/users/': typeof UsersIndexRoute
   '/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
   '/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
   '/api/users/$userId': typeof ApiUsersUserIdRoute
-  '/posts/$postId/deep': typeof PostsPostIdDeepRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
-  '/deferred': typeof DeferredRoute
   '/dog-runs': typeof DogRunsRoute
   '/login': typeof LoginRoute
-  '/redirect': typeof RedirectRoute
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
   '/api/users': typeof ApiUsersRouteWithChildren
   '/dogs/$dogId': typeof DogsDogIdRoute
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/posts': typeof PostsIndexRoute
-  '/users': typeof UsersIndexRoute
   '/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
   '/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
   '/api/users/$userId': typeof ApiUsersUserIdRoute
-  '/posts/$postId/deep': typeof PostsPostIdDeepRoute
   '/admin/dogs': typeof AdminDogsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_pathlessLayout': typeof PathlessLayoutRouteWithChildren
   '/customScript.js': typeof CustomScriptDotjsRoute
-  '/deferred': typeof DeferredRoute
   '/dog-runs': typeof DogRunsRoute
   '/login': typeof LoginRoute
-  '/posts': typeof PostsRouteWithChildren
-  '/redirect': typeof RedirectRoute
-  '/users': typeof UsersRouteWithChildren
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
   '/_pathlessLayout/_nested-layout': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/api/users': typeof ApiUsersRouteWithChildren
   '/dogs/$dogId': typeof DogsDogIdRoute
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/posts/': typeof PostsIndexRoute
-  '/users/': typeof UsersIndexRoute
   '/_pathlessLayout/_nested-layout/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
   '/_pathlessLayout/_nested-layout/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
   '/api/users/$userId': typeof ApiUsersUserIdRoute
-  '/posts_/$postId/deep': typeof PostsPostIdDeepRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
 }
 export interface FileRouteTypes {
@@ -234,92 +149,61 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/customScript.js'
-    | '/deferred'
     | '/dog-runs'
     | '/login'
-    | '/posts'
-    | '/redirect'
-    | '/users'
     | '/vets'
     | '/welfare-groups'
     | '/api/users'
     | '/dogs/$dogId'
-    | '/posts/$postId'
-    | '/users/$userId'
-    | '/posts/'
-    | '/users/'
     | '/route-a'
     | '/route-b'
     | '/admin/dogs/$dogId'
     | '/api/users/$userId'
-    | '/posts/$postId/deep'
     | '/admin/dogs/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/customScript.js'
-    | '/deferred'
     | '/dog-runs'
     | '/login'
-    | '/redirect'
     | '/vets'
     | '/welfare-groups'
     | '/api/users'
     | '/dogs/$dogId'
-    | '/posts/$postId'
-    | '/users/$userId'
-    | '/posts'
-    | '/users'
     | '/route-a'
     | '/route-b'
     | '/admin/dogs/$dogId'
     | '/api/users/$userId'
-    | '/posts/$postId/deep'
     | '/admin/dogs'
   id:
     | '__root__'
     | '/'
-    | '/_pathlessLayout'
     | '/customScript.js'
-    | '/deferred'
     | '/dog-runs'
     | '/login'
-    | '/posts'
-    | '/redirect'
-    | '/users'
     | '/vets'
     | '/welfare-groups'
     | '/_pathlessLayout/_nested-layout'
     | '/api/users'
     | '/dogs/$dogId'
-    | '/posts/$postId'
-    | '/users/$userId'
-    | '/posts/'
-    | '/users/'
     | '/_pathlessLayout/_nested-layout/route-a'
     | '/_pathlessLayout/_nested-layout/route-b'
     | '/admin/dogs/$dogId'
     | '/api/users/$userId'
-    | '/posts_/$postId/deep'
     | '/admin/dogs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PathlessLayoutRoute: typeof PathlessLayoutRouteWithChildren
   CustomScriptDotjsRoute: typeof CustomScriptDotjsRoute
-  DeferredRoute: typeof DeferredRoute
   DogRunsRoute: typeof DogRunsRoute
   LoginRoute: typeof LoginRoute
-  PostsRoute: typeof PostsRouteWithChildren
-  RedirectRoute: typeof RedirectRoute
-  UsersRoute: typeof UsersRouteWithChildren
   VetsRoute: typeof VetsRoute
   WelfareGroupsRoute: typeof WelfareGroupsRoute
+  PathlessLayoutNestedLayoutRoute: typeof PathlessLayoutNestedLayoutRouteWithChildren
   ApiUsersRoute: typeof ApiUsersRouteWithChildren
   DogsDogIdRoute: typeof DogsDogIdRoute
   AdminDogsDogIdRoute: typeof AdminDogsDogIdRoute
-  PostsPostIdDeepRoute: typeof PostsPostIdDeepRoute
   AdminDogsIndexRoute: typeof AdminDogsIndexRoute
 }
 
@@ -339,27 +223,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VetsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/users': {
-      id: '/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof UsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/redirect': {
-      id: '/redirect'
-      path: '/redirect'
-      fullPath: '/redirect'
-      preLoaderRoute: typeof RedirectRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/posts': {
-      id: '/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof PostsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -374,25 +237,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DogRunsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/deferred': {
-      id: '/deferred'
-      path: '/deferred'
-      fullPath: '/deferred'
-      preLoaderRoute: typeof DeferredRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/customScript.js': {
       id: '/customScript.js'
       path: '/customScript.js'
       fullPath: '/customScript.js'
       preLoaderRoute: typeof CustomScriptDotjsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_pathlessLayout': {
-      id: '/_pathlessLayout'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof PathlessLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -401,34 +250,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/users/': {
-      id: '/users/'
-      path: '/'
-      fullPath: '/users/'
-      preLoaderRoute: typeof UsersIndexRouteImport
-      parentRoute: typeof UsersRoute
-    }
-    '/posts/': {
-      id: '/posts/'
-      path: '/'
-      fullPath: '/posts/'
-      preLoaderRoute: typeof PostsIndexRouteImport
-      parentRoute: typeof PostsRoute
-    }
-    '/users/$userId': {
-      id: '/users/$userId'
-      path: '/$userId'
-      fullPath: '/users/$userId'
-      preLoaderRoute: typeof UsersUserIdRouteImport
-      parentRoute: typeof UsersRoute
-    }
-    '/posts/$postId': {
-      id: '/posts/$postId'
-      path: '/$postId'
-      fullPath: '/posts/$postId'
-      preLoaderRoute: typeof PostsPostIdRouteImport
-      parentRoute: typeof PostsRoute
     }
     '/dogs/$dogId': {
       id: '/dogs/$dogId'
@@ -449,20 +270,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof PathlessLayoutNestedLayoutRouteImport
-      parentRoute: typeof PathlessLayoutRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/dogs/': {
       id: '/admin/dogs/'
       path: '/admin/dogs'
       fullPath: '/admin/dogs/'
       preLoaderRoute: typeof AdminDogsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/posts_/$postId/deep': {
-      id: '/posts_/$postId/deep'
-      path: '/posts/$postId/deep'
-      fullPath: '/posts/$postId/deep'
-      preLoaderRoute: typeof PostsPostIdDeepRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/users/$userId': {
@@ -514,42 +328,6 @@ const PathlessLayoutNestedLayoutRouteWithChildren =
     PathlessLayoutNestedLayoutRouteChildren,
   )
 
-interface PathlessLayoutRouteChildren {
-  PathlessLayoutNestedLayoutRoute: typeof PathlessLayoutNestedLayoutRouteWithChildren
-}
-
-const PathlessLayoutRouteChildren: PathlessLayoutRouteChildren = {
-  PathlessLayoutNestedLayoutRoute: PathlessLayoutNestedLayoutRouteWithChildren,
-}
-
-const PathlessLayoutRouteWithChildren = PathlessLayoutRoute._addFileChildren(
-  PathlessLayoutRouteChildren,
-)
-
-interface PostsRouteChildren {
-  PostsPostIdRoute: typeof PostsPostIdRoute
-  PostsIndexRoute: typeof PostsIndexRoute
-}
-
-const PostsRouteChildren: PostsRouteChildren = {
-  PostsPostIdRoute: PostsPostIdRoute,
-  PostsIndexRoute: PostsIndexRoute,
-}
-
-const PostsRouteWithChildren = PostsRoute._addFileChildren(PostsRouteChildren)
-
-interface UsersRouteChildren {
-  UsersUserIdRoute: typeof UsersUserIdRoute
-  UsersIndexRoute: typeof UsersIndexRoute
-}
-
-const UsersRouteChildren: UsersRouteChildren = {
-  UsersUserIdRoute: UsersUserIdRoute,
-  UsersIndexRoute: UsersIndexRoute,
-}
-
-const UsersRouteWithChildren = UsersRoute._addFileChildren(UsersRouteChildren)
-
 interface ApiUsersRouteChildren {
   ApiUsersUserIdRoute: typeof ApiUsersUserIdRoute
 }
@@ -564,20 +342,15 @@ const ApiUsersRouteWithChildren = ApiUsersRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PathlessLayoutRoute: PathlessLayoutRouteWithChildren,
   CustomScriptDotjsRoute: CustomScriptDotjsRoute,
-  DeferredRoute: DeferredRoute,
   DogRunsRoute: DogRunsRoute,
   LoginRoute: LoginRoute,
-  PostsRoute: PostsRouteWithChildren,
-  RedirectRoute: RedirectRoute,
-  UsersRoute: UsersRouteWithChildren,
   VetsRoute: VetsRoute,
   WelfareGroupsRoute: WelfareGroupsRoute,
+  PathlessLayoutNestedLayoutRoute: PathlessLayoutNestedLayoutRouteWithChildren,
   ApiUsersRoute: ApiUsersRouteWithChildren,
   DogsDogIdRoute: DogsDogIdRoute,
   AdminDogsDogIdRoute: AdminDogsDogIdRoute,
-  PostsPostIdDeepRoute: PostsPostIdDeepRoute,
   AdminDogsIndexRoute: AdminDogsIndexRoute,
 }
 export const routeTree = rootRouteImport

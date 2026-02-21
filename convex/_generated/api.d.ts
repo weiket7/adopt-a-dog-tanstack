@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as dogs from "../dogs.js";
 import type * as http from "../http.js";
+import type * as welfareGroups from "../welfareGroups.js";
 
 import type {
   ApiFromModules,
@@ -22,6 +23,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   dogs: typeof dogs;
   http: typeof http;
+  welfareGroups: typeof welfareGroups;
 }>;
 
 /**

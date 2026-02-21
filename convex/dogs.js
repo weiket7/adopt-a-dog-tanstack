@@ -56,6 +56,7 @@ export const list = query({
       gender: v.string(),
       hdbApproved: v.string(),
       birthday: v.string(),
+      welfareGroupId: v.id("welfareGroups"),
       imageStorageId: v.optional(v.id("_storage")),
     },
     handler: async (ctx, args) => {
@@ -70,7 +71,8 @@ export const list = query({
       gender: v.string(),
       hdbApproved: v.string(),
       birthday: v.string(),
-      imageStorageId: v.optional(v.id("_storage")), // Add this to args
+      welfareGroupId: v.id("welfareGroups"),
+      imageStorageId: v.optional(v.id("_storage")), 
     },
     handler: async (ctx, args) => {
       const { id, ...data } = args;

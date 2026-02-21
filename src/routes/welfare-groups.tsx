@@ -1,41 +1,82 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "convex/_generated/api";
+import { convexQuery } from "@convex-dev/react-query";
 
-export const Route = createFileRoute('/welfare-groups')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/welfare-groups")({
+  // This ensures the data is prefetched on the server (SSR)
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(
+      convexQuery(api.welfareGroups.list, {})
+    );
+  },
+  component: WelfareGroupsPage,
+});
 
-const welfareGroups = [
-    {
-      name: "Gentle Paws",
-      email: "farmwaylove@gmail.com",
-      website: "https://gentlepaws2010.blogspot.com/",
-    },
-    {
-      name: "OSCAS",
-      email: "enquiry@oscas.sg",
-      website: "https://www.oscas.sg/",
-    },
-    {
-      name: "Exclusively Mongrels",
-      email: "enquiry@exclusivelymongrels.org",
-      website: "https://www.exclusivelymongrels.org/",
-    },
-  ];
+function WelfareGroupsPage() {
+  // Use the pre-warmed cache
+  const { data: groups } = useQuery(convexQuery(api.welfareGroups.list, {}));
 
-function RouteComponent() {
   return (
-    <div className="row">
-    {
-      welfareGroups.map((x) => (
-        <div className="col-md-6">
-          <h2 className="font-weight-semibold text-5 line-height-6 mt-3 mb-2">
-            {x.name}
-          </h2>
-          <div>Email: {x.email}</div>
-          <div>Website: {x.website}</div>
+    <>
+      <h1>Welfare Groups</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="row g-4">
+          {groups?.map((group) => (
+            <div key={group._id} className="col-md-6 col-lg-4">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">{group.name}</h5>
+
+                  <p className="card-text">
+                    {group.email && (
+                      <>
+                        <i className="fa-regular fa-envelope"></i>&nbsp;
+                        <a
+                          href={`mailto:${group.email}`}
+                          className="text-decoration-none"
+                        >
+                          {group.email}
+                        </a>
+                      </>
+                    )}
+                  </p>
+
+                  <div className="d-flex gap-2 mt-auto">
+                    {group.website && (
+                      <a
+                        href={group.website}
+                        target="_blank"
+                        className="btn btn-sm btn-outline-primary"
+                      >
+                        Website
+                      </a>
+                    )}
+                    {group.facebook && (
+                      <a
+                        href={group.facebook}
+                        target="_blank"
+                        className="btn btn-sm btn-outline-secondary"
+                      >
+                        Facebook
+                      </a>
+                    )}
+                    {group.volunteerUrl && (
+                      <a
+                        href={group.volunteerUrl}
+                        target="_blank"
+                        className="btn btn-sm btn-primary"
+                      >
+                        Volunteer
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))
-    }
-  </div>
-  )
+      </div>
+    </>
+  );
 }

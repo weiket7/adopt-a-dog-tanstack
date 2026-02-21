@@ -5,6 +5,11 @@ import { convexQuery } from "@convex-dev/react-query";
 import { api } from "convex/_generated/api";
 import { toAge } from "~/utils/extensions";
 import { Id } from "convex/_generated/dataModel"; // Import the Id type
+import { useForm } from "@tanstack/react-form";
+import { createServerFn } from "@tanstack/react-start";
+import { FieldError } from "~/components/FieldError";
+import { Resend } from "resend";
+import { contactAction } from "~/funcs/email";
 
 export const Route = createFileRoute("/dogs/$dogId")({
   //loader: ({ params: { dogId } }) => useSuspenseQuery(convexQuery(api.dogs.list, {})),
@@ -22,6 +27,21 @@ export const Route = createFileRoute("/dogs/$dogId")({
 
 function PostComponent() {
   const dog = Route.useLoaderData();
+
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      mobile: "",
+      email: "",
+      message: "",
+    },
+    //validatorAdapter: zodValidator(),
+    onSubmit: async ({ value }) => {
+      await contactAction({ data: value });
+      alert("Message sent successfully!");
+      form.reset();
+    },
+  });
 
   return (
     <div className="row">
@@ -64,30 +84,102 @@ function PostComponent() {
                 <hr className="bg-color-grey-400" />
               </div>
               {dog.gender == "Male" ? (
-                <i className="fa-solid fa-mars" />
+                <i className="fa-solid fa-mars"></i>
               ) : (
-                <i className="fa-solid fa-venus" />
-              )}
-              {/* <!-- <span className="sale text-color-dark font-weight-semi-bold">
-                {dog.gender}
-              </span> --> */}
+                <i className="fa-solid fa-venus"></i>
+              )}{" "}
               {dog.gender}
               <br />
               <i className="fa-solid fa-cake-candles"></i> {toAge(dog.birthday)}
               <br />
               <i className="fa-solid fa-house"></i>
               {dog.hdbApproved == "Yes" ? "HDB Approved" : "Not HDB Approved"}
-              {/* <!-- <ul className="list list-unstyled text-2">
-                <li className="mb-0">
-                  AVAILABILITY: <strong className="text-color-dark">AVAILABLE</strong>
-                </li>
-                <li className="mb-0">
-                  SKU: <strong className="text-color-dark">1234567890</strong>
-                </li>
-              </ul> --> */}
               <br />
               <br />
               {dog.description}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  form.handleSubmit();
+                }}
+              >
+                <form.Field
+                  name="name"
+                  children={(field) => (
+                    <div className="mb-3">
+                      <label className="form-label">Full Name</label>
+                      <input
+                        className={`form-control ${field.state.meta.errors.length ? "is-invalid" : ""}`}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                />
+
+                <form.Field
+                  name="mobile"
+                  children={(field) => (
+                    <div className="mb-3">
+                      <label className="form-label">Mobile Number</label>
+                      <input
+                        type="tel"
+                        className={`form-control ${field.state.meta.errors.length ? "is-invalid" : ""}`}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                />
+
+                <form.Field
+                  name="email"
+                  children={(field) => (
+                    <div className="mb-3">
+                      <label className="form-label">Email Address</label>
+                      <input
+                        type="email"
+                        className={`form-control ${field.state.meta.errors.length ? "is-invalid" : ""}`}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                />
+
+                <form.Field
+                  name="message"
+                  children={(field) => (
+                    <div className="mb-3">
+                      <label className="form-label">Message</label>
+                      <textarea
+                        rows={4}
+                        className={`form-control ${field.state.meta.errors.length ? "is-invalid" : ""}`}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                />
+
+                <form.Subscribe
+                  selector={(state) => [state.canSubmit, state.isSubmitting]}
+                  children={([canSubmit, isSubmitting]) => (
+                    <button
+                      type="submit"
+                      className="btn btn-primary w-100 py-2"
+                      disabled={!canSubmit || isSubmitting}
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                    </button>
+                  )}
+                />
+              </form>
             </div>
           </div>
         </div>

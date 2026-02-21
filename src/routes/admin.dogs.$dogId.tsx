@@ -24,6 +24,8 @@ function DogFormPage() {
     isEdit ? { id: dogId as any } : "skip"
   );
 
+  const welfareGroups = useQuery(api.welfareGroups.list) || [];
+
   const { mutate, isPending } = useMutation<
     { success: boolean },
     Error,
@@ -62,6 +64,7 @@ function DogFormPage() {
       gender: existingDog?.gender || "Male",
       hdbApproved: existingDog?.hdbApproved || "Yes",
       birthday: existingDog?.birthday || "",
+      welfareGroupId: existingDog?.welfareGroupId || "",
       image: null as File | null,
     },
     onSubmit: async ({ value }) => {
@@ -71,6 +74,7 @@ function DogFormPage() {
       formData.append("gender", value.gender);
       formData.append("hdbApproved", value.hdbApproved);
       formData.append("birthday", value.birthday);
+      formData.append("welfareGroupId", value.welfareGroupId);
       if (value.image) formData.append("image", value.image);
 
       if (isEdit) formData.append("dogId", dogId);
@@ -168,6 +172,33 @@ function DogFormPage() {
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
+                    </div>
+                  )}
+                />
+
+                <form.Field
+                  name="welfareGroupId"
+                  validators={{
+                    onChange: z.string().min(1, "Welfare Group is required"),
+                  }}
+                  children={(field) => (
+                    <div className="mb-3">
+                      <label className="form-label">Welfare Group</label>
+                      <select
+                        className={`form-control form-select ${
+                          field.state.meta.errors.length ? "is-invalid" : ""
+                        }`}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      >
+                        <option value="">Select a Group...</option>
+                        {welfareGroups.map((group) => (
+                          <option key={group._id} value={group._id}>
+                            {group.name}
+                          </option>
+                        ))}
+                      </select>
+                      <FieldError errors={field.state.meta.errors} />
                     </div>
                   )}
                 />

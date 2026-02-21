@@ -18,6 +18,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
     const gender = data.get("gender") as string;
     const hdbApproved = data.get("hdbApproved") as string;
     const birthday = data.get("birthday") as string;
+    const welfareGroupId = data.get("welfareGroupId") as string;
 
     let storageId = data.get("existingStorageId") as string | undefined;
 
@@ -39,6 +40,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
       gender,
       hdbApproved,
       birthday,
+      welfareGroupId,
       imageStorageId: storageId as any,
     };
 

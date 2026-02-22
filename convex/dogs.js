@@ -14,6 +14,7 @@ export const all = query({
 
 export const list = query({
   args: {
+    paginationOpts: paginationOptsValidator,
     name: v.optional(v.string()),
     hdbApproved: v.optional(v.string()),
     gender: v.optional(v.string()),
@@ -31,15 +32,18 @@ export const list = query({
       q = q.filter((q) => q.eq(q.field("gender"), args.gender));
     }
 
-    const dogs = await q.collect(); // Apply your filters here
-    return await Promise.all(
-      dogs.map(async (dog) => ({
+    const results = await q.paginate(args.paginationOpts);
+
+    const pageWithUrls = await Promise.all(
+      results.page.map(async (dog) => ({
         ...dog,
         imageUrl: dog.imageStorageId 
           ? await ctx.storage.getUrl(dog.imageStorageId) 
-          : "/img/products/product-grey-4.jpg", // Fallback image
+          : "/img/products/product-grey-4.jpg",
       }))
     );
+
+    return { ...results, page: pageWithUrls };
   },
 });
 

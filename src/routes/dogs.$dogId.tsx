@@ -58,7 +58,7 @@ function PostComponent() {
                   <img
                     alt=""
                     className="img-fluid"
-                    src={dog.imageUrl || "img/products/product-grey-4.js"}
+                    src={dog.imageUrl || "img/products/product-grey-4.jpg"}
                   />
                 </div>
               </div>

@@ -1,10 +1,13 @@
-import { convexQuery } from "@convex-dev/react-query";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toAge } from "~/utils/extensions";
 import { z } from "zod";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { convexQuery } from "@convex-dev/react-query";
+import {
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
 
 const schema = z.object({
   name: z
@@ -26,13 +29,29 @@ export const Route = createFileRoute("/")({
   validateSearch: (search) => schema.parse(search),
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ context: { queryClient }, deps: { search } }) => {
-    return await queryClient.ensureQueryData(
-      convexQuery(api.dogs.list, {
-        name: search.name,
-        hdbApproved: search.hdbApproved,
-        gender: search.gender,
-      })
-    );
+    const args = {
+      name: search.name,
+      hdbApproved: search.hdbApproved,
+      gender: search.gender,
+    };
+
+    await queryClient.ensureInfiniteQueryData({
+      // 1. The queryKey must include the args + a label for 'infinite'
+      queryKey: ["dogs", "list", args],
+      queryFn: ({ pageParam }) => {
+        return queryClient.fetchQuery(
+          convexQuery(api.dogs.list, {
+            ...args,
+            paginationOpts: {
+              numItems: 12,
+              cursor: pageParam as string | null,
+            },
+          })
+        );
+      },
+      initialPageParam: null,
+      getNextPageParam: (lastPage) => lastPage.continueCursor || null,
+    });
   },
 });
 
@@ -41,6 +60,7 @@ function Home() {
   const navigate = useNavigate({ from: Route.fullPath }); // Get navigation tool
   const dogs = Route.useLoaderData();
   const formRef = useRef<HTMLFormElement>(null);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   const clear = () => {
     formRef.current?.reset();
@@ -65,6 +85,57 @@ function Home() {
       }),
     });
   };
+
+  const queryClient = useQueryClient(); // From @tanstack/react-query
+
+  const args = {
+    name: search.name,
+    hdbApproved: search.hdbApproved,
+    gender: search.gender,
+  };
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery({
+      queryKey: ["dogs", "list", args],
+      queryFn: ({ pageParam }) => {
+        return queryClient.fetchQuery(
+          convexQuery(api.dogs.list, {
+            ...args,
+            paginationOpts: {
+              numItems: 12,
+              cursor: pageParam as string | null,
+            },
+          })
+        );
+      },
+      initialPageParam: null,
+      // Convex returns 'continueCursor' and 'isDone'
+      getNextPageParam: (lastPage) =>
+        lastPage.isDone ? null : lastPage.continueCursor,
+    });
+
+  const allDogs = data.pages.flatMap((p) => p.page);
+
+  useEffect(() => {
+    // 2. Initialize the native observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // If the div is visible and there is more to load
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1, rootMargin: "200px" } // Load 200px before reaching bottom
+    );
+
+    // 3. Start observing the target
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    // 4. Cleanup: stop observing when component unmounts
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]); // Re-run when status changes
 
   return (
     <div className="row">
@@ -171,7 +242,7 @@ function Home() {
         </aside>
       </div>
       <div className="col-lg-9 order-1 order-lg-2">
-        {dogs.length === 0 ? (
+        {allDogs.length === 0 ? (
           "No dogs found"
         ) : (
           <div
@@ -179,7 +250,7 @@ function Home() {
             data-plugin-masonry
             data-plugin-options="{'layoutMode': 'fitRows'}"
           >
-            {dogs.map((x) => (
+            {allDogs.map((x) => (
               <div className="col-sm-6 col-lg-4" key={x._id}>
                 <div className="product mb-0">
                   <div className="product-thumb-info border-0 mb-3">
@@ -204,7 +275,7 @@ function Home() {
                         <img
                           alt=""
                           className="img-fluid"
-                          src={x.imageUrl || "img/products/product-grey-4.js"}
+                          src={x.imageUrl || "img/products/product-grey-4.jpg"}
                         />
                       </div>
                     </a>
@@ -262,6 +333,27 @@ function Home() {
                 </div>
               </div>
             ))}
+
+            {/* {hasNextPage && (
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+              >
+                {isFetchingNextPage ? "Loading..." : "Load More"}
+              </button>
+            )} */}
+
+            {/* 5. The Sentinel Element (Ref is attached here) */}
+            <div ref={observerTarget} className="col-12 py-5 text-center">
+              {isFetchingNextPage && (
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+              {!hasNextPage && allDogs.length > 0 && (
+                <p className="text-muted">You've seen all the dogs! 🐾</p>
+              )}
+            </div>
           </div>
         )}
       </div>

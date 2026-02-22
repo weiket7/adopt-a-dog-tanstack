@@ -1,14 +1,11 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { useMutation } from "@tanstack/react-query";
-import { deleteDogAction, saveDogAction } from "~/funcs/dog-actions";
-import { useMutation as useConvexMutation } from "convex/react";
+import { deleteDogAction, saveDogAction } from "~/server/dog.functions";
 import { api } from "convex/_generated/api";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 import { FieldError } from "~/components/FieldError";
-import { Id } from "convex/_generated/dataModel";
-import { ConvexHttpClient } from "convex/browser";
 
 export const Route = createFileRoute("/admin/dogs/$dogId")({
   component: DogFormPage,
@@ -28,8 +25,8 @@ function DogFormPage() {
   const welfareGroups = useQuery(api.welfareGroups.list, {}) || [];
 
   const { mutate: deleteDog, isPending: isDeleting } = useMutation({
-    mutationFn: async (variables: string) => {
-      return await deleteDogAction({ data: variables });
+    mutationFn: async (dogId: string) => {
+      return await deleteDogAction({ data: dogId });
     },
     onSuccess: () => {
       router.invalidate().then(() => {
@@ -52,7 +49,7 @@ function DogFormPage() {
     },
     onSuccess: () => {
       router.invalidate().then(() => {
-        router.navigate({ to: "/" });
+        router.navigate({ to: "/admin/dogs" });
       });
     },
     onError: (error) => {

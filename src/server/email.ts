@@ -7,11 +7,10 @@ import { Id } from "convex/_generated/dataModel";
 
 const apiKey = process.env.RESEND_API_KEY;
 
-export const contactAction = createServerFn({ method: "POST" })
+export const emailWelfareGroup = createServerFn({ method: "POST" })
   .inputValidator(
     z.object({
       dogId: z.string(),
-
       name: z.string(),
       mobile: z.string(),
       email: z.string(),
@@ -27,6 +26,7 @@ export const contactAction = createServerFn({ method: "POST" })
       throw new Error("Dog or Welfare Group not found");
     }
 
+    //TODO how to join tables in convex? do we need to make another query to get the welfare group email?
     const group = await convex.query(api.welfareGroups.getById, {
       id: dog.welfareGroupId,
     });
@@ -34,8 +34,9 @@ export const contactAction = createServerFn({ method: "POST" })
     if (!group) {
       throw new Error("Welfare Group not found");
     }
-
-    console.log("Sending email with:", data);
+    if (!group.email) {
+      throw new Error("Welfare Group email not found");
+    }
 
     const resend = new Resend(apiKey);
 

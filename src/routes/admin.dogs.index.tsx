@@ -8,7 +8,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { api } from "../../convex/_generated/api";
-import * as React from "react";
 
 // Define the shape of our data for the table
 type Dog = {
@@ -73,7 +72,7 @@ const columns = [
 
 function DogsTablePage() {
   // 1. Fetch data from Convex
-  const { data: dogs } = useSuspenseQuery(convexQuery(api.dogs.list, {}));
+  const { data: dogs } = useSuspenseQuery(convexQuery(api.dogs.all, {}));
 
   // 2. Initialize the table
   const table = useReactTable({

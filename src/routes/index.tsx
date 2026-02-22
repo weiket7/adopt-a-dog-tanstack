@@ -1,9 +1,10 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toAge } from "~/utils/extensions";
 import { z } from "zod";
+import { useRef } from "react";
 
 const schema = z.object({
   name: z
@@ -37,14 +38,39 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const search = Route.useSearch();
-  //const { name, hdbApproved, gender } = Route.useSearch()
+  const navigate = useNavigate({ from: Route.fullPath }); // Get navigation tool
   const dogs = Route.useLoaderData();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const clear = () => {
+    formRef.current?.reset();
+    navigate({ search: {} }); // Clear search params
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const name = formData.get("name") as string;
+    const hdbApproved = formData.get("hdbApproved") as string;
+    const gender = formData.get("gender") as string;
+
+    // Navigate to the same page with new search params
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        name: name || undefined,
+        hdbApproved: hdbApproved || undefined,
+        gender: gender || undefined,
+      }),
+    });
+  };
 
   return (
     <div className="row">
       <div className="col-lg-3 order-2 order-lg-1">
         <aside className="sidebar">
-          <form action="/" method="get">
+          <form onSubmit={handleSubmit} ref={formRef}>
             <div className="row g-3">
               <div className="col-12">
                 <label className="form-label mb-1 text-2">
@@ -56,6 +82,7 @@ function Home() {
                   maxLength={50}
                   className="form-control text-3 h-auto py-2"
                   name="name"
+                  defaultValue={search.name}
                 />
               </div>
 
@@ -70,6 +97,7 @@ function Home() {
                     name="hdbApproved"
                     value="Yes"
                     id="hdbApproved-yes"
+                    defaultChecked={search.hdbApproved === "Yes"}
                   />
                   <label className="form-check-label" htmlFor="hdbApproved-yes">
                     {" "}
@@ -83,6 +111,7 @@ function Home() {
                     name="hdbApproved"
                     value="No"
                     id="hdbApproved-no"
+                    defaultChecked={search.hdbApproved === "No"}
                   />
                   <label className="form-check-label" htmlFor="hdbApproved-no">
                     {" "}
@@ -102,6 +131,7 @@ function Home() {
                     name="gender"
                     value="Male"
                     id="gender-male"
+                    defaultChecked={search.gender === "Male"}
                   />
                   <label className="form-check-label" htmlFor="gender-male">
                     {" "}
@@ -115,6 +145,7 @@ function Home() {
                     name="gender"
                     value="Female"
                     id="gender-female"
+                    defaultChecked={search.gender === "Female"}
                   />
                   <label className="form-check-label" htmlFor="gender-female">
                     {" "}
@@ -125,7 +156,14 @@ function Home() {
 
               <div className="col-12">
                 <button type="submit" className="btn btn-primary">
-                  Submit
+                  Search
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-link btn-sm"
+                  onClick={clear}
+                >
+                  Clear
                 </button>
               </div>
             </div>
@@ -133,22 +171,25 @@ function Home() {
         </aside>
       </div>
       <div className="col-lg-9 order-1 order-lg-2">
-        <div
-          className="row products product-thumb-info-list"
-          data-plugin-masonry
-          data-plugin-options="{'layoutMode': 'fitRows'}"
-        >
-          {dogs.map((x) => (
-            <div className="col-sm-6 col-lg-4" key={x._id}>
-              <div className="product mb-0">
-                <div className="product-thumb-info border-0 mb-3">
-                  {/* <div className="product-thumb-info-badges-wrapper">
+        {dogs.length === 0 ? (
+          "No dogs found"
+        ) : (
+          <div
+            className="row products product-thumb-info-list"
+            data-plugin-masonry
+            data-plugin-options="{'layoutMode': 'fitRows'}"
+          >
+            {dogs.map((x) => (
+              <div className="col-sm-6 col-lg-4" key={x._id}>
+                <div className="product mb-0">
+                  <div className="product-thumb-info border-0 mb-3">
+                    {/* <div className="product-thumb-info-badges-wrapper">
                         <span className="badge badge-ecommerce text-bg-success">
                           NEW
                         </span>
                       </div> */}
 
-                  {/* <div className="addtocart-btn-wrapper">
+                    {/* <div className="addtocart-btn-wrapper">
                         <a
                           href="shop-cart.html"
                           className="text-decoration-none addtocart-btn"
@@ -158,41 +199,41 @@ function Home() {
                         </a>
                       </div> */}
 
-                  <a href={"dogs/" + x._id}>
-                    <div className="product-thumb-info-image">
-                      <img
-                        alt=""
-                        className="img-fluid"
-                        src={x.imageUrl || "img/products/product-grey-4.js"}
-                      />
-                    </div>
-                  </a>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <div>
-                    {/* <a
-                          href="#"
-                          className="d-block text-uppercase text-decoration-none text-color-default text-color-hover-primary line-height-1 text-0 mb-1"
-                        >
-                          electronics
-                        </a> */}
-                    <h3 className="font-weight-medium font-alternative text-transform-none line-height-3 mb-0">
-                      <a
-                        href={"dogs/" + x._id}
-                        className="text-color-dark text-color-hover-primary"
-                      >
-                        {x.name}
-                      </a>
-                    </h3>
+                    <a href={"dogs/" + x._id}>
+                      <div className="product-thumb-info-image">
+                        <img
+                          alt=""
+                          className="img-fluid"
+                          src={x.imageUrl || "img/products/product-grey-4.js"}
+                        />
+                      </div>
+                    </a>
                   </div>
-                  {/* <a
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      {/* <a
+                      href="#"
+                      className="d-block text-uppercase text-decoration-none text-color-default text-color-hover-primary line-height-1 text-0 mb-1"
+                    >
+                      electronics
+                    </a> */}
+                      <h3 className="font-weight-medium font-alternative text-transform-none line-height-3 mb-0">
+                        <a
+                          href={"dogs/" + x._id}
+                          className="text-color-dark text-color-hover-primary"
+                        >
+                          {x.name}
+                        </a>
+                      </h3>
+                    </div>
+                    {/* <a
                       href="#"
                       className="text-decoration-none text-color-default text-color-hover-dark text-4"
                     >
                       <i className="far fa-heart" />
                     </a> */}
-                </div>
-                {/* <div title="Rated 5 out of 5">
+                  </div>
+                  {/* <div title="Rated 5 out of 5">
                     <input
                       type="text"
                       className="d-none"
@@ -202,44 +243,27 @@ function Home() {
                       data-plugin-options="{'displayOnly': true, 'color': 'default', 'size':'xs'}"
                     />
                   </div> */}
-                <p className="text-4 mb-3">
-                  {x.gender == "Male" ? (
-                    <i className="fa-solid fa-mars" />
-                  ) : (
-                    <i className="fa-solid fa-venus" />
-                  )}{" "}
-                  <span>{x.gender}</span>
-                  <br />
-                  <i className="fa-solid fa-cake-candles" /> {toAge(x.birthday)}
-                  <br />
-                  <i className="fa-solid fa-house" />{" "}
-                  {x.hdbApproved == "Yes" ? "HDB Approved" : "Not HDB Approved"}
-                </p>
+                  <p className="text-4 mb-3">
+                    {x.gender == "Male" ? (
+                      <i className="fa-solid fa-mars" />
+                    ) : (
+                      <i className="fa-solid fa-venus" />
+                    )}{" "}
+                    <span>{x.gender}</span>
+                    <br />
+                    <i className="fa-solid fa-cake-candles" />{" "}
+                    {toAge(x.birthday)}
+                    <br />
+                    <i className="fa-solid fa-house" />{" "}
+                    {x.hdbApproved == "Yes"
+                      ? "HDB Approved"
+                      : "Not HDB Approved"}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        {/* <!-- <div className="row mt-4">
-          <div className="col">
-            <ul className="pagination float-end">
-              <li className="page-item">
-                <a className="page-link" href="#"
-                  ><i className="fas fa-angle-left"></i></a
-                >
-              </li>
-              <li className="page-item active">
-                <a className="page-link" href="#">1</a>
-              </li>
-              <li className="page-item"><a className="page-link" href="#">2</a></li>
-              <li className="page-item"><a className="page-link" href="#">3</a></li>
-              <li className="page-item">
-                <a className="page-link" href="#"
-                  ><i className="fas fa-angle-right"></i></a
-                >
-              </li>
-            </ul>
+            ))}
           </div>
-        </div> --> */}
+        )}
       </div>
     </div>
   );

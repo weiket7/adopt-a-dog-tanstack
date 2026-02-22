@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { NotFound } from "~/components/NotFound";
 import { PostErrorComponent } from "~/components/PostError";
 import { convexQuery } from "@convex-dev/react-query";
@@ -6,17 +6,19 @@ import { api } from "convex/_generated/api";
 import { toAge } from "~/utils/extensions";
 import { Id } from "convex/_generated/dataModel"; // Import the Id type
 import { useForm } from "@tanstack/react-form";
-import { createServerFn } from "@tanstack/react-start";
 import { FieldError } from "~/components/FieldError";
-import { Resend } from "resend";
-import { contactAction } from "~/funcs/email";
+import { emailWelfareGroup } from "~/server/email";
 
 export const Route = createFileRoute("/dogs/$dogId")({
-  //loader: ({ params: { dogId } }) => useSuspenseQuery(convexQuery(api.dogs.list, {})),
   loader: async ({ params, context }) => {
-    return await context.queryClient.ensureQueryData(
-      convexQuery(api.dogs.get, { id: params.dogId as Id<"dogs"> })
-    );
+    const dog = await context.queryClient
+      .ensureQueryData(
+        convexQuery(api.dogs.get, { id: params.dogId as Id<"dogs"> })
+      )
+      .catch(() => null); // Catch the Convex validation error and return null
+
+    if (!dog) throw notFound(); // Triggers notFoundComponent
+    return dog;
   },
   component: PostComponent,
   errorComponent: PostErrorComponent,
@@ -27,6 +29,9 @@ export const Route = createFileRoute("/dogs/$dogId")({
 
 function PostComponent() {
   const dog = Route.useLoaderData();
+  if (!dog) {
+    return <NotFound>Dog not found</NotFound>;
+  }
 
   const form = useForm({
     defaultValues: {
@@ -34,11 +39,10 @@ function PostComponent() {
       mobile: "",
       email: "",
       message: "",
+      dogId: dog!._id,
     },
     onSubmit: async ({ value }) => {
-      //TODO add dogId
-      await contactAction({ data: value });
-      alert("Message sent successfully!");
+      await emailWelfareGroup({ data: value });
       form.reset();
     },
   });
@@ -50,21 +54,6 @@ function PostComponent() {
           <div className="col-lg-6">
             <div className="product mb-0">
               <div className="product-thumb-info border-0 mb-0">
-                {/* <!-- <div className="product-thumb-info-badges-wrapper">
-                  <span className="badge badge-ecommerce text-bg-success">NEW</span>
-                </div> --> 
-
-                <!-- <div className="addtocart-btn-wrapper">
-                  <a
-                    href="shop-cart.html"
-                    className="text-decoration-none addtocart-btn"
-                    title="Add to Cart"
-                  >
-                    <i className="icons icon-bag"></i>
-                  </a>
-                </div> -->
-
-                <!-- <a href="shop-product-sidebar-left.html"> -->-->*/}
                 <div className="product-thumb-info-image">
                   <img
                     alt=""
@@ -72,7 +61,6 @@ function PostComponent() {
                     src={dog.imageUrl || "img/products/product-grey-4.js"}
                   />
                 </div>
-                {/* </a>  */}
               </div>
             </div>
           </div>

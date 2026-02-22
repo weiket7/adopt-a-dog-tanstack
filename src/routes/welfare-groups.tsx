@@ -6,16 +6,21 @@ import { convexQuery } from "@convex-dev/react-query";
 export const Route = createFileRoute("/welfare-groups")({
   // This ensures the data is prefetched on the server (SSR)
   loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(
+    return await context.queryClient.ensureQueryData(
       convexQuery(api.welfareGroups.list, {})
     );
   },
+  pendingComponent: () => <div>Loading welfare groups...</div>,
   component: WelfareGroupsPage,
 });
 
 function WelfareGroupsPage() {
   // Use the pre-warmed cache
-  const { data: groups } = useQuery(convexQuery(api.welfareGroups.list, {}));
+  // Real-time updates. If a group name changes in the database, it changes on the screen instantly.
+  // const { data: groups } = useQuery(convexQuery(api.welfareGroups.list, {}));
+
+  //not real-time. If the data changes in Convex, this component won't update until you refresh the page or navigate away and back.
+  const groups = Route.useLoaderData();
 
   return (
     <>

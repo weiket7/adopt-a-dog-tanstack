@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
             ...args,
             paginationOpts: {
               numItems: 12,
-              cursor: pageParam as string | null,
+              cursor: pageParam,
             },
           })
         );
@@ -108,7 +108,7 @@ function Home() {
           })
         );
       },
-      initialPageParam: null,
+      initialPageParam: null as string | null,
       // Convex returns 'continueCursor' and 'isDone'
       getNextPageParam: (lastPage) =>
         lastPage.isDone ? null : lastPage.continueCursor,

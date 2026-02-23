@@ -13,7 +13,7 @@ const NAMES = [
   "Cooper",
   "Lola",
 ];
-const GENDERS = ["Male", "Female"];
+const GENDERS = ["Male", "Female"] as const;
 
 export const seedDogs = internalMutation({
   args: { count: v.number() },

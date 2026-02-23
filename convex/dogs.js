@@ -8,7 +8,7 @@ export const generateUploadUrl = action(async (ctx) => {
 
 export const all = query({
   handler: async (ctx, args) => {
-    return await ctx.db.collect(); // Apply your filters here
+    return await ctx.db.query("dogs").collect(); // Apply your filters here
   },
 });
 

@@ -58,6 +58,19 @@ function DogFormPage() {
     },
   });
 
+  // const dogSchema = z.object({
+  //   name: z.string().min(1, "Name is required"),
+  //   gender: z.enum(["Male", "Female"], {
+  //     errorMap: () => ({ message: "Please select a gender" }),
+  //   }),
+  //   hdbApproved: z.enum(["Yes", "No"], {
+  //     errorMap: () => ({ message: "Please select HDB status" }),
+  //   }),
+  //   birthday: z.string().min(1, "Birthday is required"),
+  //   welfareGroupId: z.string().min(1, "Welfare Group is required"),
+  //   image: z.instanceof(File).nullable(),
+  // });
+
   const form = useForm({
     defaultValues: {
       name: existingDog?.name || "",
@@ -67,6 +80,9 @@ function DogFormPage() {
       welfareGroupId: existingDog?.welfareGroupId || "",
       image: null as File | null,
     },
+    // validators: {
+    //   onChange: dogSchema,
+    // },
     onSubmit: async ({ value }) => {
       const formData = new FormData();
 
@@ -128,13 +144,22 @@ function DogFormPage() {
                 <div className="row mb-3">
                   <form.Field
                     name="gender"
+                    validators={{
+                      onChange: z.enum(["Male", "Female"], {
+                        errorMap: () => ({
+                          message: "Please select a valid gender",
+                        }),
+                      }),
+                    }}
                     children={(field) => (
                       <div className="col-md-6">
                         <label className="">Gender</label>
                         <select
                           className="form-control form-select"
                           value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={(e) =>
+                            field.handleChange(e.target.value as any)
+                          }
                         >
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
@@ -151,7 +176,9 @@ function DogFormPage() {
                         <select
                           className="form-control form-select"
                           value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={(e) =>
+                            field.handleChange(e.target.value as any)
+                          }
                         >
                           <option value="Yes">Yes</option>
                           <option value="No">No</option>

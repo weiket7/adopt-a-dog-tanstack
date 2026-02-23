@@ -8,21 +8,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { api } from "../../convex/_generated/api";
-
-// Define the shape of our data for the table
-type Dog = {
-  _id: string;
-  name: string;
-  birthday: string;
-  gender: string;
-  hdbApproved: string;
-};
+import { Doc } from "../../convex/_generated/dataModel";
 
 export const Route = createFileRoute("/admin/dogs/")({
   component: DogsTablePage,
 });
 
-const columnHelper = createColumnHelper<Dog>();
+const columnHelper = createColumnHelper<Doc<"dogs">>();
 
 // Define your columns
 const columns = [
@@ -71,10 +63,8 @@ const columns = [
 ];
 
 function DogsTablePage() {
-  // 1. Fetch data from Convex
   const { data: dogs } = useSuspenseQuery(convexQuery(api.dogs.all, {}));
 
-  // 2. Initialize the table
   const table = useReactTable({
     data: dogs,
     columns,

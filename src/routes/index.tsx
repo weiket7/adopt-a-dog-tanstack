@@ -49,8 +49,9 @@ export const Route = createFileRoute("/")({
           })
         );
       },
-      initialPageParam: null,
-      getNextPageParam: (lastPage) => lastPage.continueCursor || null,
+      initialPageParam: null as string | null,
+      getNextPageParam: (lastPage: { continueCursor: any }) =>
+        lastPage.continueCursor || null, //TODO
     });
   },
 });

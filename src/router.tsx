@@ -13,7 +13,7 @@ export function getRouter() {
   if (!CONVEX_URL) {
     console.error("router.tsx missing envar VITE_CONVEX_URL");
   }
-  console.log("router.tsx using CONVEX_URL", CONVEX_URL);
+  console.log("router.tsx using CONVEX_URL ", CONVEX_URL);
   const convexQueryClient = new ConvexQueryClient(CONVEX_URL);
 
   const queryClient: QueryClient = new QueryClient({

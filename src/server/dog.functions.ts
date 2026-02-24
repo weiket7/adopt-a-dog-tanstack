@@ -1,8 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { api } from "../../convex/_generated/api";
-import { convex } from "./convex";
+import { getConvexServerClient } from "./convex";
 import { Id } from "convex/_generated/dataModel";
 import z from "zod";
+
+const convex = getConvexServerClient();
 
 export const saveDogAction = createServerFn({ method: "POST" })
   .inputValidator((data: FormData) => {

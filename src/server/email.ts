@@ -1,11 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { Resend } from "resend";
 import z from "zod";
-import { convex } from "./convex";
+import { getConvexServerClient } from "./convex";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 
 const apiKey = process.env.RESEND_API_KEY;
+const convex = getConvexServerClient();
 
 export const emailWelfareGroup = createServerFn({ method: "POST" })
   .inputValidator(

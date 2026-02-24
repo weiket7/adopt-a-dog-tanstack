@@ -13,7 +13,6 @@ import { Route as WelfareGroupsRouteImport } from './routes/welfare-groups'
 import { Route as VetsRouteImport } from './routes/vets'
 import { Route as PetCafesRouteImport } from './routes/pet-cafes'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as IndexcopyRouteImport } from './routes/index copy'
 import { Route as DogRunsRouteImport } from './routes/dog-runs'
 import { Route as CustomScriptDotjsRouteImport } from './routes/customScript[.]js'
 import { Route as IndexRouteImport } from './routes/index'
@@ -39,11 +38,6 @@ const PetCafesRoute = PetCafesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexcopyRoute = IndexcopyRouteImport.update({
-  id: '/index copy',
-  path: '/index copy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DogRunsRoute = DogRunsRouteImport.update({
@@ -81,7 +75,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/dog-runs': typeof DogRunsRoute
-  '/index copy': typeof IndexcopyRoute
   '/login': typeof LoginRoute
   '/pet-cafes': typeof PetCafesRoute
   '/vets': typeof VetsRoute
@@ -94,7 +87,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/dog-runs': typeof DogRunsRoute
-  '/index copy': typeof IndexcopyRoute
   '/login': typeof LoginRoute
   '/pet-cafes': typeof PetCafesRoute
   '/vets': typeof VetsRoute
@@ -108,7 +100,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/dog-runs': typeof DogRunsRoute
-  '/index copy': typeof IndexcopyRoute
   '/login': typeof LoginRoute
   '/pet-cafes': typeof PetCafesRoute
   '/vets': typeof VetsRoute
@@ -123,7 +114,6 @@ export interface FileRouteTypes {
     | '/'
     | '/customScript.js'
     | '/dog-runs'
-    | '/index copy'
     | '/login'
     | '/pet-cafes'
     | '/vets'
@@ -136,7 +126,6 @@ export interface FileRouteTypes {
     | '/'
     | '/customScript.js'
     | '/dog-runs'
-    | '/index copy'
     | '/login'
     | '/pet-cafes'
     | '/vets'
@@ -149,7 +138,6 @@ export interface FileRouteTypes {
     | '/'
     | '/customScript.js'
     | '/dog-runs'
-    | '/index copy'
     | '/login'
     | '/pet-cafes'
     | '/vets'
@@ -163,7 +151,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CustomScriptDotjsRoute: typeof CustomScriptDotjsRoute
   DogRunsRoute: typeof DogRunsRoute
-  IndexcopyRoute: typeof IndexcopyRoute
   LoginRoute: typeof LoginRoute
   PetCafesRoute: typeof PetCafesRoute
   VetsRoute: typeof VetsRoute
@@ -201,13 +188,6 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/index copy': {
-      id: '/index copy'
-      path: '/index copy'
-      fullPath: '/index copy'
-      preLoaderRoute: typeof IndexcopyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dog-runs': {
@@ -259,7 +239,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CustomScriptDotjsRoute: CustomScriptDotjsRoute,
   DogRunsRoute: DogRunsRoute,
-  IndexcopyRoute: IndexcopyRoute,
   LoginRoute: LoginRoute,
   PetCafesRoute: PetCafesRoute,
   VetsRoute: VetsRoute,

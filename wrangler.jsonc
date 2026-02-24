@@ -1,7 +1,16 @@
 {
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "adopt-a-dog",
-    "compatibility_date": "2026-02-24",
-    "compatibility_flags": ["nodejs_compat"],
-    "main": "@tanstack/react-start/server-entry"
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "adopt-a-dog",
+  "compatibility_date": "2026-02-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "assets": {
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true
+    }
   }
+}

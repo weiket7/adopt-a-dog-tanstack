@@ -35,6 +35,11 @@ Porto 12.1
 As of Feb 2026, latest version is 13  
 https://preview.themeforest.net/item/porto-responsive-html5-template/full_screen_preview/4106987
 
+## Hosted in Cloudflare
+
+npm add -D @cloudflare/vite-plugin wrangler
+
+https://tanstack.com/start/latest/docs/framework/react/guide/hosting
 ## To do
 
 [] Add straysnomore

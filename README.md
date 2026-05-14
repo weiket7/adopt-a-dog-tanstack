@@ -39,12 +39,41 @@ https://preview.themeforest.net/item/porto-responsive-html5-template/full_screen
 
 npm add -D @cloudflare/vite-plugin wrangler
 
+npx wrangler tail my-tanstack-app
+
 https://tanstack.com/start/latest/docs/framework/react/guide/hosting
+
 ## To do
 
-[] Add straysnomore
 [] Restrict Google Map
+[] Convex Firecrawl to get dogs
 [] Whether console.log is being logged twice
 [] Services like artists
+[] Email when local mail to myself
 [] Recommended products
+[] Posts about pyrometra, prostate cancer, sterilisation, skin, costs, home
+[] Partners like Kenny for washing pet stuff
 [] Boarding
+[] Handle all errors like convex
+[] Background jobs
+[] Swimming https://www.facebook.com/fortcaninesg
+[] Change view dog to slug and welfare group name
+[] Secure admin pages and APIs
+[] Multiple pictures
+[] Pagination
+[] Deploy to Cloudflare
+[] Tanstack table fully editable
+[] Migrate convex dev to prod
+[] Create log in for welfare group to update
+[] View welfare groups' dogs
+[] Google ads / patreon / buy coffee to earn some money back
+
+## Convex learning
+
+1. Set up and local project connect
+2. Remove field
+3. Add field
+4. Define schema
+5. Migration
+6. Migrate dev to prod
+7.

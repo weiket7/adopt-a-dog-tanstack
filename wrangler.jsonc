@@ -7,6 +7,9 @@
   "assets": {
     "binding": "ASSETS"
   },
+  "vars": {
+    "VITE_CONVEX_URL": "https://adept-eagle-139.convex.cloud"
+  },
   "observability": {
     "enabled": true,
     "logs": {

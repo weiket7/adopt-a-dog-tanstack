@@ -1,24 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { api } from "convex/_generated/api";
+import { convexQuery } from "@convex-dev/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export const Route = createFileRoute("/vets")({
   component: VetsPage,
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(convexQuery(api.vets.listAll, {}));
+  },
 });
-
-const vets = [
-  { id: 1,  name: "Mount Pleasant Animal Medical Centre",         address: "232 Whitley Rd",                        hours: "Mon–Sat 9am–7pm · Sun 9am–1pm",          phone: "+65 6250 8333", emergency: true,  publicHolidays: false, area: "Central" },
-  { id: 2,  name: "Animal Recovery Veterinary Centre",            address: "30 Burn Rd, #01-01",                    hours: "Open 24 hours",                          phone: "+65 6634 1117", emergency: true,  publicHolidays: true,  area: "East" },
-  { id: 3,  name: "Beecroft Animal Specialist & Emergency Hospital", address: "5 Burn Rd, #02-01",                  hours: "Open 24 hours",                          phone: "+65 6256 2275", emergency: true,  publicHolidays: true,  area: "East" },
-  { id: 4,  name: "The Animal Doctors",                           address: "6 Greenwood Ave",                       hours: "Mon–Fri 10am–8pm · Sat–Sun 10am–6pm",   phone: "+65 6253 1300", emergency: false, publicHolidays: false, area: "North" },
-  { id: 5,  name: "The Joyous Vet",                               address: "240 Pasir Panjang Rd",                  hours: "Mon–Sat 10am–8pm · Sun 10am–4pm",        phone: "+65 6873 3622", emergency: false, publicHolidays: true,  area: "West" },
-  { id: 6,  name: "Light of Life Veterinary Clinic",              address: "Blk 153 Serangoon North Ave 1",         hours: "Daily 10am–9pm",                         phone: "+65 6286 0030", emergency: false, publicHolidays: true,  area: "Central" },
-  { id: 7,  name: "Animal & Avian Veterinary Clinic",             address: "21 Jalan Tua Kong",                     hours: "Mon–Sat 9am–8pm · Sun 9am–5pm",          phone: "+65 6243 3282", emergency: false, publicHolidays: false, area: "East" },
-  { id: 8,  name: "The Animal Clinic — Frankel",                  address: "21 Jalan Tua Kong",                     hours: "Mon–Fri 9am–9pm · Sat–Sun 9am–5pm",      phone: "+65 6244 8009", emergency: false, publicHolidays: false, area: "East" },
-  { id: 9,  name: "Vet Central",                                  address: "62 Eng Watt St",                        hours: "Mon–Sat 10am–8pm",                       phone: "+65 6224 5754", emergency: false, publicHolidays: false, area: "Central" },
-  { id: 10, name: "Allpets & Aqualife Veterinary Clinic",         address: "151 Serangoon North Ave 2",             hours: "Daily 10am–10pm",                        phone: "+65 6280 3833", emergency: false, publicHolidays: true,  area: "North" },
-  { id: 11, name: "Companion Animal Surgery",                     address: "162 Bukit Merah Central, #01-3545",     hours: "Mon–Sat 9am–7pm · Sun 9am–1pm",          phone: "+65 6271 8488", emergency: false, publicHolidays: false, area: "South" },
-  { id: 12, name: "Pet Hospital 24/7 — Tampines",                 address: "1 Tampines North Drive 1",              hours: "Open 24 hours",                          phone: "+65 6260 7080", emergency: true,  publicHolidays: true,  area: "East" },
-];
 
 function SearchIcon() {
   return (
@@ -27,15 +18,9 @@ function SearchIcon() {
     </svg>
   );
 }
-
 function BoltIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>
-    </svg>
-  );
+  return <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>;
 }
-
 function SunIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -44,7 +29,6 @@ function SunIcon() {
     </svg>
   );
 }
-
 function PinIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -52,7 +36,6 @@ function PinIcon() {
     </svg>
   );
 }
-
 function ClockIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -60,7 +43,6 @@ function ClockIcon() {
     </svg>
   );
 }
-
 function PhoneIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -69,10 +51,9 @@ function PhoneIcon() {
   );
 }
 
-type Vet = typeof vets[number];
 type Filter = "all" | "emergency" | "ph";
 
-function VetCard({ vet }: { vet: Vet }) {
+function VetCard({ vet }: { vet: any }) {
   return (
     <article className="vet-card">
       <div className="vet-head">
@@ -101,10 +82,11 @@ function VetCard({ vet }: { vet: Vet }) {
 }
 
 function VetsPage() {
+  const { data: allVets } = useSuspenseQuery(convexQuery(api.vets.listAll, {}));
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
 
-  const list = vets.filter((v) => {
+  const list = allVets.filter((v) => {
     if (q.trim()) {
       const qq = q.toLowerCase();
       if (
@@ -129,7 +111,7 @@ function VetsPage() {
           </p>
         </div>
         <div className="stat">
-          <b>{vets.length}</b>
+          <b>{allVets.length}</b>
           clinics islandwide
         </div>
       </header>
@@ -152,7 +134,7 @@ function VetsPage() {
       </div>
 
       <section className="vets-grid">
-        {list.map((v) => <VetCard key={v.id} vet={v} />)}
+        {list.map((v) => <VetCard key={v._id} vet={v} />)}
       </section>
     </main>
   );

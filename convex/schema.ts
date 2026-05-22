@@ -19,11 +19,15 @@ export default defineSchema({
     slug: v.string(),
     status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
     image: v.optional(v.string()),
-    facebook: v.string(),
+    blurb: v.optional(v.string()),
+    dogsAvailable: v.optional(v.number()),
+    facebook: v.optional(v.string()),
     website: v.optional(v.string()),
     email: v.optional(v.string()),
     volunteerUrl: v.optional(v.string()),
     instagram: v.optional(v.string()),
+    tiktok: v.optional(v.string()),
+    youtube: v.optional(v.string()),
   }),
   //}).index("by_slug", ["slug"]),
 
@@ -35,11 +39,13 @@ export default defineSchema({
     link: v.optional(v.string()),
   }),
 
-  // vets: defineTable({
-  //   name: v.string(),
-  //   address: v.string(),
-  //   postalCode: v.string(),
-  //   contactNumber: v.string(),
-  //   email: v.optional(v.string()),
-  // }),
+  vets: defineTable({
+    name: v.string(),
+    address: v.string(),
+    hours: v.string(),
+    phone: v.string(),
+    area: v.string(),
+    emergency: v.boolean(),
+    publicHolidays: v.boolean(),
+  }),
 });

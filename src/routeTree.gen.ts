@@ -11,12 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelfareGroupsRouteImport } from './routes/welfare-groups'
 import { Route as VetsRouteImport } from './routes/vets'
-import { Route as PetCafesRouteImport } from './routes/pet-cafes'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as EventsRouteImport } from './routes/events'
 import { Route as DogRunsRouteImport } from './routes/dog-runs'
 import { Route as CustomScriptDotjsRouteImport } from './routes/customScript[.]js'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DogsDogIdRouteImport } from './routes/dogs.$dogId'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin.events.index'
 import { Route as AdminDogsIndexRouteImport } from './routes/admin.dogs.index'
 import { Route as AdminEventsEventIdRouteImport } from './routes/admin.events.$eventId'
@@ -32,14 +31,9 @@ const VetsRoute = VetsRouteImport.update({
   path: '/vets',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PetCafesRoute = PetCafesRouteImport.update({
-  id: '/pet-cafes',
-  path: '/pet-cafes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DogRunsRoute = DogRunsRouteImport.update({
@@ -52,14 +46,14 @@ const CustomScriptDotjsRoute = CustomScriptDotjsRouteImport.update({
   path: '/customScript.js',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DogsDogIdRoute = DogsDogIdRouteImport.update({
-  id: '/dogs/$dogId',
-  path: '/dogs/$dogId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
@@ -85,13 +79,12 @@ const AdminDogsDogIdRoute = AdminDogsDogIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/dog-runs': typeof DogRunsRoute
-  '/login': typeof LoginRoute
-  '/pet-cafes': typeof PetCafesRoute
+  '/events': typeof EventsRoute
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
-  '/dogs/$dogId': typeof DogsDogIdRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
   '/admin/events/$eventId': typeof AdminEventsEventIdRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
@@ -99,13 +92,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/dog-runs': typeof DogRunsRoute
-  '/login': typeof LoginRoute
-  '/pet-cafes': typeof PetCafesRoute
+  '/events': typeof EventsRoute
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
-  '/dogs/$dogId': typeof DogsDogIdRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
   '/admin/events/$eventId': typeof AdminEventsEventIdRoute
   '/admin/dogs': typeof AdminDogsIndexRoute
@@ -114,13 +106,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blog': typeof BlogRoute
   '/customScript.js': typeof CustomScriptDotjsRoute
   '/dog-runs': typeof DogRunsRoute
-  '/login': typeof LoginRoute
-  '/pet-cafes': typeof PetCafesRoute
+  '/events': typeof EventsRoute
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRoute
-  '/dogs/$dogId': typeof DogsDogIdRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
   '/admin/events/$eventId': typeof AdminEventsEventIdRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
@@ -130,13 +121,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/blog'
     | '/customScript.js'
     | '/dog-runs'
-    | '/login'
-    | '/pet-cafes'
+    | '/events'
     | '/vets'
     | '/welfare-groups'
-    | '/dogs/$dogId'
     | '/admin/dogs/$dogId'
     | '/admin/events/$eventId'
     | '/admin/dogs/'
@@ -144,13 +134,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/blog'
     | '/customScript.js'
     | '/dog-runs'
-    | '/login'
-    | '/pet-cafes'
+    | '/events'
     | '/vets'
     | '/welfare-groups'
-    | '/dogs/$dogId'
     | '/admin/dogs/$dogId'
     | '/admin/events/$eventId'
     | '/admin/dogs'
@@ -158,13 +147,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/blog'
     | '/customScript.js'
     | '/dog-runs'
-    | '/login'
-    | '/pet-cafes'
+    | '/events'
     | '/vets'
     | '/welfare-groups'
-    | '/dogs/$dogId'
     | '/admin/dogs/$dogId'
     | '/admin/events/$eventId'
     | '/admin/dogs/'
@@ -173,13 +161,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlogRoute: typeof BlogRoute
   CustomScriptDotjsRoute: typeof CustomScriptDotjsRoute
   DogRunsRoute: typeof DogRunsRoute
-  LoginRoute: typeof LoginRoute
-  PetCafesRoute: typeof PetCafesRoute
+  EventsRoute: typeof EventsRoute
   VetsRoute: typeof VetsRoute
   WelfareGroupsRoute: typeof WelfareGroupsRoute
-  DogsDogIdRoute: typeof DogsDogIdRoute
   AdminDogsDogIdRoute: typeof AdminDogsDogIdRoute
   AdminEventsEventIdRoute: typeof AdminEventsEventIdRoute
   AdminDogsIndexRoute: typeof AdminDogsIndexRoute
@@ -202,18 +189,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VetsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pet-cafes': {
-      id: '/pet-cafes'
-      path: '/pet-cafes'
-      fullPath: '/pet-cafes'
-      preLoaderRoute: typeof PetCafesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dog-runs': {
@@ -230,18 +210,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomScriptDotjsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dogs/$dogId': {
-      id: '/dogs/$dogId'
-      path: '/dogs/$dogId'
-      fullPath: '/dogs/$dogId'
-      preLoaderRoute: typeof DogsDogIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/events/': {
@@ -277,13 +257,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlogRoute: BlogRoute,
   CustomScriptDotjsRoute: CustomScriptDotjsRoute,
   DogRunsRoute: DogRunsRoute,
-  LoginRoute: LoginRoute,
-  PetCafesRoute: PetCafesRoute,
+  EventsRoute: EventsRoute,
   VetsRoute: VetsRoute,
   WelfareGroupsRoute: WelfareGroupsRoute,
-  DogsDogIdRoute: DogsDogIdRoute,
   AdminDogsDogIdRoute: AdminDogsDogIdRoute,
   AdminEventsEventIdRoute: AdminEventsEventIdRoute,
   AdminDogsIndexRoute: AdminDogsIndexRoute,

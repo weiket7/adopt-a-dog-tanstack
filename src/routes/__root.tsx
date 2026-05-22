@@ -8,53 +8,34 @@ import * as React from "react";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
 import appCss from "~/styles/app.css?url";
-import { seo } from "~/utils/seo";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   head: () => ({
     meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Homeward — Dogs for Adoption" },
       {
-        charSet: "utf-8",
+        name: "description",
+        content:
+          "Find your perfect dog companion. Browse dogs available for adoption in Singapore.",
       },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      ...seo({
-        title:
-          "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
-        description: `TanStack Start is a type-safe, client-first, full-stack React framework. `,
-      }),
     ],
     links: [
-      //{ rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
-        rel: "apple-touch-icon",
-        sizes: "180x180",
-        href: "/apple-touch-icon.png",
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
       },
       {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        href: "/favicon-32x32.png",
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap",
       },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "/favicon-16x16.png",
-      },
-      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
       { rel: "icon", href: "/favicon.ico" },
-    ],
-    scripts: [
-      {
-        src: "/customScript.js",
-        type: "text/javascript",
-      },
     ],
   }),
   errorComponent: DefaultCatchBoundary,
@@ -62,262 +43,78 @@ export const Route = createRootRouteWithContext<{
   shellComponent: RootDocument,
 });
 
-const menu = [
-  // {
-  //   name: "Home",
-  //   link: "/",
-  // },
-  {
-    name: "Dogs for Adoption",
-    link: "/",
-  },
-  {
-    name: "Welfare Groups",
-    link: "/welfare-groups",
-  },
-  {
-    name: "Events",
-    link: "/events",
-  },
-  {
-    name: "Listings",
-    link: "",
-    subMenu: [
-      {
-        name: "Dog Runs",
-        link: "/dog-runs",
-      },
-      {
-        name: "Pet Stores",
-        link: "/pet-stores",
-      },
-      {
-        name: "Vets",
-        link: "/vets",
-      },
-      {
-        name: "Pet Cafes",
-        link: "/pet-cafes",
-      },
-      {
-        name: "Pet Transport",
-        link: "/pet-transport",
-      },
-      {
-        name: "Grooming",
-        link: "/grooming",
-      },
-      {
-        name: "Services", //boarding, training, portraits (rachel)
-        link: "/services",
-      },
-    ],
-  },
-  // {
-  //   name: ".NET Starter Kit",
-  //   link: "/dotnet-starter-kit",
-  // },
-  // {
-  //   name: "Blog",
-  //   link: "/blog",
-  // },
-];
+function PawIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <ellipse cx="6" cy="10" rx="2" ry="2.6" />
+      <ellipse cx="10" cy="6.5" rx="2" ry="2.6" />
+      <ellipse cx="14" cy="6.5" rx="2" ry="2.6" />
+      <ellipse cx="18" cy="10" rx="2" ry="2.6" />
+      <path d="M12 12c-3 0-5.5 2.4-5.5 5 0 1.8 1.3 3 3 3 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.7 0 3-1.2 3-3 0-2.6-2.5-5-5.5-5z" />
+    </svg>
+  );
+}
+
+function Nav() {
+  return (
+    <nav className="nav">
+      <div className="nav-inner">
+        <Link to="/" className="logo">
+          <span className="mark">
+            <PawIcon />
+          </span>
+          Homeward
+          <small>Dog Rescue</small>
+        </Link>
+        <div className="nav-menu">
+          <Link
+            to="/"
+            activeProps={{ className: "active" }}
+            activeOptions={{ exact: true }}
+          >
+            Dogs
+          </Link>
+          <Link to="/events" activeProps={{ className: "active" }}>
+            Events
+          </Link>
+          <Link to="/welfare-groups" activeProps={{ className: "active" }}>
+            Welfare Groups
+          </Link>
+          <Link to="/dog-runs" activeProps={{ className: "active" }}>
+            Dog Runs
+          </Link>
+          <Link to="/vets" activeProps={{ className: "active" }}>
+            Vets
+          </Link>
+          <Link to="/blog" activeProps={{ className: "active" }}>
+            Blog
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="foot">
+      <span>&copy; 2026 Homeward Dog Rescue &middot; Singapore</span>
+      <span>hello@homeward.sg</span>
+    </footer>
+  );
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
-
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        <title>Adopt a Dog</title>
-
-        <meta name="keywords" content="WebSite Template" />
-        <meta
-          name="description"
-          content="Porto - Multipurpose Website Template"
-        />
-        <meta name="author" content="okler.net" />
-
-        <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
-        <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
-
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no"
-        />
-
-        <link
-          id="googleFonts"
-          href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800%7CShadows+Into+Light&display=swap"
-          rel="stylesheet"
-          type="text/css"
-        />
-
-        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" />
-        <link
-          rel="stylesheet"
-          href="/vendor/fontawesome-free/css/all.min.css"
-        />
-        <link rel="stylesheet" href="/vendor/animate/animate.compat.css" />
-        <link
-          rel="stylesheet"
-          href="/vendor/simple-line-icons/css/simple-line-icons.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="/vendor/owl.carousel/assets/owl.carousel.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="/vendor/owl.carousel/assets/owl.theme.default.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="/vendor/magnific-popup/magnific-popup.min.css"
-        />
-
-        <link rel="stylesheet" href="/css/theme.css" />
-        <link rel="stylesheet" href="/css/theme-elements.css" />
-        <link rel="stylesheet" href="/css/theme-blog.css" />
-        <link rel="stylesheet" href="/css/theme-shop.css" />
-
-        <link
-          rel="stylesheet"
-          href="/vendor/circle-flip-slideshow/css/component.css"
-        />
-
-        <link id="skinCSS" rel="stylesheet" href="/css/skins/default.css" />
-
-        <link rel="stylesheet" href="/css/custom.css" />
-
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
-        />
       </head>
-      <body data-plugin-page-transition>
-        <div className="body">
-          <header
-            id="header"
-            className="header-effect-shrink"
-            suppressHydrationWarning={true}
-            data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyChangeLogo': false, 'stickyStartAt': 0}"
-          >
-            <div
-              className="header-body border-top-0"
-              suppressHydrationWarning={true}
-            >
-              <div className="header-container container">
-                <div className="header-row">
-                  <div className="header-column">
-                    <div className="header-row">
-                      <p
-                        className="mb-0 text-dark"
-                        style={{ fontSize: "20px" }}
-                      >
-                        <strong>
-                          <a href="/">Adopt A Dog | Singapore</a>
-                        </strong>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="header-column justify-content-end">
-                    <div className="header-row">
-                      <div className="header-nav header-nav-line header-nav-top-line header-nav-top-line-with-border order-2 order-lg-1">
-                        <div className="header-nav-main header-nav-main-square header-nav-main-effect-2 header-nav-main-sub-effect-1">
-                          <nav className="collapse">
-                            {/* <nav className="collapse"> */}
-                            <ul className="nav nav-pills" id="mainNav">
-                              {menu.map((x) => (
-                                <li key={x.link} className="dropdown">
-                                  <Link
-                                    to={x.link}
-                                    suppressHydrationWarning={true} // Move it here!
-                                    className="dropdown-item dropdown-toggle"
-                                    // activeProps={{ className: 'active' }} // Optional: add an active class automatically
-                                  >
-                                    {x.name}
-                                  </Link>
-                                  {x.subMenu && (
-                                    <ul className="dropdown-menu">
-                                      {x.subMenu.map((sub) => (
-                                        <li key={sub.link}>
-                                          <Link
-                                            to={sub.link}
-                                            suppressHydrationWarning={true}
-                                            className="dropdown-item"
-                                          >
-                                            {sub.name}
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          </nav>
-                        </div>
-                        <button
-                          className="btn header-btn-collapse-nav"
-                          data-bs-toggle="collapse"
-                          data-bs-target=".header-nav-main nav"
-                        >
-                          <i className="fas fa-bars"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          <div role="main" className="main">
-            {/* <!-- <section
-              className="page-header page-header-modern bg-color-grey page-header-sm"
-            >
-              <div className="container">
-                <div className="row">
-                  <div
-                    className="col-md-8 align-self-center p-static order-2 order-md-1"
-                  >
-                    <h1 className="text-dark text-uppercase">
-                      <strong><slot name="header" /></strong>
-                    </h1>
-                  </div>
-                  <div className="col-md-4 align-self-center order-1 order-md-2">
-                    <ul className="breadcrumb d-block text-md-end">
-                      <li><a href="#">Home</a></li>
-                      <li className="active">Features</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </section> --> */}
-
-            <div className="container py-4">
-              {children}
-              <TanStackRouterDevtools position="bottom-right" />
-            </div>
-          </div>
-        </div>
-
-        <script src="/vendor/plugins/js/plugins.min.js"></script>
-
-        <script src="/js/theme.js"></script>
-
-        <script src="/vendor/circle-flip-slideshow/js/jquery.flipshow.min.js"></script>
-        <script src="/js/views/view.home.js"></script>
-
-        <script src="/js/custom.js"></script>
-
-        <script src="/js/theme.init.js"></script>
-
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+      <body>
+        <Nav />
+        {children}
+        <Footer />
+        <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
     </html>

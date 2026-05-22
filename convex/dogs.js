@@ -8,7 +8,22 @@ export const generateUploadUrl = action(async (ctx) => {
 
 export const all = query({
   handler: async (ctx, args) => {
-    return await ctx.db.query("dogs").collect(); // Apply your filters here
+    return await ctx.db.query("dogs").collect();
+  },
+});
+
+export const listAll = query({
+  handler: async (ctx) => {
+    const dogs = await ctx.db.query("dogs").collect();
+    const active = dogs.filter((d) => d.status !== "inactive");
+    return await Promise.all(
+      active.map(async (dog) => ({
+        ...dog,
+        imageUrl: dog.imageStorageId
+          ? await ctx.storage.getUrl(dog.imageStorageId)
+          : null,
+      }))
+    );
   },
 });
 

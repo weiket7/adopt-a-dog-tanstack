@@ -1,363 +1,536 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toAge } from "~/utils/extensions";
-import { z } from "zod";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { convexQuery } from "@convex-dev/react-query";
-import {
-  useQueryClient,
-  useSuspenseInfiniteQuery,
-} from "@tanstack/react-query";
-
-const schema = z.object({
-  name: z
-    .string()
-    .optional()
-    .transform((v) => v || undefined),
-  hdbApproved: z
-    .string()
-    .optional()
-    .transform((v) => v || undefined),
-  gender: z
-    .string()
-    .optional()
-    .transform((v) => v || undefined),
-});
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  validateSearch: (search) => schema.parse(search),
-  loaderDeps: ({ search }) => ({ search }),
-  loader: async ({ context: { queryClient }, deps: { search } }) => {
-    const args = {
-      name: search.name,
-      hdbApproved: search.hdbApproved,
-      gender: search.gender,
-    };
-
-    await queryClient.ensureInfiniteQueryData({
-      // 1. The queryKey must include the args + a label for 'infinite'
-      queryKey: ["dogs", "list", args],
-      queryFn: ({ pageParam }) => {
-        return queryClient.fetchQuery(
-          convexQuery(api.dogs.list, {
-            ...args,
-            paginationOpts: {
-              numItems: 12,
-              cursor: pageParam,
-            },
-          })
-        );
-      },
-      initialPageParam: null as string | null,
-      getNextPageParam: (lastPage: { continueCursor: any }) =>
-        lastPage.continueCursor || null, //TODO
-    });
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(convexQuery(api.dogs.listAll, {}));
   },
 });
 
-function Home() {
-  const search = Route.useSearch();
-  const navigate = useNavigate({ from: Route.fullPath }); // Get navigation tool
-  const dogs = Route.useLoaderData();
-  const formRef = useRef<HTMLFormElement>(null);
-  const observerTarget = useRef<HTMLDivElement>(null);
+/* ------------------------------------------------------------------ */
+/* Helpers                                                             */
+/* ------------------------------------------------------------------ */
 
-  const clear = () => {
-    formRef.current?.reset();
-    navigate({ search: {} }); // Clear search params
-  };
+const FINEPRINT = [
+  "House-trained, loves long walks at East Coast.",
+  "A little shy at first, completely devoted once she trusts you.",
+  "Knows sit, stay, paw. Working on “leave it.”",
+  "Best as the only dog in the home.",
+  "Great with kids over 8. Calm around babies.",
+  "Loves car rides and rolling in fresh laundry.",
+  "Needs a patient owner — still learning the world.",
+  "Fully vaccinated, sterilised, microchipped.",
+  "Currently in foster. Visits by appointment.",
+  "Quiet apartment dog. Sleeps through the night.",
+  "Cuddles first, eats second. Always.",
+  "Walks beautifully on leash. No pulling.",
+  "Affectionate with everyone she meets, including the postman.",
+  "Would thrive with another playful dog at home.",
+  "Senior gentleman looking for a soft sofa.",
+  "Recovered from a rough start — now thriving.",
+  "Crate-trained. Travels well.",
+  "Loves squeaky toys, hates the vacuum.",
+  "Food-motivated. Will work for cheese.",
+  "Best suited to a ground-floor home with a garden.",
+  "Needs a daily walk and a daily nap. In that order.",
+  "Gets along with cats after slow introductions.",
+  "Will follow you from room to room. Velcro dog.",
+  "Big personality in a small package.",
+  "Calm, easygoing, perfect first dog.",
+  "Loves the beach. Tolerates the bath.",
+  "Talks back when ignored. Very expressive.",
+  "Smart, sensitive, slightly dramatic.",
+  "Foster says: “The sweetest dog I’ve ever met.”",
+  "Looking for a forever, not a maybe.",
+];
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const a = arr.slice();
+  let s = seed;
+  for (let i = a.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-    const name = formData.get("name") as string;
-    const hdbApproved = formData.get("hdbApproved") as string;
-    const gender = formData.get("gender") as string;
+function pickFine(dogId: string, seed: number): string {
+  let hash = seed;
+  for (let i = 0; i < dogId.length; i++) {
+    hash = (((hash * 31) >>> 0) + dogId.charCodeAt(i)) >>> 0;
+  }
+  return FINEPRINT[hash % FINEPRINT.length];
+}
 
-    // Navigate to the same page with new search params
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        name: name || undefined,
-        hdbApproved: hdbApproved || undefined,
-        gender: gender || undefined,
-      }),
-    });
-  };
+/* ------------------------------------------------------------------ */
+/* Icons                                                               */
+/* ------------------------------------------------------------------ */
 
-  const queryClient = useQueryClient(); // From @tanstack/react-query
+const SearchIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+  </svg>
+);
+const HeartIcon = () => (
+  <svg viewBox="0 0 24 24">
+    <path d="M12 21s-7-4.5-9.5-9C.5 8 3 4 7 4c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6.5 4 4.5 8-2.5 4.5-9.5 9-9.5 9z"/>
+  </svg>
+);
+const CheckIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+    <polyline points="4 12 10 18 20 6"/>
+  </svg>
+);
+const MarsIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="10" cy="14" r="5"/><path d="m14.5 9.5 5-5"/><path d="M15 4h5v5"/>
+  </svg>
+);
+const VenusIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="9" r="5"/><path d="M12 14v8"/><path d="M9 19h6"/>
+  </svg>
+);
+const ShuffleIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/>
+  </svg>
+);
+const CloseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <path d="M6 6l12 12M18 6 6 18"/>
+  </svg>
+);
+const CakeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 21V11a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10z"/><path d="M4 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M12 4v4M10 4a2 2 0 1 1 4 0c0 1-1 2-2 2s-2-1-2-2z"/>
+  </svg>
+);
+const SendIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>
+  </svg>
+);
 
-  const args = {
-    name: search.name,
-    hdbApproved: search.hdbApproved,
-    gender: search.gender,
-  };
+/* ------------------------------------------------------------------ */
+/* Filters                                                             */
+/* ------------------------------------------------------------------ */
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useSuspenseInfiniteQuery({
-      queryKey: ["dogs", "list", args],
-      queryFn: ({ pageParam }) => {
-        return queryClient.fetchQuery(
-          convexQuery(api.dogs.list, {
-            ...args,
-            paginationOpts: {
-              numItems: 12,
-              cursor: pageParam as string | null,
-            },
-          })
-        );
-      },
-      initialPageParam: null as string | null,
-      // Convex returns 'continueCursor' and 'isDone'
-      getNextPageParam: (lastPage) =>
-        lastPage.isDone ? null : lastPage.continueCursor,
-    });
+function Filters({
+  q, setQ,
+  hdb, setHdb,
+  gender, setGender,
+  favCount,
+}: {
+  q: string; setQ: (v: string) => void;
+  hdb: boolean; setHdb: (v: boolean) => void;
+  gender: string; setGender: (v: string) => void;
+  favCount: number;
+}) {
+  return (
+    <aside className="filters">
+      <div className="filter-eyebrow">Find your match</div>
 
-  const allDogs = data.pages.flatMap((p) => p.page);
+      <div className="filter-group">
+        <label className="filter-label" htmlFor="dog-search">Search by name</label>
+        <div className="search">
+          <SearchIcon />
+          <input
+            id="dog-search"
+            type="text"
+            placeholder="e.g. Mochi, Bruno…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            autoComplete="off"
+          />
+        </div>
+      </div>
 
-  useEffect(() => {
-    // 2. Initialize the native observer
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // If the div is visible and there is more to load
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1, rootMargin: "200px" } // Load 200px before reaching bottom
-    );
+      <div className="filter-group">
+        <span className="filter-label">HDB approved</span>
+        <p className="filter-help">
+          Show only dogs that meet HDB&rsquo;s approved breed &amp; size list for flat-living.
+        </p>
+        <button
+          type="button"
+          className={"toggle-row" + (hdb ? " on" : "")}
+          onClick={() => setHdb(!hdb)}
+          aria-pressed={hdb}
+        >
+          <span className="switch" />
+          <span>
+            <div className="toggle-label">HDB-approved only</div>
+            <div className="toggle-sub">
+              {hdb ? "Showing flat-friendly dogs" : "Showing all dogs"}
+            </div>
+          </span>
+        </button>
+      </div>
 
-    // 3. Start observing the target
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
+      <div className="filter-group">
+        <span className="filter-label">Gender</span>
+        <div className="seg" role="radiogroup" aria-label="Gender">
+          <button role="radio" aria-pressed={gender === "all"} onClick={() => setGender("all")}>All</button>
+          <button role="radio" aria-pressed={gender === "Male"} onClick={() => setGender("Male")}>Male</button>
+          <button role="radio" aria-pressed={gender === "Female"} onClick={() => setGender("Female")}>Female</button>
+        </div>
+      </div>
 
-    // 4. Cleanup: stop observing when component unmounts
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]); // Re-run when status changes
+      <div className="filter-group">
+        <div className="shortlist-callout">
+          <div className="shortlist-callout-title">
+            {favCount > 0 ? `${favCount} on your shortlist` : "Build a shortlist"}
+          </div>
+          Tap the heart on any card to save dogs you&rsquo;d like to meet.
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* DogCard                                                             */
+/* ------------------------------------------------------------------ */
+
+function DogCard({
+  dog, fine, fav, onFav, onOpen,
+}: {
+  dog: any; fine: string; fav: boolean; onFav: (id: string) => void; onOpen: (dog: any) => void;
+}) {
+  const [popped, setPopped] = useState(false);
+  const [imgOk, setImgOk] = useState(true);
 
   return (
-    <div className="row">
-      <div className="col-lg-3 order-2 order-lg-1">
-        <aside className="sidebar">
-          <form onSubmit={handleSubmit} ref={formRef}>
-            <div className="row g-3">
-              <div className="col-12">
-                <label className="form-label mb-1 text-2">
-                  <b>Name</b>
-                </label>
-                <input
-                  type="text"
-                  data-msg-required="Please enter your name."
-                  maxLength={50}
-                  className="form-control text-3 h-auto py-2"
-                  name="name"
-                  defaultValue={search.name}
-                />
-              </div>
-
-              <div className="col-12">
-                <label className="form-label mb-1 text-2">
-                  <b>HDB Approved</b>
-                </label>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="hdbApproved"
-                    value="Yes"
-                    id="hdbApproved-yes"
-                    defaultChecked={search.hdbApproved === "Yes"}
-                  />
-                  <label className="form-check-label" htmlFor="hdbApproved-yes">
-                    {" "}
-                    Yes{" "}
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="hdbApproved"
-                    value="No"
-                    id="hdbApproved-no"
-                    defaultChecked={search.hdbApproved === "No"}
-                  />
-                  <label className="form-check-label" htmlFor="hdbApproved-no">
-                    {" "}
-                    No{" "}
-                  </label>
-                </div>
-              </div>
-
-              <div className="col-12">
-                <label className="form-label mb-1 text-2">
-                  <b>Gender</b>
-                </label>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="gender"
-                    value="Male"
-                    id="gender-male"
-                    defaultChecked={search.gender === "Male"}
-                  />
-                  <label className="form-check-label" htmlFor="gender-male">
-                    {" "}
-                    Male
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="gender"
-                    value="Female"
-                    id="gender-female"
-                    defaultChecked={search.gender === "Female"}
-                  />
-                  <label className="form-check-label" htmlFor="gender-female">
-                    {" "}
-                    Female
-                  </label>
-                </div>
-              </div>
-
-              <div className="col-12">
-                <button type="submit" className="btn btn-primary">
-                  Search
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-link btn-sm"
-                  onClick={clear}
-                >
-                  Clear
-                </button>
-              </div>
-            </div>
-          </form>
-        </aside>
-      </div>
-      <div className="col-lg-9 order-1 order-lg-2">
-        {allDogs.length === 0 ? (
-          "No dogs found"
+    <article
+      className="card"
+      role="button"
+      tabIndex={0}
+      onClick={() => onOpen(dog)}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(dog); } }}
+      aria-label={`View ${dog.name}'s profile`}
+    >
+      <div className="card-photo">
+        {dog.imageUrl && imgOk ? (
+          <img
+            src={dog.imageUrl}
+            alt={dog.name}
+            loading="lazy"
+            onError={() => setImgOk(false)}
+          />
         ) : (
-          <div
-            className="row products product-thumb-info-list"
-            data-plugin-masonry
-            data-plugin-options="{'layoutMode': 'fitRows'}"
-          >
-            {allDogs.map((x) => (
-              <div className="col-sm-6 col-lg-4" key={x._id}>
-                <div className="product mb-0">
-                  <div className="product-thumb-info border-0 mb-3">
-                    {/* <div className="product-thumb-info-badges-wrapper">
-                        <span className="badge badge-ecommerce text-bg-success">
-                          NEW
-                        </span>
-                      </div> */}
+          <div className="placeholder">{dog.name[0].toUpperCase()}</div>
+        )}
 
-                    {/* <div className="addtocart-btn-wrapper">
-                        <a
-                          href="shop-cart.html"
-                          className="text-decoration-none addtocart-btn"
-                          title="Add to Cart"
-                        >
-                          <i className="icons icon-bag" />
-                        </a>
-                      </div> */}
+        <div className="badges">
+          {dog.hdbApproved === "Yes" && (
+            <span className="badge hdb"><CheckIcon /> HDB</span>
+          )}
+        </div>
 
-                    <a href={"dogs/" + x._id}>
-                      <div className="product-thumb-info-image">
-                        <img
-                          alt=""
-                          className="img-fluid"
-                          src={x.imageUrl || "img/products/product-grey-4.jpg"}
-                        />
-                      </div>
-                    </a>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <div>
-                      {/* <a
-                      href="#"
-                      className="d-block text-uppercase text-decoration-none text-color-default text-color-hover-primary line-height-1 text-0 mb-1"
-                    >
-                      electronics
-                    </a> */}
-                      <h3 className="font-weight-medium font-alternative text-transform-none line-height-3 mb-0">
-                        <a
-                          href={"dogs/" + x._id}
-                          className="text-color-dark text-color-hover-primary"
-                        >
-                          {x.name}
-                        </a>
-                      </h3>
-                    </div>
-                    {/* <a
-                      href="#"
-                      className="text-decoration-none text-color-default text-color-hover-dark text-4"
-                    >
-                      <i className="far fa-heart" />
-                    </a> */}
-                  </div>
-                  {/* <div title="Rated 5 out of 5">
-                    <input
-                      type="text"
-                      className="d-none"
-                      value="5"
-                      title=""
-                      data-plugin-star-rating
-                      data-plugin-options="{'displayOnly': true, 'color': 'default', 'size':'xs'}"
-                    />
-                  </div> */}
-                  <p className="text-4 mb-3">
-                    {x.gender == "Male" ? (
-                      <i className="fa-solid fa-mars" />
-                    ) : (
-                      <i className="fa-solid fa-venus" />
-                    )}{" "}
-                    <span>{x.gender}</span>
-                    <br />
-                    <i className="fa-solid fa-cake-candles" />{" "}
-                    {toAge(x.birthday)}
-                    <br />
-                    <i className="fa-solid fa-house" />{" "}
-                    {x.hdbApproved == "Yes"
-                      ? "HDB Approved"
-                      : "Not HDB Approved"}
-                  </p>
-                </div>
-              </div>
-            ))}
+        <button
+          type="button"
+          className={"heart" + (fav ? " on" : "") + (popped ? " pop" : "")}
+          aria-pressed={fav}
+          aria-label={fav ? `Remove ${dog.name} from shortlist` : `Save ${dog.name} to shortlist`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onFav(dog._id);
+            setPopped(true);
+            setTimeout(() => setPopped(false), 360);
+          }}
+        >
+          <HeartIcon />
+        </button>
+      </div>
 
-            {/* {hasNextPage && (
-              <button
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-              >
-                {isFetchingNextPage ? "Loading..." : "Load More"}
-              </button>
-            )} */}
+      <div className="card-body">
+        <div className="card-name-row">
+          <h3 className="card-name">{dog.name}</h3>
+          <span className="card-gender">
+            {dog.gender === "Male" ? <MarsIcon /> : <VenusIcon />}
+            {dog.gender}
+          </span>
+        </div>
+        <div className="card-meta">
+          {dog.birthday ? toAge(dog.birthday) : <span>&nbsp;</span>}
+        </div>
+        <div className="card-fine">{dog.description || fine}</div>
+      </div>
+    </article>
+  );
+}
 
-            {/* 5. The Sentinel Element (Ref is attached here) */}
-            <div ref={observerTarget} className="col-12 py-5 text-center">
-              {isFetchingNextPage && (
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              )}
-              {!hasNextPage && allDogs.length > 0 && (
-                <p className="text-muted">You've seen all the dogs! 🐾</p>
+/* ------------------------------------------------------------------ */
+/* DogDetail modal                                                     */
+/* ------------------------------------------------------------------ */
+
+function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
+  const [imgOk, setImgOk] = useState(true);
+  const sheetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  useEffect(() => {
+    if (sheetRef.current) sheetRef.current.scrollTop = 0;
+    setImgOk(true);
+  }, [dog?._id]);
+
+  if (!dog) return null;
+
+  const update = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((p) => ({ ...p, [k]: e.target.value }));
+
+  const submit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim()) return;
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div
+        className="modal-sheet"
+        ref={sheetRef}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${dog.name}'s profile`}
+      >
+        <button className="modal-close" onClick={onClose} aria-label="Close">
+          <CloseIcon />
+        </button>
+
+        <div className="modal-body">
+          <div>
+            <div className="detail-head">
+              <div className="detail-eyebrow">Available for adoption</div>
+              <h2 className="detail-name">Meet <em>{dog.name}</em></h2>
+              {dog.breed && <div className="detail-tag">{dog.breed}</div>}
+            </div>
+
+            <div className="modal-portrait">
+              {dog.imageUrl && imgOk ? (
+                <img src={dog.imageUrl} alt={dog.name} onError={() => setImgOk(false)} />
+              ) : (
+                <div className="placeholder">{dog.name[0]}</div>
               )}
             </div>
+
+            <div className="detail-grid">
+              <div className="detail-cell">
+                <div className="k">Gender</div>
+                <div className="v">
+                  {dog.gender === "Male" ? <MarsIcon /> : <VenusIcon />}
+                  {dog.gender}
+                </div>
+              </div>
+              <div className="detail-cell">
+                <div className="k">Age</div>
+                <div className="v">{dog.birthday ? toAge(dog.birthday) : "—"}</div>
+              </div>
+              <div className="detail-cell">
+                <div className="k">Birthday</div>
+                <div className="v"><CakeIcon /> {dog.birthday || "—"}</div>
+              </div>
+              <div className="detail-cell">
+                <div className="k">HDB approved</div>
+                <div className="v">{dog.hdbApproved === "Yes" ? "Yes" : "Landed only"}</div>
+              </div>
+            </div>
+
+            {dog.description && (
+              <>
+                <div className="detail-about-label">About {dog.name}</div>
+                <p className="detail-about">{dog.description}</p>
+              </>
+            )}
           </div>
-        )}
+
+          <aside>
+            <div className="form-card">
+              {submitted ? (
+                <div className="form-success">
+                  <span className="check-ring"><CheckIcon /></span>
+                  <h4>Thanks, {form.name.split(" ")[0] || "friend"}.</h4>
+                  <p>We&rsquo;ve received your interest in {dog.name}. Our adoption team will be in touch within 2 working days.</p>
+                </div>
+              ) : (
+                <>
+                  <h3>Interested in {dog.name}?</h3>
+                  <p className="form-sub">Tell us a little about yourself and we&rsquo;ll arrange a meet at the shelter.</p>
+                  <form onSubmit={submit}>
+                    <div className="form-field">
+                      <label htmlFor="adopter-name">Your name</label>
+                      <input id="adopter-name" type="text" placeholder="Full name" value={form.name} onChange={update("name")} required />
+                    </div>
+                    <div className="form-row">
+                      <div className="form-field">
+                        <label htmlFor="adopter-email">Email</label>
+                        <input id="adopter-email" type="email" placeholder="you@example.com" value={form.email} onChange={update("email")} required />
+                      </div>
+                      <div className="form-field">
+                        <label htmlFor="adopter-phone">Phone</label>
+                        <input id="adopter-phone" type="tel" placeholder="+65 9123 4567" value={form.phone} onChange={update("phone")} />
+                      </div>
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="adopter-message">Tell us about your home</label>
+                      <textarea
+                        id="adopter-message"
+                        placeholder={`Where do you live, who else is at home, and what made ${dog.name} catch your eye?`}
+                        value={form.message}
+                        onChange={update("message")}
+                      />
+                    </div>
+                    <button type="submit" className="form-submit">
+                      <SendIcon /> Send interest
+                    </button>
+                    <div className="form-disclaimer">
+                      Adoption is subject to home visit &amp; suitability check.
+                    </div>
+                  </form>
+                </>
+              )}
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Home                                                                */
+/* ------------------------------------------------------------------ */
+
+function Home() {
+  const { data: allDogs } = useSuspenseQuery(convexQuery(api.dogs.listAll, {}));
+
+  const [q, setQ] = useState("");
+  const [hdb, setHdb] = useState(false);
+  const [gender, setGender] = useState("all");
+  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1e6) + 1);
+  const [selectedDog, setSelectedDog] = useState<any>(null);
+
+  const [favs, setFavs] = useState<Set<string>>(() => {
+    try {
+      const raw = localStorage.getItem("homeward.favs");
+      return raw ? new Set(JSON.parse(raw)) : new Set();
+    } catch { return new Set(); }
+  });
+  useEffect(() => {
+    try { localStorage.setItem("homeward.favs", JSON.stringify([...favs])); } catch {}
+  }, [favs]);
+
+  const toggleFav = (id: string) => {
+    setFavs((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const shuffled = useMemo(
+    () => seededShuffle(allDogs ?? [], seed),
+    [allDogs, seed],
+  );
+
+  const filtered = useMemo(() => {
+    const ql = q.trim().toLowerCase();
+    return shuffled.filter((d) => {
+      if (ql && !d.name.toLowerCase().includes(ql)) return false;
+      if (hdb && d.hdbApproved !== "Yes") return false;
+      if (gender !== "all" && d.gender !== gender) return false;
+      return true;
+    });
+  }, [shuffled, q, hdb, gender]);
+
+  const clearFilters = () => { setQ(""); setHdb(false); setGender("all"); };
+
+  return (
+    <main className="page">
+      <header className="page-header">
+        <div>
+          <h1>Meet the dogs <em>looking for home.</em></h1>
+          <p>
+            Every dog here is fully vaccinated, sterilised and waiting for someone
+            patient. Browse below, save your favourites, and we&rsquo;ll arrange a
+            meet at our shelter or with a foster carer.
+          </p>
+        </div>
+        <div className="stat">
+          <b>{allDogs?.length ?? 0}</b>
+          dogs currently in our care
+        </div>
+      </header>
+
+      <div className="layout">
+        <Filters
+          q={q} setQ={setQ}
+          hdb={hdb} setHdb={setHdb}
+          gender={gender} setGender={setGender}
+          favCount={favs.size}
+        />
+
+        <section>
+          <div className="results-meta">
+            <div className="results-count">
+              {filtered.length} {filtered.length === 1 ? "dog" : "dogs"}
+              <span> &middot; in random order</span>
+            </div>
+            <button
+              className="shuffle"
+              onClick={() => setSeed(Math.floor(Math.random() * 1e6) + 1)}
+              title="Shuffle order"
+            >
+              <ShuffleIcon /> Shuffle
+            </button>
+          </div>
+
+          <div className="grid">
+            {filtered.length === 0 ? (
+              <div className="empty">
+                <h3>No dogs match those filters</h3>
+                <p>Try widening your search &mdash; the right match may not be the one you came in for.</p>
+                <button onClick={clearFilters}>Clear all filters</button>
+              </div>
+            ) : (
+              filtered.map((dog) => (
+                <DogCard
+                  key={dog._id}
+                  dog={dog}
+                  fine={pickFine(dog._id, seed)}
+                  fav={favs.has(dog._id)}
+                  onFav={toggleFav}
+                  onOpen={setSelectedDog}
+                />
+              ))
+            )}
+          </div>
+        </section>
+      </div>
+
+      {selectedDog && (
+        <DogDetail dog={selectedDog} onClose={() => setSelectedDog(null)} />
+      )}
+    </main>
   );
 }

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toAge } from "~/utils/extensions";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
@@ -73,48 +74,111 @@ function pickFine(dogId: string, seed: number): string {
 /* ------------------------------------------------------------------ */
 
 const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
   </svg>
 );
 const HeartIcon = () => (
   <svg viewBox="0 0 24 24">
-    <path d="M12 21s-7-4.5-9.5-9C.5 8 3 4 7 4c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6.5 4 4.5 8-2.5 4.5-9.5 9-9.5 9z"/>
+    <path d="M12 21s-7-4.5-9.5-9C.5 8 3 4 7 4c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6.5 4 4.5 8-2.5 4.5-9.5 9-9.5 9z" />
   </svg>
 );
 const CheckIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
-    <polyline points="4 12 10 18 20 6"/>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width="11"
+    height="11"
+  >
+    <polyline points="4 12 10 18 20 6" />
   </svg>
 );
 const MarsIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="10" cy="14" r="5"/><path d="m14.5 9.5 5-5"/><path d="M15 4h5v5"/>
+    <circle cx="10" cy="14" r="5" />
+    <path d="m14.5 9.5 5-5" />
+    <path d="M15 4h5v5" />
   </svg>
 );
 const VenusIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="9" r="5"/><path d="M12 14v8"/><path d="M9 19h6"/>
+    <circle cx="12" cy="9" r="5" />
+    <path d="M12 14v8" />
+    <path d="M9 19h6" />
   </svg>
 );
 const ShuffleIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/>
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M16 3h5v5" />
+    <path d="M4 20 21 3" />
+    <path d="M21 16v5h-5" />
+    <path d="m15 15 6 6" />
+    <path d="M4 4l5 5" />
   </svg>
 );
 const CloseIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <path d="M6 6l12 12M18 6 6 18"/>
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
+    <path d="M6 6l12 12M18 6 6 18" />
   </svg>
 );
 const CakeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 21V11a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10z"/><path d="M4 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M12 4v4M10 4a2 2 0 1 1 4 0c0 1-1 2-2 2s-2-1-2-2z"/>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M4 21V11a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10z" />
+    <path d="M4 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2" />
+    <path d="M12 4v4M10 4a2 2 0 1 1 4 0c0 1-1 2-2 2s-2-1-2-2z" />
   </svg>
 );
 const SendIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M22 2 11 13" />
+    <path d="M22 2 15 22l-4-9-9-4z" />
   </svg>
 );
 
@@ -123,14 +187,20 @@ const SendIcon = () => (
 /* ------------------------------------------------------------------ */
 
 function Filters({
-  q, setQ,
-  hdb, setHdb,
-  gender, setGender,
+  q,
+  setQ,
+  hdb,
+  setHdb,
+  gender,
+  setGender,
   favCount,
 }: {
-  q: string; setQ: (v: string) => void;
-  hdb: boolean; setHdb: (v: boolean) => void;
-  gender: string; setGender: (v: string) => void;
+  q: string;
+  setQ: (v: string) => void;
+  hdb: boolean;
+  setHdb: (v: boolean) => void;
+  gender: string;
+  setGender: (v: string) => void;
   favCount: number;
 }) {
   return (
@@ -138,7 +208,9 @@ function Filters({
       <div className="filter-eyebrow">Find your match</div>
 
       <div className="filter-group">
-        <label className="filter-label" htmlFor="dog-search">Search by name</label>
+        <label className="filter-label" htmlFor="dog-search">
+          Search by name
+        </label>
         <div className="search">
           <SearchIcon />
           <input
@@ -155,7 +227,8 @@ function Filters({
       <div className="filter-group">
         <span className="filter-label">HDB approved</span>
         <p className="filter-help">
-          Show only dogs that meet HDB&rsquo;s approved breed &amp; size list for flat-living.
+          Show only dogs that meet HDB&rsquo;s approved breed &amp; size list
+          for flat-living.
         </p>
         <button
           type="button"
@@ -176,16 +249,36 @@ function Filters({
       <div className="filter-group">
         <span className="filter-label">Gender</span>
         <div className="seg" role="radiogroup" aria-label="Gender">
-          <button role="radio" aria-pressed={gender === "all"} onClick={() => setGender("all")}>All</button>
-          <button role="radio" aria-pressed={gender === "Male"} onClick={() => setGender("Male")}>Male</button>
-          <button role="radio" aria-pressed={gender === "Female"} onClick={() => setGender("Female")}>Female</button>
+          <button
+            role="radio"
+            aria-pressed={gender === "all"}
+            onClick={() => setGender("all")}
+          >
+            All
+          </button>
+          <button
+            role="radio"
+            aria-pressed={gender === "Male"}
+            onClick={() => setGender("Male")}
+          >
+            Male
+          </button>
+          <button
+            role="radio"
+            aria-pressed={gender === "Female"}
+            onClick={() => setGender("Female")}
+          >
+            Female
+          </button>
         </div>
       </div>
 
       <div className="filter-group">
         <div className="shortlist-callout">
           <div className="shortlist-callout-title">
-            {favCount > 0 ? `${favCount} on your shortlist` : "Build a shortlist"}
+            {favCount > 0
+              ? `${favCount} on your shortlist`
+              : "Build a shortlist"}
           </div>
           Tap the heart on any card to save dogs you&rsquo;d like to meet.
         </div>
@@ -199,12 +292,22 @@ function Filters({
 /* ------------------------------------------------------------------ */
 
 function DogCard({
-  dog, fine, fav, onFav, onOpen,
+  dog,
+  fine,
+  fav,
+  onFav,
+  onOpen,
 }: {
-  dog: any; fine: string; fav: boolean; onFav: (id: string) => void; onOpen: (dog: any) => void;
+  dog: any;
+  fine: string;
+  fav: boolean;
+  onFav: (id: string) => void;
+  onOpen: (dog: any) => void;
 }) {
   const [popped, setPopped] = useState(false);
   const [imgOk, setImgOk] = useState(true);
+
+  const initial = dog.name[0].toUpperCase();
 
   return (
     <article
@@ -212,7 +315,12 @@ function DogCard({
       role="button"
       tabIndex={0}
       onClick={() => onOpen(dog)}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(dog); } }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen(dog);
+        }
+      }}
       aria-label={`View ${dog.name}'s profile`}
     >
       <div className="card-photo">
@@ -229,7 +337,9 @@ function DogCard({
 
         <div className="badges">
           {dog.hdbApproved === "Yes" && (
-            <span className="badge hdb"><CheckIcon /> HDB</span>
+            <span className="badge hdb">
+              <CheckIcon /> HDB
+            </span>
           )}
         </div>
 
@@ -237,7 +347,11 @@ function DogCard({
           type="button"
           className={"heart" + (fav ? " on" : "") + (popped ? " pop" : "")}
           aria-pressed={fav}
-          aria-label={fav ? `Remove ${dog.name} from shortlist` : `Save ${dog.name} to shortlist`}
+          aria-label={
+            fav
+              ? `Remove ${dog.name} from shortlist`
+              : `Save ${dog.name} to shortlist`
+          }
           onClick={(e) => {
             e.stopPropagation();
             onFav(dog._id);
@@ -271,13 +385,20 @@ function DogCard({
 /* ------------------------------------------------------------------ */
 
 function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
   const [submitted, setSubmitted] = useState(false);
   const [imgOk, setImgOk] = useState(true);
   const sheetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
@@ -285,7 +406,9 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, []);
 
   useEffect(() => {
@@ -295,8 +418,10 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
 
   if (!dog) return null;
 
-  const update = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm((p) => ({ ...p, [k]: e.target.value }));
+  const update =
+    (k: string) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((p) => ({ ...p, [k]: e.target.value }));
 
   const submit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -322,13 +447,19 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
           <div>
             <div className="detail-head">
               <div className="detail-eyebrow">Available for adoption</div>
-              <h2 className="detail-name">Meet <em>{dog.name}</em></h2>
+              <h2 className="detail-name">
+                Meet <em>{dog.name}</em>
+              </h2>
               {dog.breed && <div className="detail-tag">{dog.breed}</div>}
             </div>
 
             <div className="modal-portrait">
               {dog.imageUrl && imgOk ? (
-                <img src={dog.imageUrl} alt={dog.name} onError={() => setImgOk(false)} />
+                <img
+                  src={dog.imageUrl}
+                  alt={dog.name}
+                  onError={() => setImgOk(false)}
+                />
               ) : (
                 <div className="placeholder">{dog.name[0]}</div>
               )}
@@ -344,15 +475,21 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
               </div>
               <div className="detail-cell">
                 <div className="k">Age</div>
-                <div className="v">{dog.birthday ? toAge(dog.birthday) : "—"}</div>
+                <div className="v">
+                  {dog.birthday ? toAge(dog.birthday) : "—"}
+                </div>
               </div>
               <div className="detail-cell">
                 <div className="k">Birthday</div>
-                <div className="v"><CakeIcon /> {dog.birthday || "—"}</div>
+                <div className="v">
+                  <CakeIcon /> {dog.birthday || "—"}
+                </div>
               </div>
               <div className="detail-cell">
                 <div className="k">HDB approved</div>
-                <div className="v">{dog.hdbApproved === "Yes" ? "Yes" : "Landed only"}</div>
+                <div className="v">
+                  {dog.hdbApproved === "Yes" ? "Yes" : "Landed only"}
+                </div>
               </div>
             </div>
 
@@ -368,31 +505,61 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
             <div className="form-card">
               {submitted ? (
                 <div className="form-success">
-                  <span className="check-ring"><CheckIcon /></span>
+                  <span className="check-ring">
+                    <CheckIcon />
+                  </span>
                   <h4>Thanks, {form.name.split(" ")[0] || "friend"}.</h4>
-                  <p>We&rsquo;ve received your interest in {dog.name}. Our adoption team will be in touch within 2 working days.</p>
+                  <p>
+                    We&rsquo;ve received your interest in {dog.name}. Our
+                    adoption team will be in touch within 2 working days.
+                  </p>
                 </div>
               ) : (
                 <>
                   <h3>Interested in {dog.name}?</h3>
-                  <p className="form-sub">Tell us a little about yourself and we&rsquo;ll arrange a meet at the shelter.</p>
+                  <p className="form-sub">
+                    Tell us a little about yourself and we&rsquo;ll arrange a
+                    meet at the shelter.
+                  </p>
                   <form onSubmit={submit}>
                     <div className="form-field">
                       <label htmlFor="adopter-name">Your name</label>
-                      <input id="adopter-name" type="text" placeholder="Full name" value={form.name} onChange={update("name")} required />
+                      <input
+                        id="adopter-name"
+                        type="text"
+                        placeholder="Full name"
+                        value={form.name}
+                        onChange={update("name")}
+                        required
+                      />
                     </div>
                     <div className="form-row">
                       <div className="form-field">
                         <label htmlFor="adopter-email">Email</label>
-                        <input id="adopter-email" type="email" placeholder="you@example.com" value={form.email} onChange={update("email")} required />
+                        <input
+                          id="adopter-email"
+                          type="email"
+                          placeholder="you@example.com"
+                          value={form.email}
+                          onChange={update("email")}
+                          required
+                        />
                       </div>
                       <div className="form-field">
                         <label htmlFor="adopter-phone">Phone</label>
-                        <input id="adopter-phone" type="tel" placeholder="+65 9123 4567" value={form.phone} onChange={update("phone")} />
+                        <input
+                          id="adopter-phone"
+                          type="tel"
+                          placeholder="+65 9123 4567"
+                          value={form.phone}
+                          onChange={update("phone")}
+                        />
                       </div>
                     </div>
                     <div className="form-field">
-                      <label htmlFor="adopter-message">Tell us about your home</label>
+                      <label htmlFor="adopter-message">
+                        Tell us about your home
+                      </label>
                       <textarea
                         id="adopter-message"
                         placeholder={`Where do you live, who else is at home, and what made ${dog.name} catch your eye?`}
@@ -434,16 +601,21 @@ function Home() {
     try {
       const raw = localStorage.getItem("homeward.favs");
       return raw ? new Set(JSON.parse(raw)) : new Set();
-    } catch { return new Set(); }
+    } catch {
+      return new Set();
+    }
   });
   useEffect(() => {
-    try { localStorage.setItem("homeward.favs", JSON.stringify([...favs])); } catch {}
+    try {
+      localStorage.setItem("homeward.favs", JSON.stringify([...favs]));
+    } catch {}
   }, [favs]);
 
   const toggleFav = (id: string) => {
     setFavs((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
@@ -463,17 +635,23 @@ function Home() {
     });
   }, [shuffled, q, hdb, gender]);
 
-  const clearFilters = () => { setQ(""); setHdb(false); setGender("all"); };
+  const clearFilters = () => {
+    setQ("");
+    setHdb(false);
+    setGender("all");
+  };
 
   return (
     <main className="page">
       <header className="page-header">
         <div>
-          <h1>Meet the dogs <em>looking for home.</em></h1>
+          <h1>
+            Meet the dogs <em>looking for home.</em>
+          </h1>
           <p>
-            Every dog here is fully vaccinated, sterilised and waiting for someone
-            patient. Browse below, save your favourites, and we&rsquo;ll arrange a
-            meet at our shelter or with a foster carer.
+            Every dog here is fully vaccinated, sterilised and waiting for
+            someone patient. Browse below, save your favourites, and we&rsquo;ll
+            arrange a meet at our shelter or with a foster carer.
           </p>
         </div>
         <div className="stat">
@@ -484,9 +662,12 @@ function Home() {
 
       <div className="layout">
         <Filters
-          q={q} setQ={setQ}
-          hdb={hdb} setHdb={setHdb}
-          gender={gender} setGender={setGender}
+          q={q}
+          setQ={setQ}
+          hdb={hdb}
+          setHdb={setHdb}
+          gender={gender}
+          setGender={setGender}
           favCount={favs.size}
         />
 
@@ -509,7 +690,10 @@ function Home() {
             {filtered.length === 0 ? (
               <div className="empty">
                 <h3>No dogs match those filters</h3>
-                <p>Try widening your search &mdash; the right match may not be the one you came in for.</p>
+                <p>
+                  Try widening your search &mdash; the right match may not be
+                  the one you came in for.
+                </p>
                 <button onClick={clearFilters}>Clear all filters</button>
               </div>
             ) : (
@@ -528,8 +712,9 @@ function Home() {
         </section>
       </div>
 
-      {selectedDog && (
-        <DogDetail dog={selectedDog} onClose={() => setSelectedDog(null)} />
+      {selectedDog && createPortal(
+        <DogDetail dog={selectedDog} onClose={() => setSelectedDog(null)} />,
+        document.body,
       )}
     </main>
   );

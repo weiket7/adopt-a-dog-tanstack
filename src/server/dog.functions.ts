@@ -4,8 +4,6 @@ import { getConvexServerClient } from "./convex";
 import { Id } from "convex/_generated/dataModel";
 import z from "zod";
 
-const convex = getConvexServerClient();
-
 export const saveDogAction = createServerFn({ method: "POST" })
   .inputValidator((data: FormData) => {
     if (!(data instanceof FormData)) {
@@ -14,6 +12,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }: { data: FormData }) => {
+    const convex = getConvexServerClient();
     const dogId = data.get("dogId") as string | null;
     const imageFile = data.get("image") as File;
     const name = data.get("name") as string;
@@ -58,6 +57,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
 export const deleteDogAction = createServerFn({ method: "POST" })
   .inputValidator(z.string())
   .handler(async ({ data: dogId }) => {
+    const convex = getConvexServerClient();
     console.log(dogId);
     await convex.mutation(api.dogs.remove, { id: dogId as Id<"dogs"> });
     return { success: true };

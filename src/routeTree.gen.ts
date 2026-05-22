@@ -17,7 +17,9 @@ import { Route as DogRunsRouteImport } from './routes/dog-runs'
 import { Route as CustomScriptDotjsRouteImport } from './routes/customScript[.]js'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DogsDogIdRouteImport } from './routes/dogs.$dogId'
+import { Route as AdminEventsIndexRouteImport } from './routes/admin.events.index'
 import { Route as AdminDogsIndexRouteImport } from './routes/admin.dogs.index'
+import { Route as AdminEventsEventIdRouteImport } from './routes/admin.events.$eventId'
 import { Route as AdminDogsDogIdRouteImport } from './routes/admin.dogs.$dogId'
 
 const WelfareGroupsRoute = WelfareGroupsRouteImport.update({
@@ -60,9 +62,19 @@ const DogsDogIdRoute = DogsDogIdRouteImport.update({
   path: '/dogs/$dogId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
+  id: '/admin/events/',
+  path: '/admin/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDogsIndexRoute = AdminDogsIndexRouteImport.update({
   id: '/admin/dogs/',
   path: '/admin/dogs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEventsEventIdRoute = AdminEventsEventIdRouteImport.update({
+  id: '/admin/events/$eventId',
+  path: '/admin/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDogsDogIdRoute = AdminDogsDogIdRouteImport.update({
@@ -81,7 +93,9 @@ export interface FileRoutesByFullPath {
   '/welfare-groups': typeof WelfareGroupsRoute
   '/dogs/$dogId': typeof DogsDogIdRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
+  '/admin/events/$eventId': typeof AdminEventsEventIdRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,7 +107,9 @@ export interface FileRoutesByTo {
   '/welfare-groups': typeof WelfareGroupsRoute
   '/dogs/$dogId': typeof DogsDogIdRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
+  '/admin/events/$eventId': typeof AdminEventsEventIdRoute
   '/admin/dogs': typeof AdminDogsIndexRoute
+  '/admin/events': typeof AdminEventsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,7 +122,9 @@ export interface FileRoutesById {
   '/welfare-groups': typeof WelfareGroupsRoute
   '/dogs/$dogId': typeof DogsDogIdRoute
   '/admin/dogs/$dogId': typeof AdminDogsDogIdRoute
+  '/admin/events/$eventId': typeof AdminEventsEventIdRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,7 +138,9 @@ export interface FileRouteTypes {
     | '/welfare-groups'
     | '/dogs/$dogId'
     | '/admin/dogs/$dogId'
+    | '/admin/events/$eventId'
     | '/admin/dogs/'
+    | '/admin/events/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -132,7 +152,9 @@ export interface FileRouteTypes {
     | '/welfare-groups'
     | '/dogs/$dogId'
     | '/admin/dogs/$dogId'
+    | '/admin/events/$eventId'
     | '/admin/dogs'
+    | '/admin/events'
   id:
     | '__root__'
     | '/'
@@ -144,7 +166,9 @@ export interface FileRouteTypes {
     | '/welfare-groups'
     | '/dogs/$dogId'
     | '/admin/dogs/$dogId'
+    | '/admin/events/$eventId'
     | '/admin/dogs/'
+    | '/admin/events/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -157,7 +181,9 @@ export interface RootRouteChildren {
   WelfareGroupsRoute: typeof WelfareGroupsRoute
   DogsDogIdRoute: typeof DogsDogIdRoute
   AdminDogsDogIdRoute: typeof AdminDogsDogIdRoute
+  AdminEventsEventIdRoute: typeof AdminEventsEventIdRoute
   AdminDogsIndexRoute: typeof AdminDogsIndexRoute
+  AdminEventsIndexRoute: typeof AdminEventsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -218,11 +244,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DogsDogIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/events/': {
+      id: '/admin/events/'
+      path: '/admin/events'
+      fullPath: '/admin/events/'
+      preLoaderRoute: typeof AdminEventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dogs/': {
       id: '/admin/dogs/'
       path: '/admin/dogs'
       fullPath: '/admin/dogs/'
       preLoaderRoute: typeof AdminDogsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/events/$eventId': {
+      id: '/admin/events/$eventId'
+      path: '/admin/events/$eventId'
+      fullPath: '/admin/events/$eventId'
+      preLoaderRoute: typeof AdminEventsEventIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/dogs/$dogId': {
@@ -245,7 +285,9 @@ const rootRouteChildren: RootRouteChildren = {
   WelfareGroupsRoute: WelfareGroupsRoute,
   DogsDogIdRoute: DogsDogIdRoute,
   AdminDogsDogIdRoute: AdminDogsDogIdRoute,
+  AdminEventsEventIdRoute: AdminEventsEventIdRoute,
   AdminDogsIndexRoute: AdminDogsIndexRoute,
+  AdminEventsIndexRoute: AdminEventsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -26,4 +26,20 @@ export default defineSchema({
     instagram: v.optional(v.string()),
   }),
   //}).index("by_slug", ["slug"]),
+
+  events: defineTable({
+    name: v.string(),
+    location: v.string(),
+    image: v.optional(v.string()),
+    dateTime: v.string(),
+    link: v.optional(v.string()),
+  }),
+
+  // vets: defineTable({
+  //   name: v.string(),
+  //   address: v.string(),
+  //   postalCode: v.string(),
+  //   contactNumber: v.string(),
+  //   email: v.optional(v.string()),
+  // }),
 });

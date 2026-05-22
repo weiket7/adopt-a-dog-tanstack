@@ -24,7 +24,7 @@ export function getConvexServerClient() {
       "Convex Server Error: VITE_CONVEX_URL is missing from all environments."
     );
   }
-  console.log("convexAction.ts using CONVEX_URL ", CONVEX_URL);
+  console.log("convex.ts using CONVEX_URL ", CONVEX_URL);
 
   // Pass the actual variable CONVEX_URL
   client = new ConvexHttpClient(CONVEX_URL);

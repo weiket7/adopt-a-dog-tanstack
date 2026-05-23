@@ -274,7 +274,7 @@ function Filters({
         </div>
       </div>
 
-      <div className="filter-group">
+      {/* <div className="filter-group">
         <div className="shortlist-callout">
           <div className="shortlist-callout-title">
             {favCount > 0
@@ -283,7 +283,7 @@ function Filters({
           </div>
           Tap the heart on any card to save dogs you&rsquo;d like to meet.
         </div>
-      </div>
+      </div> */}
     </aside>
   );
 }
@@ -344,7 +344,7 @@ function DogCard({
           )}
         </div>
 
-        <button
+        {/* <button
           type="button"
           className={"heart" + (fav ? " on" : "") + (popped ? " pop" : "")}
           aria-pressed={fav}
@@ -361,7 +361,7 @@ function DogCard({
           }}
         >
           <HeartIcon />
-        </button>
+        </button> */}
       </div>
 
       <div className="card-body">

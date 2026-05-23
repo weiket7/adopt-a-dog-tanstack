@@ -66,29 +66,46 @@ function Nav() {
           Adopt A Dog
           <small>Singapore</small>
         </Link>
-        <div className="nav-menu">
-          <Link
-            to="/"
-            activeProps={{ className: "active" }}
-            activeOptions={{ exact: true }}
-          >
-            Dogs
-          </Link>
-          <Link to="/welfare-groups" activeProps={{ className: "active" }}>
-            Welfare Groups
-          </Link>
-          <Link to="/events" activeProps={{ className: "active" }}>
-            Events
-          </Link>
-          <Link to="/dog-runs" activeProps={{ className: "active" }}>
-            Dog Runs
-          </Link>
-          <Link to="/vets" activeProps={{ className: "active" }}>
-            Vets
-          </Link>
-          {/* <Link to="/blog" activeProps={{ className: "active" }}>
+        <div className="nav-right">
+          <div className="nav-menu">
+            <Link
+              to="/"
+              activeProps={{ className: "active" }}
+              activeOptions={{ exact: true }}
+            >
+              Dogs
+            </Link>
+            <Link to="/welfare-groups" activeProps={{ className: "active" }}>
+              Welfare Groups
+            </Link>
+            <Link to="/events" activeProps={{ className: "active" }}>
+              Events
+            </Link>
+            <Link to="/dog-runs" activeProps={{ className: "active" }}>
+              Dog Runs
+            </Link>
+            <Link to="/vets" activeProps={{ className: "active" }}>
+              Vets
+            </Link>
+            {/* <Link to="/blog" activeProps={{ className: "active" }}>
             Blog
           </Link> */}
+          </div>
+          <a
+            className="nav-support"
+            href="https://ko-fi.com/homewardsg"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Support us on Ko-fi — donations go towards hosting this site"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z" />
+            </svg>
+            Support us
+            <span className="nav-support-tip" role="tooltip">
+              Donations go towards hosting this site
+            </span>
+          </a>
         </div>
       </div>
     </nav>

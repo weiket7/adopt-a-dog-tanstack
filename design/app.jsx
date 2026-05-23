@@ -2,6 +2,21 @@
 const { useState, useEffect, useMemo, useRef } = React;
 
 /* ------------------------------------------------------------------ */
+/* Hot-swap built-in DOGS with admin-managed list if present           */
+/* ------------------------------------------------------------------ */
+(function loadAdminDogs() {
+  try {
+    const raw = localStorage.getItem("homeward.dogs.v1");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) {
+        window.DOGS = parsed;
+      }
+    }
+  } catch {}
+})();
+
+/* ------------------------------------------------------------------ */
 /* Tweak defaults                                                      */
 /* ------------------------------------------------------------------ */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
@@ -212,17 +227,34 @@ function Nav({ view, setView }) {
           Homeward
           <small>Dog Rescue</small>
         </a>
-        <div className="nav-menu">
-          {items.map((it) => (
-            <a
-              key={it.id}
-              href="#"
-              className={view === it.id ? "active" : ""}
-              onClick={(e) => { e.preventDefault(); setView(it.id); }}
-            >
-              {it.label}
-            </a>
-          ))}
+        <div className="nav-right">
+          <div className="nav-menu">
+            {items.map((it) => (
+              <a
+                key={it.id}
+                href="#"
+                className={view === it.id ? "active" : ""}
+                onClick={(e) => { e.preventDefault(); setView(it.id); }}
+              >
+                {it.label}
+              </a>
+            ))}
+          </div>
+          <a
+            className="nav-support"
+            href="https://ko-fi.com/adoptadogsg"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Support us on Ko-fi — donations go towards hosting this site"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z"/>
+            </svg>
+            Support us
+            <span className="nav-support-tip" role="tooltip">
+              Donations go towards hosting this site. Thank you!
+            </span>
+          </a>
         </div>
       </div>
     </nav>
@@ -1046,7 +1078,10 @@ function App() {
 
       <footer className="foot">
         <span>&copy; 2026 Homeward Dog Rescue &middot; Sembawang, Singapore</span>
-        <span>hello@homeward.sg &middot; +65 6555 0142</span>
+        <span>
+          hello@homeward.sg &middot; +65 6555 0142 &middot;{" "}
+          <a href="admin.html" style={{color:'var(--muted)', textDecoration:'underline', textUnderlineOffset:'3px'}}>Admin</a>
+        </span>
       </footer>
 
       {selectedDog && (

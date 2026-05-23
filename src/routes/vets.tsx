@@ -142,7 +142,7 @@ function VetsPage() {
       const qq = q.toLowerCase();
       if (
         !v.name.toLowerCase().includes(qq) &&
-        !v.address.toLowerCase().includes(qq) &&
+        //!v.address.toLowerCase().includes(qq) &&
         !v.area.toLowerCase().includes(qq)
       )
         return false;

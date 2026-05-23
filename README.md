@@ -1,15 +1,18 @@
 ## Built using
 
-1. TanStack Start
+1. Claude Design
+2. Claude Code
+3. TanStack Start
    - TanStack Router
    - TanStack Query
    - TanStack Table
-2. [dayjs](https://github.com/iamkun/dayjs)
-3. [Convex](https://docs.convex.dev/quickstart/tanstack-start)
+4. [dayjs](https://github.com/iamkun/dayjs)
+5. [Convex](https://docs.convex.dev/quickstart/tanstack-start)
    - Auth
-4. Resend
-5. Zod
-6. vis.gl/react-google-maps
+6. Resend
+7. Zod
+8. vis.gl/react-google-maps
+9. [Images of dogs](https://placedog.net/)
 
 ## Run
 
@@ -52,24 +55,30 @@ https://tanstack.com/start/latest/docs/framework/react/guide/hosting
 3. `refer to design/vets.xlsx, go to seeds.ts, replace existing VETS with the data`
 4. In Convex, run seedVets function
 
+## Dogs
+
+```
+refer to design/admin.jsx
+
+given src/styles/admin.css
+
+implement in src/routes/admin.dogs.index.tsx, ignore admin.dogs.$dogId.tsx
+```
+
 ## To do
 
 [] Restrict Google Map
 [] Convex Firecrawl to get dogs
-[] Whether console.log is being logged twice
 [] Services like artists
 [] Email when local mail to myself
 [] Recommended products
 [] Posts about pyrometra, prostate cancer, sterilisation, skin, costs, home
 [] Partners like Kenny for washing pet stuff
 [] Boarding
-[] Handle all errors like convex
 [] Swimming https://www.facebook.com/fortcaninesg
-[] Change view dog to slug and welfare group name
 [] Secure admin pages and APIs
 [] Multiple pictures
 [] Pagination
 [] Migrate convex dev to prod
 [] Create log in for welfare group to update
 [] View welfare groups' dogs
-[] Google ads / patreon / buy coffee to earn some money back

@@ -98,7 +98,7 @@ function Nav() {
 function Footer() {
   return (
     <footer className="foot">
-      <span>&copy; 2026 Homeward Dog Rescue &middot; Singapore</span>
+      <span>&copy; 2026 Adopt A Dog &middot; Singapore</span>
       <span>hello@homeward.sg</span>
     </footer>
   );

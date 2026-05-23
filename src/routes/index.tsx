@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { emailWelfareGroup } from "~/server/email";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -392,6 +393,7 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
   const [imgOk, setImgOk] = useState(true);
   const sheetRef = useRef<HTMLDivElement>(null);
 
@@ -423,9 +425,20 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const submit = (e: React.SyntheticEvent) => {
+  const submit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim()) return;
+    setSending(true);
+    await emailWelfareGroup({
+      data: {
+        dogId: dog._id,
+        name: form.name,
+        email: form.email,
+        mobile: form.phone,
+        message: form.message,
+      },
+    });
+    setSending(false);
     setSubmitted(true);
   };
 
@@ -567,8 +580,8 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
                         onChange={update("message")}
                       />
                     </div>
-                    <button type="submit" className="form-submit">
-                      <SendIcon /> Send interest
+                    <button type="submit" className="form-submit" disabled={sending}>
+                      <SendIcon /> {sending ? "Sending…" : "Send interest"}
                     </button>
                     <div className="form-disclaimer">
                       Adoption is subject to home visit &amp; suitability check.

@@ -6,7 +6,6 @@ import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 
 const apiKey = process.env.RESEND_API_KEY;
-const convex = getConvexServerClient();
 
 export const emailWelfareGroup = createServerFn({ method: "POST" })
   .inputValidator(
@@ -16,9 +15,10 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
       mobile: z.string(),
       email: z.string(),
       message: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
+    const convex = getConvexServerClient();
     const dog = await convex.query(api.dogs.get, {
       id: data.dogId as Id<"dogs">,
     });
@@ -27,7 +27,6 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
       throw new Error("Dog or Welfare Group not found");
     }
 
-    //TODO how to join tables in convex? do we need to make another query to get the welfare group email?
     const group = await convex.query(api.welfareGroups.getById, {
       id: dog.welfareGroupId,
     });
@@ -41,9 +40,13 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
 
     const resend = new Resend(apiKey);
 
-    await resend.emails.send({
-      from: "adoptadogsg7@gmail.com", //check whether resend free tier needs from to be onboarding@resend.dev
-      to: group.email,
+    console.log("Sending email to welfare group:", "wei_ket@hotmail.com");
+
+    const { data2, error } = await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: "weiket7@gmail.com",
+      //from: "adoptadogsg7@gmail.com",
+      //to: group.email,
       replyTo: data.email,
       subject: `Interest in adopting ${dog.name} | Referral from adoptadog.sg`,
       html: `
@@ -57,6 +60,12 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
         <p>${data.message}</p>
       `,
     });
+
+    if (error) {
+      return console.error({ error });
+    }
+
+    console.log({ data2 });
 
     return { success: true };
   });

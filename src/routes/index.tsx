@@ -493,12 +493,6 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
                 </div>
               </div>
               <div className="detail-cell">
-                <div className="k">Birthday</div>
-                <div className="v">
-                  <CakeIcon /> {dog.birthday || "—"}
-                </div>
-              </div>
-              <div className="detail-cell">
                 <div className="k">HDB approved</div>
                 <div className="v">
                   {dog.hdbApproved === "Yes" ? "Yes" : "Landed only"}
@@ -580,7 +574,11 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
                         onChange={update("message")}
                       />
                     </div>
-                    <button type="submit" className="form-submit" disabled={sending}>
+                    <button
+                      type="submit"
+                      className="form-submit"
+                      disabled={sending}
+                    >
                       <SendIcon /> {sending ? "Sending…" : "Send interest"}
                     </button>
                     <div className="form-disclaimer">
@@ -725,10 +723,11 @@ function Home() {
         </section>
       </div>
 
-      {selectedDog && createPortal(
-        <DogDetail dog={selectedDog} onClose={() => setSelectedDog(null)} />,
-        document.body,
-      )}
+      {selectedDog &&
+        createPortal(
+          <DogDetail dog={selectedDog} onClose={() => setSelectedDog(null)} />,
+          document.body,
+        )}
     </main>
   );
 }

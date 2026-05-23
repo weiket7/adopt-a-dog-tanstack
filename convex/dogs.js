@@ -7,8 +7,16 @@ export const generateUploadUrl = action(async (ctx) => {
 });
 
 export const all = query({
-  handler: async (ctx, args) => {
-    return await ctx.db.query("dogs").collect();
+  handler: async (ctx) => {
+    const dogs = await ctx.db.query("dogs").collect();
+    return await Promise.all(
+      dogs.map(async (dog) => ({
+        ...dog,
+        imageUrl: dog.imageStorageId
+          ? await ctx.storage.getUrl(dog.imageStorageId)
+          : null,
+      }))
+    );
   },
 });
 
@@ -78,12 +86,13 @@ export const get = query({
 });
 
 export const add = mutation({
-  args: { 
-    name: v.string(), 
+  args: {
+    name: v.string(),
     gender: v.string(),
     hdbApproved: v.string(),
-    birthday: v.string(),
-    welfareGroupId: v.id("welfareGroups"),
+    birthday: v.optional(v.string()),
+    description: v.optional(v.string()),
+    welfareGroupId: v.optional(v.id("welfareGroups")),
     imageStorageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
@@ -92,18 +101,19 @@ export const add = mutation({
 });
 
 export const update = mutation({
-  args: { 
-    id: v.id("dogs"), 
-    name: v.string(), 
+  args: {
+    id: v.id("dogs"),
+    name: v.string(),
     gender: v.string(),
     hdbApproved: v.string(),
-    birthday: v.string(),
-    welfareGroupId: v.id("welfareGroups"),
-    imageStorageId: v.optional(v.id("_storage")), 
+    birthday: v.optional(v.string()),
+    description: v.optional(v.string()),
+    welfareGroupId: v.optional(v.id("welfareGroups")),
+    imageStorageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;
-    await ctx.db.patch(id, data); 
+    await ctx.db.patch(id, data);
     return id;
   },
 });

@@ -63,8 +63,8 @@ function Nav() {
           <span className="mark">
             <PawIcon />
           </span>
-          Homeward
-          <small>Dog Rescue</small>
+          Adopt A Dog
+          <small>Singapore</small>
         </Link>
         <div className="nav-menu">
           <Link
@@ -74,11 +74,11 @@ function Nav() {
           >
             Dogs
           </Link>
-          <Link to="/events" activeProps={{ className: "active" }}>
-            Events
-          </Link>
           <Link to="/welfare-groups" activeProps={{ className: "active" }}>
             Welfare Groups
+          </Link>
+          <Link to="/events" activeProps={{ className: "active" }}>
+            Events
           </Link>
           <Link to="/dog-runs" activeProps={{ className: "active" }}>
             Dog Runs
@@ -86,9 +86,9 @@ function Nav() {
           <Link to="/vets" activeProps={{ className: "active" }}>
             Vets
           </Link>
-          <Link to="/blog" activeProps={{ className: "active" }}>
+          {/* <Link to="/blog" activeProps={{ className: "active" }}>
             Blog
-          </Link>
+          </Link> */}
         </div>
       </div>
     </nav>

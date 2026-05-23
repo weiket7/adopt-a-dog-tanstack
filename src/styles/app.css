@@ -830,8 +830,8 @@ input { font: inherit; color: inherit; }
 .groups-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-  padding: 36px 0 96px;
+  gap: 18px;
+  padding-bottom: 96px;
 }
 @media (max-width: 1180px) {
   .groups-grid { grid-template-columns: repeat(2, 1fr); }

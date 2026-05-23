@@ -43,6 +43,15 @@ npx wrangler tail my-tanstack-app
 
 https://tanstack.com/start/latest/docs/framework/react/guide/hosting
 
+## Data
+
+## Vets
+
+1. Download PDF from https://avs.nparks.gov.sg/outreach/resources/public-registry-of-avs-licensed-veterinary-centres/
+2. Parse it into a table
+3. `refer to design/vets.xlsx, go to seeds.ts, replace existing VETS with the data`
+4. In Convex, run seedVets function
+
 ## To do
 
 [] Restrict Google Map
@@ -55,25 +64,12 @@ https://tanstack.com/start/latest/docs/framework/react/guide/hosting
 [] Partners like Kenny for washing pet stuff
 [] Boarding
 [] Handle all errors like convex
-[] Background jobs
 [] Swimming https://www.facebook.com/fortcaninesg
 [] Change view dog to slug and welfare group name
 [] Secure admin pages and APIs
 [] Multiple pictures
 [] Pagination
-[] Deploy to Cloudflare
-[] Tanstack table fully editable
 [] Migrate convex dev to prod
 [] Create log in for welfare group to update
 [] View welfare groups' dogs
 [] Google ads / patreon / buy coffee to earn some money back
-
-## Convex learning
-
-1. Set up and local project connect
-2. Remove field
-3. Add field
-4. Define schema
-5. Migration
-6. Migrate dev to prod
-7.

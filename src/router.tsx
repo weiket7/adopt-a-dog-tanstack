@@ -4,7 +4,6 @@ import { createRouter } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
 import { ConvexQueryClient } from "@convex-dev/react-query";
-import { ConvexProvider } from "convex/react";
 import { routeTree } from "./routeTree.gen";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 
@@ -13,7 +12,6 @@ export function getRouter() {
   if (!CONVEX_URL) {
     console.error("router.tsx missing envar VITE_CONVEX_URL");
   }
-  console.log("router.tsx using CONVEX_URL ", CONVEX_URL);
   const convexQueryClient = new ConvexQueryClient(CONVEX_URL);
 
   const queryClient: QueryClient = new QueryClient({

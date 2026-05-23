@@ -41,8 +41,13 @@ export default defineSchema({
 
   vets: defineTable({
     name: v.string(),
-    address: v.string(),
-    hours: v.string(),
+    block: v.string(),
+    street: v.string(),
+    floor: v.optional(v.string()),
+    unit: v.optional(v.string()),
+    building: v.optional(v.string()),
+    postalCode: v.string(),
+    openingHours: v.string(),
     phone: v.string(),
     area: v.string(),
     emergency: v.boolean(),

@@ -13,40 +13,84 @@ export const Route = createFileRoute("/vets")({
 
 function SearchIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
     </svg>
   );
 }
 function BoltIcon() {
-  return <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>;
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />
+    </svg>
+  );
 }
 function SunIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="4"/>
-      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
     </svg>
   );
 }
 function PinIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22s7-7 7-13a7 7 0 1 0-14 0c0 6 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 22s7-7 7-13a7 7 0 1 0-14 0c0 6 7 13 7 13z" />
+      <circle cx="12" cy="9" r="2.5" />
     </svg>
   );
 }
 function ClockIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
     </svg>
   );
 }
 function PhoneIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
     </svg>
   );
 }
@@ -73,9 +117,16 @@ function VetCard({ vet }: { vet: any }) {
       </div>
       <h3 className="vet-name">{vet.name}</h3>
       <div className="vet-meta">
-        <span><PinIcon /> {vet.address}</span>
-        <span><ClockIcon /> {vet.hours}</span>
-        <span><PhoneIcon /> {vet.phone}</span>
+        <span>
+          <PinIcon /> {vet.block} {vet.street}, #{vet.floor}-{vet.unit},
+          Singapore {vet.postalCode}
+        </span>
+        <span>
+          <ClockIcon /> {vet.hours}
+        </span>
+        <span>
+          <PhoneIcon /> {vet.phone}
+        </span>
       </div>
     </article>
   );
@@ -93,7 +144,8 @@ function VetsPage() {
         !v.name.toLowerCase().includes(qq) &&
         !v.address.toLowerCase().includes(qq) &&
         !v.area.toLowerCase().includes(qq)
-      ) return false;
+      )
+        return false;
     }
     if (filter === "emergency" && !v.emergency) return false;
     if (filter === "ph" && !v.publicHolidays) return false;
@@ -104,10 +156,12 @@ function VetsPage() {
     <main className="page">
       <header className="page-header">
         <div>
-          <h1>Our partner <em>vets.</em></h1>
+          <h1>
+            Our partner <em>vets.</em>
+          </h1>
           <p>
-            A small directory of clinics our adopters and fosters know and trust.
-            Always call ahead, especially after hours.
+            A small directory of clinics our adopters and fosters know and
+            trust. Always call ahead, especially after hours.
           </p>
         </div>
         <div className="stat">
@@ -126,15 +180,40 @@ function VetsPage() {
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <div className="seg" role="radiogroup" aria-label="Filter vets" style={{ width: "auto" }}>
-          <button role="radio" aria-pressed={filter === "all"}       onClick={() => setFilter("all")}>All</button>
-          <button role="radio" aria-pressed={filter === "emergency"} onClick={() => setFilter("emergency")}>24h Emergency</button>
-          <button role="radio" aria-pressed={filter === "ph"}        onClick={() => setFilter("ph")}>Open on PH</button>
+        <div
+          className="seg"
+          role="radiogroup"
+          aria-label="Filter vets"
+          style={{ width: "auto" }}
+        >
+          <button
+            role="radio"
+            aria-pressed={filter === "all"}
+            onClick={() => setFilter("all")}
+          >
+            All
+          </button>
+          <button
+            role="radio"
+            aria-pressed={filter === "emergency"}
+            onClick={() => setFilter("emergency")}
+          >
+            24h Emergency
+          </button>
+          <button
+            role="radio"
+            aria-pressed={filter === "ph"}
+            onClick={() => setFilter("ph")}
+          >
+            Open on PH
+          </button>
         </div>
       </div>
 
       <section className="vets-grid">
-        {list.map((v) => <VetCard key={v._id} vet={v} />)}
+        {list.map((v) => (
+          <VetCard key={v._id} vet={v} />
+        ))}
       </section>
     </main>
   );

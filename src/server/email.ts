@@ -42,7 +42,7 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
 
     console.log("Sending email to welfare group:", "wei_ket@hotmail.com");
 
-    const { data2, error } = await resend.emails.send({
+    const { result, error } = await resend.emails.send({
       from: "onboarding@resend.dev",
       to: "weiket7@gmail.com",
       //from: "adoptadogsg7@gmail.com",
@@ -65,7 +65,7 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
       return console.error({ error });
     }
 
-    console.log({ data2 });
+    console.log({ result });
 
     return { success: true };
   });

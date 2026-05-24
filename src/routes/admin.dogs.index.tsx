@@ -52,6 +52,7 @@ type DogRow = {
   hdbApproved: "Yes" | "No";
   birthday?: string;
   description?: string;
+  welfareGroupId?: Id<"welfareGroups">;
   imageStorageId?: Id<"_storage">;
   imageUrl: string | null;
   status?: "active" | "inactive";
@@ -63,6 +64,7 @@ type FormState = {
   hdbApproved: "Yes" | "No";
   birthday: string;
   description: string;
+  welfareGroupId: Id<"welfareGroups"> | "";
 };
 
 const EMPTY_FORM: FormState = {
@@ -71,17 +73,22 @@ const EMPTY_FORM: FormState = {
   hdbApproved: "Yes",
   birthday: "",
   description: "",
+  welfareGroupId: "",
 };
+
+type WelfareGroupOption = { _id: Id<"welfareGroups">; name: string };
 
 /* ---------- DogForm modal ---------- */
 function DogForm({
   initial,
   initialImageUrl,
+  welfareGroups,
   onSave,
   onClose,
 }: {
   initial: FormState & { id?: Id<"dogs"> };
   initialImageUrl: string | null;
+  welfareGroups: WelfareGroupOption[];
   onSave: (form: FormState, file: File | null) => Promise<void>;
   onClose: () => void;
 }) {
@@ -161,6 +168,20 @@ function DogForm({
                 <button type="button" aria-pressed={d.hdbApproved === "Yes"} onClick={() => setD((p) => ({ ...p, hdbApproved: "Yes" }))}>Yes</button>
                 <button type="button" aria-pressed={d.hdbApproved === "No"} onClick={() => setD((p) => ({ ...p, hdbApproved: "No" }))}>No</button>
               </div>
+            </div>
+
+            <div className="field">
+              <label htmlFor="f-welfare-group">Welfare Group</label>
+              <select
+                id="f-welfare-group"
+                value={d.welfareGroupId}
+                onChange={(e) => setD((p) => ({ ...p, welfareGroupId: e.target.value as Id<"welfareGroups"> | "" }))}
+              >
+                <option value="">— None —</option>
+                {welfareGroups.map((g) => (
+                  <option key={g._id} value={g._id}>{g.name}</option>
+                ))}
+              </select>
             </div>
 
             <div className="field full">
@@ -253,6 +274,7 @@ function Confirm({
 /* ---------- page ---------- */
 function DogsAdminPage() {
   const dogs = useQuery(api.dogs.all) as DogRow[] | undefined;
+  const welfareGroups = (useQuery(api.welfareGroups.list, {}) ?? []) as WelfareGroupOption[];
   const addDog = useMutation(api.dogs.add);
   const updateDog = useMutation(api.dogs.update);
   const removeDog = useMutation(api.dogs.remove);
@@ -295,6 +317,7 @@ function DogsAdminPage() {
       hdbApproved: dog.hdbApproved,
       birthday: dog.birthday ?? "",
       description: dog.description ?? "",
+      welfareGroupId: (dog.welfareGroupId ?? "") as Id<"welfareGroups"> | "",
     });
     setEditingImageUrl(dog.imageUrl);
   };
@@ -315,6 +338,8 @@ function DogsAdminPage() {
 
     if (!editing) return;
 
+    const welfareGroupId = form.welfareGroupId || undefined;
+
     if (!editing.id) {
       await addDog({
         name: form.name,
@@ -322,6 +347,7 @@ function DogsAdminPage() {
         hdbApproved: form.hdbApproved,
         birthday: form.birthday || undefined,
         description: form.description || undefined,
+        welfareGroupId,
         imageStorageId,
       });
       flash(`Added ${form.name}`);
@@ -333,6 +359,7 @@ function DogsAdminPage() {
         hdbApproved: form.hdbApproved,
         birthday: form.birthday || undefined,
         description: form.description || undefined,
+        welfareGroupId,
         ...(imageStorageId ? { imageStorageId } : {}),
       });
       flash(`Updated ${form.name}`);
@@ -451,6 +478,7 @@ function DogsAdminPage() {
         <DogForm
           initial={editing}
           initialImageUrl={editingImageUrl}
+          welfareGroups={welfareGroups}
           onSave={handleSave}
           onClose={() => setEditing(null)}
         />

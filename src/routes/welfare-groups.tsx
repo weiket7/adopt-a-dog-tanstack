@@ -84,6 +84,21 @@ function YTIcon() {
     </svg>
   );
 }
+function EmailIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m2 7 10 7 10-7" />
+    </svg>
+  );
+}
 
 function SocialLink({
   href,
@@ -165,6 +180,12 @@ function GroupCard({ group }: { group: any }) {
         <SocialLink href={group.youtube} label="YouTube">
           {" "}
           <YTIcon />
+        </SocialLink>
+        <SocialLink
+          href={group.email ? `mailto:${group.email}` : undefined}
+          label="Email"
+        >
+          <EmailIcon />
         </SocialLink>
       </div>
     </article>

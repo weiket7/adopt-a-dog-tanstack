@@ -1378,6 +1378,7 @@ input { font: inherit; color: inherit; }
   line-height: 1.65;
   color: var(--ink-2);
   text-wrap: pretty;
+  white-space: pre-line;
 }
 
 .form-card {

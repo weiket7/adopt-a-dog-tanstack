@@ -242,7 +242,7 @@ function Nav({ view, setView }) {
           </div>
           <a
             className="nav-support"
-            href="https://ko-fi.com/adoptadogsg"
+            href="https://ko-fi.com/homeward"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Support us on Ko-fi — donations go towards hosting this site"

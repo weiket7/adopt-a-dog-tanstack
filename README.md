@@ -65,6 +65,15 @@ given src/styles/admin.css
 implement in src/routes/admin.dogs.index.tsx, ignore admin.dogs.$dogId.tsx
 ```
 
+## Deploy
+
+Ensure there's .env.production
+wrangler.jsonc
+
+`npm wrangler login`
+`npm run build`
+`npm run deploy`
+
 ## To do
 
 [] Restrict Google Map
@@ -78,7 +87,7 @@ implement in src/routes/admin.dogs.index.tsx, ignore admin.dogs.$dogId.tsx
 [] Swimming https://www.facebook.com/fortcaninesg
 [] Secure admin pages and APIs
 [] Multiple pictures
-[] Pagination
 [] Migrate convex dev to prod
 [] Create log in for welfare group to update
 [] View welfare groups' dogs
+[] Convex queries (useQuery) run client-side via WebSocket, so data fetched from Convex won't be in the initial SSR HTML — the server renders the loading/skeleton state. If SEO on dog listing pages matters, you'd need to either pre-fetch on the server using a Convex HTTP client, or use useSuspenseQuery with proper server-side data loading via TanStack Router's loader. The current setup handles SEO well for static content and metadata, but dynamic dog data is hydrated after page load.

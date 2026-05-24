@@ -16,7 +16,7 @@ export const Route = createRootRouteWithContext<{
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Homeward — Dogs for Adoption" },
+      { title: "Adoptadog — Dogs for adoption in Singapore" },
       {
         name: "description",
         content:
@@ -93,7 +93,7 @@ function Nav() {
           </div>
           <a
             className="nav-support"
-            href="https://ko-fi.com/homewardsg"
+            href="https://ko-fi.com/adoptadogsg"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Support us on Ko-fi — donations go towards hosting this site"
@@ -116,7 +116,7 @@ function Footer() {
   return (
     <footer className="foot">
       <span>&copy; 2026 Adopt A Dog &middot; Singapore</span>
-      <span>hello@homeward.sg</span>
+      <span>Developed by Wei Ket</span>
     </footer>
   );
 }

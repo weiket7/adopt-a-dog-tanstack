@@ -146,6 +146,44 @@
     outline: none; transition: border-color .15s;
   }
   .search input:focus { border-color: var(--accent); }
+    .filter-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .filter-select::after {
+    content: "";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    width: 8px; height: 8px;
+    border-right: 1.5px solid var(--muted);
+    border-bottom: 1.5px solid var(--muted);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+  .filter-select select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 11px 36px 11px 14px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .15s;
+    min-width: 220px;
+    max-width: 280px;
+    cursor: pointer;
+  }
+  .filter-select select:focus { border-color: var(--accent); }
+  .filter-select.narrow select {
+    min-width: 160px;
+    max-width: 180px;
+  }
+
   .stat-chip {
     font-size: 12.5px;
     color: var(--muted);
@@ -213,6 +251,33 @@
   }
   .pill.hdb-yes { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
   .pill.hdb-no  { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+    .pill.status-active,
+  .pill.status-inactive {
+    background: var(--bg);
+    border-color: var(--line);
+    color: var(--ink-2);
+    padding-left: 9px;
+  }
+  .pill.status-inactive { color: var(--muted); }
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 2px var(--ok-soft);
+  }
+  .pill.status-inactive .status-dot {
+    background: #b9b3a7;
+    box-shadow: 0 0 0 2px #e7e3da;
+  }
+  .group-tag {
+    display: inline-block;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.25;
+    max-width: 220px;
+  }
+
   .row-actions {
     display: flex; gap: 6px; justify-content: flex-end;
   }
@@ -380,4 +445,6 @@
     .page-head h1 { font-size: 32px; }
     td.col-meta { display: none; }
     td.col-birthday { display: none; }
+        td.col-group, th.col-group { display: none; }
+
   }

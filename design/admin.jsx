@@ -1,4 +1,4 @@
-/* global React, ReactDOM, DOGS */
+/* global React, ReactDOM, DOGS, GROUPS */
 const { useState, useEffect, useMemo } = React;
 
 /* ---------- icons ---------- */
@@ -50,6 +50,20 @@ const EMPTY_DOG = {
   hdb: true,
   photo: 1,
   about: "",
+  welfareGroupId: (typeof GROUPS !== 'undefined' && GROUPS[0]) ? GROUPS[0].id : null,
+  status: "Active",
+};
+
+const statusOf = (dog) => dog.status || "Active";
+
+const groupById = (id) => GROUPS.find((g) => g.id === id);
+const groupNameFor = (dog) => {
+  // graceful fallback for legacy seed entries: deterministic by dog.id
+  if (dog.welfareGroupId != null) {
+    const g = groupById(dog.welfareGroupId);
+    if (g) return g.name;
+  }
+  return null;
 };
 
 /* ---------- form modal ---------- */
@@ -129,6 +143,20 @@ function DogForm({ initial, onSave, onClose }) {
               <input id="f-photo" type="number" min="1" value={d.photo} onChange={setField('photo')} />
             </div>
 
+            <div className="field full">
+              <label htmlFor="f-group">Welfare group</label>
+              <select
+                id="f-group"
+                value={d.welfareGroupId ?? ""}
+                onChange={(e) => setD((p) => ({ ...p, welfareGroupId: e.target.value === "" ? null : Number(e.target.value) }))}
+              >
+                <option value="">— Unassigned —</option>
+                {GROUPS.map((g) => (
+                  <option key={g.id} value={g.id}>{g.name}</option>
+                ))}
+              </select>
+            </div>
+
             <div className="field">
               <label>Gender</label>
               <div className="seg-input cols-2" role="radiogroup" aria-label="Gender">
@@ -142,6 +170,14 @@ function DogForm({ initial, onSave, onClose }) {
               <div className="seg-input cols-2" role="radiogroup" aria-label="HDB approved">
                 <button type="button" aria-pressed={d.hdb === true}  onClick={() => setD((p) => ({ ...p, hdb: true }))}>Yes</button>
                 <button type="button" aria-pressed={d.hdb === false} onClick={() => setD((p) => ({ ...p, hdb: false }))}>No</button>
+              </div>
+            </div>
+
+            <div className="field">
+              <label>Status</label>
+              <div className="seg-input cols-2" role="radiogroup" aria-label="Status">
+                <button type="button" aria-pressed={statusOf(d) === "Active"}   onClick={() => setD((p) => ({ ...p, status: "Active" }))}>Active</button>
+                <button type="button" aria-pressed={statusOf(d) === "Inactive"} onClick={() => setD((p) => ({ ...p, status: "Inactive" }))}>Inactive</button>
               </div>
             </div>
 
@@ -206,6 +242,8 @@ function Confirm({ title, body, confirmLabel, danger, onConfirm, onClose }) {
 function App() {
   const [list, setList] = useState(() => loadDogs());
   const [q, setQ] = useState("");
+  const [groupFilter, setGroupFilter] = useState("all"); // "all" | "none" | numeric id as string
+  const [statusFilter, setStatusFilter] = useState("all"); // "all" | "Active" | "Inactive"
   const [editing, setEditing] = useState(null);
   const [confirm, setConfirm] = useState(null);
   const [toast, setToast] = useState(null);
@@ -219,12 +257,23 @@ function App() {
 
   const filtered = useMemo(() => {
     const ql = q.trim().toLowerCase();
-    if (!ql) return list;
-    return list.filter((d) =>
-      (d.name || "").toLowerCase().includes(ql) ||
-      (d.breed || "").toLowerCase().includes(ql)
-    );
-  }, [list, q]);
+    return list.filter((d) => {
+      if (ql) {
+        const hit = (d.name || "").toLowerCase().includes(ql) ||
+                    (d.breed || "").toLowerCase().includes(ql);
+        if (!hit) return false;
+      }
+      if (groupFilter === "all") {
+        // pass
+      } else if (groupFilter === "none") {
+        if (d.welfareGroupId != null) return false;
+      } else if (d.welfareGroupId !== Number(groupFilter)) {
+        return false;
+      }
+      if (statusFilter !== "all" && statusOf(d) !== statusFilter) return false;
+      return true;
+    });
+  }, [list, q, groupFilter, statusFilter]);
 
   const handleAdd = () => {
     setEditing({ ...EMPTY_DOG, photo: nextPhoto(list) });
@@ -304,6 +353,28 @@ function App() {
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
+        <label className="filter-select" aria-label="Filter by welfare group">
+          <select
+            value={groupFilter}
+            onChange={(e) => setGroupFilter(e.target.value)}
+          >
+            <option value="all">All welfare groups</option>
+            <option value="none">— Unassigned —</option>
+            {GROUPS.map((g) => (
+              <option key={g.id} value={String(g.id)}>{g.name}</option>
+            ))}
+          </select>
+        </label>
+        <label className="filter-select narrow" aria-label="Filter by status">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All statuses</option>
+            <option value="Active">Active only</option>
+            <option value="Inactive">Inactive only</option>
+          </select>
+        </label>
         <span className="stat-chip">{list.length} total · {filtered.length} shown</span>
       </div>
 
@@ -322,7 +393,9 @@ function App() {
                 <th className="col-meta">Gender</th>
                 <th className="col-meta">Age</th>
                 <th className="col-birthday">Birthday</th>
+                <th className="col-group">Welfare group</th>
                 <th>HDB</th>
+                <th>Status</th>
                 <th style={{textAlign:'right'}}>Actions</th>
               </tr>
             </thead>
@@ -341,10 +414,21 @@ function App() {
                   <td className="col-meta">{d.gender === "M" ? "Male" : "Female"}</td>
                   <td className="col-meta">{d.age}</td>
                   <td className="col-birthday" style={{color:'var(--muted)'}}>{d.birthday || "—"}</td>
+                  <td className="col-group">
+                    {groupNameFor(d)
+                      ? <span className="group-tag">{groupNameFor(d)}</span>
+                      : <span style={{color:'var(--muted)'}}>—</span>}
+                  </td>
                   <td>
                     {d.hdb
                       ? <span className="pill hdb-yes">HDB ✓</span>
                       : <span className="pill hdb-no">Landed</span>}
+                  </td>
+                  <td>
+                    <span className={"pill status-" + statusOf(d).toLowerCase()}>
+                      <span className="status-dot"></span>
+                      {statusOf(d)}
+                    </span>
                   </td>
                   <td>
                     <div className="row-actions">

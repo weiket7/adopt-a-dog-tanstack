@@ -108,6 +108,7 @@ type FormState = {
   birthday: string;
   description: string;
   welfareGroupId: Id<"welfareGroups"> | "";
+  status: "active" | "inactive";
 };
 
 const EMPTY_FORM: FormState = {
@@ -117,6 +118,7 @@ const EMPTY_FORM: FormState = {
   birthday: "",
   description: "",
   welfareGroupId: "",
+  status: "active",
 };
 
 type WelfareGroupOption = { _id: Id<"welfareGroups">; name: string };
@@ -279,6 +281,30 @@ function DogForm({
             </div>
 
             <div className="field">
+              <label>Status</label>
+              <div
+                className="seg-input cols-2"
+                role="radiogroup"
+                aria-label="Status"
+              >
+                <button
+                  type="button"
+                  aria-pressed={d.status === "active"}
+                  onClick={() => setD((p) => ({ ...p, status: "active" }))}
+                >
+                  Active
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={d.status === "inactive"}
+                  onClick={() => setD((p) => ({ ...p, status: "inactive" }))}
+                >
+                  Inactive
+                </button>
+              </div>
+            </div>
+
+            <div className="field">
               <label htmlFor="f-welfare-group">Welfare Group</label>
               <select
                 id="f-welfare-group"
@@ -427,6 +453,8 @@ function DogsAdminPage() {
   const generateUploadUrl = useAction(api.dogs.generateUploadUrl);
 
   const [q, setQ] = useState("");
+  const [groupFilter, setGroupFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [editing, setEditing] = useState<
     (FormState & { id?: Id<"dogs"> }) | null
   >(null);
@@ -440,6 +468,11 @@ function DogsAdminPage() {
   } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
+  const groupMap = useMemo(
+    () => new Map(welfareGroups.map((g) => [g._id, g.name])),
+    [welfareGroups],
+  );
+
   const flash = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2200);
@@ -448,9 +481,20 @@ function DogsAdminPage() {
   const filtered = useMemo(() => {
     if (!dogs) return [];
     const ql = q.trim().toLowerCase();
-    if (!ql) return dogs;
-    return dogs.filter((d) => d.name.toLowerCase().includes(ql));
-  }, [dogs, q]);
+    return dogs.filter((d) => {
+      if (ql && !d.name.toLowerCase().includes(ql)) return false;
+      if (groupFilter === "none") {
+        if (d.welfareGroupId != null) return false;
+      } else if (groupFilter !== "all") {
+        if (d.welfareGroupId !== groupFilter) return false;
+      }
+      if (statusFilter !== "all") {
+        const dogStatus = d.status ?? "active";
+        if (dogStatus !== statusFilter) return false;
+      }
+      return true;
+    });
+  }, [dogs, q, groupFilter, statusFilter]);
 
   const handleAdd = () => {
     setEditing({ ...EMPTY_FORM });
@@ -466,6 +510,7 @@ function DogsAdminPage() {
       birthday: dog.birthday ?? "",
       description: dog.description ?? "",
       welfareGroupId: (dog.welfareGroupId ?? "") as Id<"welfareGroups"> | "",
+      status: dog.status ?? "active",
     });
     setEditingImageUrl(dog.imageUrl);
   };
@@ -497,6 +542,7 @@ function DogsAdminPage() {
         description: form.description || undefined,
         welfareGroupId,
         imageStorageId,
+        status: form.status,
       });
       flash(`Added ${form.name}`);
     } else {
@@ -509,6 +555,7 @@ function DogsAdminPage() {
         description: form.description || undefined,
         welfareGroupId,
         ...(imageStorageId ? { imageStorageId } : {}),
+        status: form.status,
       });
       flash(`Updated ${form.name}`);
     }
@@ -572,6 +619,30 @@ function DogsAdminPage() {
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
+        <label className="filter-select" aria-label="Filter by welfare group">
+          <select
+            value={groupFilter}
+            onChange={(e) => setGroupFilter(e.target.value)}
+          >
+            <option value="all">All welfare groups</option>
+            <option value="none">— Unassigned —</option>
+            {welfareGroups.map((g) => (
+              <option key={g._id} value={g._id}>
+                {g.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="filter-select narrow" aria-label="Filter by status">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All statuses</option>
+            <option value="active">Active only</option>
+            <option value="inactive">Inactive only</option>
+          </select>
+        </label>
         <span className="stat-chip">
           {dogs.length} total · {filtered.length} shown
         </span>
@@ -597,7 +668,9 @@ function DogsAdminPage() {
                 <th>Name</th>
                 <th className="col-meta">Gender</th>
                 <th className="col-birthday">Birthday</th>
+                <th className="col-group">Welfare group</th>
                 <th>HDB</th>
+                <th>Status</th>
                 <th style={{ textAlign: "right" }}>Actions</th>
               </tr>
             </thead>
@@ -634,12 +707,29 @@ function DogsAdminPage() {
                   >
                     {dog.birthday || "—"}
                   </td>
+                  <td className="col-group">
+                    {dog.welfareGroupId && groupMap.get(dog.welfareGroupId) ? (
+                      <span className="group-tag">
+                        {groupMap.get(dog.welfareGroupId)}
+                      </span>
+                    ) : (
+                      <span style={{ color: "var(--muted)" }}>—</span>
+                    )}
+                  </td>
                   <td>
                     {dog.hdbApproved === "Yes" ? (
                       <span className="pill hdb-yes">HDB ✓</span>
                     ) : (
                       <span className="pill hdb-no">Landed</span>
                     )}
+                  </td>
+                  <td>
+                    <span
+                      className={`pill status-${dog.status ?? "active"}`}
+                    >
+                      <span className="status-dot"></span>
+                      {dog.status === "inactive" ? "Inactive" : "Active"}
+                    </span>
                   </td>
                   <td>
                     <div className="row-actions">

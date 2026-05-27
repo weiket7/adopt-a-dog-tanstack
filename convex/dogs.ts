@@ -2,6 +2,7 @@ import { query, mutation, action } from "./_generated/server";
 import { v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { Id } from "./_generated/dataModel";
 
 export const generateUploadUrl = action(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
@@ -90,6 +91,29 @@ export const list = query({
   },
 });
 
+export const listByWelfareGroup = query({
+  args: { welfareGroupId: v.id("welfareGroups") },
+  handler: async (ctx, { welfareGroupId }) => {
+    const dogs = await ctx.db
+      .query("dogs")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("status"), "active"),
+          q.eq(q.field("welfareGroupId"), welfareGroupId),
+        ),
+      )
+      .collect();
+    return await Promise.all(
+      dogs.map(async (dog) => ({
+        ...dog,
+        imageUrl: dog.imageStorageId
+          ? await ctx.storage.getUrl(dog.imageStorageId)
+          : null,
+      })),
+    );
+  },
+});
+
 export const get = query({
   args: { id: v.id("dogs") }, // Use v.id("dogs") for better typing
   handler: async (ctx, { id }) => {
@@ -135,7 +159,27 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;
+
+    const oldDog = await ctx.db.get(id);
     await ctx.db.patch(id, data);
+
+    const groupsToUpdate = new Set<Id<"welfareGroups">>();
+    if (oldDog?.welfareGroupId) groupsToUpdate.add(oldDog.welfareGroupId);
+    if (data.welfareGroupId) groupsToUpdate.add(data.welfareGroupId);
+
+    for (const groupId of groupsToUpdate) {
+      const activeDogs = await ctx.db
+        .query("dogs")
+        .filter((q) =>
+          q.and(
+            q.eq(q.field("welfareGroupId"), groupId),
+            q.eq(q.field("status"), "active"),
+          ),
+        )
+        .collect();
+      await ctx.db.patch(groupId, { dogsAvailable: activeDogs.length });
+    }
+
     return id;
   },
 });
@@ -147,10 +191,22 @@ export const remove = mutation({
     if (!dog) return;
 
     if (dog.imageStorageId) {
-      // NOT await ctx.storage.delete({ storageId: dog.imageStorageId });
       await ctx.storage.delete(dog.imageStorageId);
     }
 
     await ctx.db.delete(args.id);
+
+    if (dog.welfareGroupId) {
+      const activeDogs = await ctx.db
+        .query("dogs")
+        .filter((q) =>
+          q.and(
+            q.eq(q.field("welfareGroupId"), dog.welfareGroupId),
+            q.eq(q.field("status"), "active"),
+          ),
+        )
+        .collect();
+      await ctx.db.patch(dog.welfareGroupId, { dogsAvailable: activeDogs.length });
+    }
   },
 });

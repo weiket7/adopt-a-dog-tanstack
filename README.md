@@ -40,9 +40,9 @@ https://preview.themeforest.net/item/porto-responsive-html5-template/full_screen
 
 ## Hosted in Cloudflare
 
-npm add -D @cloudflare/vite-plugin wrangler
+`npm add -D @cloudflare/vite-plugin wrangler`
 
-npx wrangler tail my-tanstack-app
+`npx wrangler tail my-tanstack-app`
 
 https://tanstack.com/start/latest/docs/framework/react/guide/hosting
 
@@ -67,17 +67,22 @@ implement in src/routes/admin.dogs.index.tsx, ignore admin.dogs.$dogId.tsx
 
 ## Deploy
 
+Create environment variables SITE_URL, JWT_PRIVATE_KEY, JWKS `npx @convex-dev/auth --prod`
+
+`npx convex deploy`
+
 Ensure there's .env.production
 
-`npx wrangler login`
 `npm run build`
-`npm run deploy`
-
-Logs
-`npx wrangler tail`
 
 Preview
 `npx wrangler dev` or `npm run preview`
+
+`npx wrangler login`
+
+`npm run deploy`
+
+Logs `npx wrangler tail`
 
 ## To do
 

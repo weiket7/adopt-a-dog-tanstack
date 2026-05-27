@@ -208,11 +208,12 @@ const Icon = {
 /* ------------------------------------------------------------------ */
 function Nav({ view, setView }) {
   const items = [
-    { id: "dogs",    label: "Dogs" },
-    { id: "events",  label: "Events" },
-    { id: "dogruns", label: "Dog Runs" },
-    { id: "groups",  label: "Welfare Groups" },
-    { id: "blog",    label: "Blog" },
+    { id: "dogs",     label: "Dogs" },
+    { id: "events",   label: "Events" },
+    { id: "services", label: "Services" },
+    { id: "dogruns",  label: "Dog Runs" },
+    { id: "groups",   label: "Welfare Groups" },
+    { id: "blog",     label: "Blog" },
     { id: "vets",    label: "Vets" },
   ];
   return (
@@ -242,7 +243,7 @@ function Nav({ view, setView }) {
           </div>
           <a
             className="nav-support"
-            href="https://ko-fi.com/homeward"
+            href="https://ko-fi.com/homewardsg"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Support us on Ko-fi — donations go towards hosting this site"
@@ -331,25 +332,6 @@ function Filters({ q, setQ, hdb, setHdb, gender, setGender, favCount, totalCount
           </div>
           Tap the heart on any card to save dogs you&rsquo;d like to meet.
         </div>
-
-        <a
-          href="https://ko-fi.com/homeward"
-          target="_blank"
-          rel="noreferrer noopener"
-          className="kofi-link"
-        >
-          <span className="kofi-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M17 8h1a3 3 0 0 1 0 6h-1"/>
-              <path d="M3 8h14v7a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
-              <path d="M6 2v3M10 2v3M14 2v3"/>
-            </svg>
-          </span>
-          <span className="kofi-body">
-            <span className="kofi-title">Keep this site online</span>
-            <span className="kofi-sub">Homeward is volunteer-run. Buy us a coffee on Ko-fi →</span>
-          </span>
-        </a>
       </div>
     </aside>
   );
@@ -686,7 +668,7 @@ function SocialLink({ href, label, children }) {
   );
 }
 
-function GroupCard({ group }) {
+function GroupCard({ group, dogCount, onPick }) {
   const [imgOk, setImgOk] = useState(true);
   return (
     <article className="group-card">
@@ -701,10 +683,16 @@ function GroupCard({ group }) {
         <div className="group-id">
           <h3 className="group-name">{group.name}</h3>
           <p className="group-blurb" dangerouslySetInnerHTML={{ __html: group.blurb }} />
-          <div className="group-count">
-            <b>{group.dogsAvailable}</b>
+          <button
+            type="button"
+            className="group-count is-button"
+            onClick={() => onPick && onPick(group)}
+            title={`Show dogs from ${group.name}`}
+          >
+            <b>{dogCount != null ? dogCount : group.dogsAvailable}</b>
             <span>dogs for adoption</span>
-          </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
         </div>
       </div>
 
@@ -719,12 +707,31 @@ function GroupCard({ group }) {
   );
 }
 
-function GroupsView() {
+/* Deterministic group assignment for legacy seed dogs without
+   `welfareGroupId` — keeps counts and filters consistent. */
+function effectiveGroupId(dog) {
+  if (dog.welfareGroupId != null) return dog.welfareGroupId;
+  const groups = window.GROUPS || [];
+  if (groups.length === 0) return null;
+  return groups[(dog.id - 1) % groups.length].id;
+}
+
+function GroupsView({ onPickGroup }) {
   const [q, setQ] = useState("");
-  const list = window.GROUPS.filter((g) =>
+  const groups = window.GROUPS;
+  // count actual dogs assigned to each group (real + deterministic fallback)
+  const countsByGroup = useMemo(() => {
+    const m = new Map();
+    for (const d of DOGS) {
+      const gid = effectiveGroupId(d);
+      m.set(gid, (m.get(gid) || 0) + 1);
+    }
+    return m;
+  }, []);
+  const list = groups.filter((g) =>
     !q.trim() || g.name.toLowerCase().includes(q.toLowerCase())
   );
-  const totalDogs = window.GROUPS.reduce((n, g) => n + (g.dogsAvailable || 0), 0);
+  const totalDogs = DOGS.length;
   return (
     <main className="page">
       <header className="header">
@@ -732,7 +739,7 @@ function GroupsView() {
           <h1>Welfare groups <em>doing the work.</em></h1>
           <p>The non-profits, shelters and small collectives rehoming Singapore&rsquo;s street and surrendered dogs. Follow them, foster with them, or just send a few dollars their way.</p>
         </div>
-        <div className="stat"><b>{totalDogs}</b>dogs across {window.GROUPS.length} groups</div>
+        <div className="stat"><b>{totalDogs}</b>dogs across {groups.length} groups</div>
       </header>
 
       <div className="runs-toolbar">
@@ -749,7 +756,14 @@ function GroupsView() {
       </div>
 
       <section className="groups-grid">
-        {list.map((g) => <GroupCard key={g.id} group={g} />)}
+        {list.map((g) => (
+          <GroupCard
+            key={g.id}
+            group={g}
+            dogCount={countsByGroup.get(g.id) || 0}
+            onPick={onPickGroup}
+          />
+        ))}
       </section>
     </main>
   );
@@ -824,6 +838,119 @@ function BlogView() {
           <BlogCard key={p.id} post={p} featured={filter === "all" && i === 0} />
         ))}
       </section>
+    </main>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Services view                                                       */
+/* ------------------------------------------------------------------ */
+const SERVICE_CATEGORIES = [
+  "Artists",
+  "Cremation",
+  "Pet shops",
+  "Small businesses",
+  "Animal communication",
+  "Pet laundromats",
+  "Boarding",
+  "Grooming",
+];
+
+function ServiceCard({ service }) {
+  return (
+    <article className="svc-card">
+      <div className="svc-head">
+        <span className={"svc-cat svc-cat--" + service.category.toLowerCase().replace(/[^a-z]/g, "")}>
+          {service.category}
+        </span>
+        {service.priceFrom && service.priceFrom !== "—" && (
+          <span className="svc-price">from {service.priceFrom}</span>
+        )}
+      </div>
+      <h3 className="svc-name">{service.name}</h3>
+      <p className="svc-blurb">{service.blurb}</p>
+      <div className="svc-meta">
+        <span><Icon.Pin/> {service.area}</span>
+        {service.phone && <span><Icon.Phone/> {service.phone}</span>}
+      </div>
+      {service.website && (
+        <a className="svc-link" href={service.website} target="_blank" rel="noopener noreferrer">
+          Visit website
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      )}
+    </article>
+  );
+}
+
+function ServicesView() {
+  const [q, setQ] = useState("");
+  const [cat, setCat] = useState("all");
+  const list = (window.SERVICES || []).filter((s) => {
+    if (cat !== "all" && s.category !== cat) return false;
+    if (q.trim()) {
+      const qq = q.toLowerCase();
+      if (!s.name.toLowerCase().includes(qq) &&
+          !s.blurb.toLowerCase().includes(qq) &&
+          !s.area.toLowerCase().includes(qq) &&
+          !s.category.toLowerCase().includes(qq)) return false;
+    }
+    return true;
+  });
+  return (
+    <main className="page">
+      <header className="header">
+        <div>
+          <h1>Services <em>for the good life.</em></h1>
+          <p>A small, hand-picked directory of dog-friendly businesses our adopters and fosters quietly recommend — from fresh-meal kitchens to memorial potters. No paid listings.</p>
+        </div>
+        <div className="stat">
+          <b>{(window.SERVICES || []).length}</b>
+          businesses across {SERVICE_CATEGORIES.length} categories
+        </div>
+      </header>
+
+      <div className="runs-toolbar">
+        <div className="search" style={{maxWidth: 320}}>
+          <Icon.Search/>
+          <input
+            type="text"
+            placeholder="Search services…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+        </div>
+        <span className="runs-count">{list.length} {list.length === 1 ? "result" : "results"}</span>
+      </div>
+
+      <div className="svc-cats" role="tablist" aria-label="Service categories">
+        <button
+          role="tab"
+          aria-selected={cat === "all"}
+          className={"svc-cat-chip" + (cat === "all" ? " active" : "")}
+          onClick={() => setCat("all")}
+        >All</button>
+        {SERVICE_CATEGORIES.map((c) => (
+          <button
+            key={c}
+            role="tab"
+            aria-selected={cat === c}
+            className={"svc-cat-chip" + (cat === c ? " active" : "")}
+            onClick={() => setCat(c)}
+          >{c}</button>
+        ))}
+      </div>
+
+      {list.length === 0 ? (
+        <div className="empty" style={{padding: "48px 20px"}}>
+          <h3 style={{fontFamily:'var(--serif)', fontWeight:500, fontSize:22, margin:'0 0 6px'}}>Nothing yet</h3>
+          <p>Try a different search or category.</p>
+        </div>
+      ) : (
+        <section className="svc-grid">
+          {list.map((s) => <ServiceCard key={s.id} service={s} />)}
+        </section>
+      )}
     </main>
   );
 }
@@ -1056,6 +1183,7 @@ function App() {
   const [q, setQ] = useState("");
   const [hdb, setHdb] = useState(false);
   const [gender, setGender] = useState("all");
+  const [groupFilter, setGroupFilter] = useState(null); // group id or null
 
   // favorites (persist to localStorage)
   const [favs, setFavs] = useState(() => {
@@ -1091,11 +1219,22 @@ function App() {
       if (ql && !d.name.toLowerCase().includes(ql) && !d.breed.toLowerCase().includes(ql)) return false;
       if (hdb && !d.hdb) return false;
       if (gender !== "all" && d.gender !== gender) return false;
+      if (groupFilter != null && effectiveGroupId(d) !== groupFilter) return false;
       return true;
     });
-  }, [ordered, q, hdb, gender]);
+  }, [ordered, q, hdb, gender, groupFilter]);
 
-  const clearFilters = () => { setQ(""); setHdb(false); setGender("all"); };
+  const clearFilters = () => { setQ(""); setHdb(false); setGender("all"); setGroupFilter(null); };
+
+  const activeGroup = groupFilter != null
+    ? (window.GROUPS || []).find((g) => g.id === groupFilter)
+    : null;
+
+  const pickGroup = (group) => {
+    setGroupFilter(group.id);
+    setView("dogs");
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -1106,18 +1245,30 @@ function App() {
         <header className="header">
           <div>
             <h1>
-              Meet the dogs <em>looking for home.</em>
+              {activeGroup ? <>Dogs from <em>{activeGroup.name.split(" — ")[0]}.</em></> : <>Meet the dogs <em>looking for home.</em></>}
             </h1>
             <p>
-              Every dog here is fully vaccinated, sterilised and waiting for someone patient.
-              Browse below, save your favourites, and we&rsquo;ll arrange a meet at our Sembawang shelter or with a foster carer.
+              {activeGroup
+                ? <>You&rsquo;re viewing dogs in the care of <b>{activeGroup.name}</b>. Clear the filter to see every dog across all welfare groups.</>
+                : <>Every dog here is fully vaccinated, sterilised and waiting for someone patient. Browse below, save your favourites, and we&rsquo;ll arrange a meet at our Sembawang shelter or with a foster carer.</>}
             </p>
           </div>
           <div className="stat">
-            <b>{DOGS.length}</b>
-            dogs currently in our care
+            <b>{activeGroup ? filtered.length : DOGS.length}</b>
+            {activeGroup ? `dogs from this group` : `dogs currently in our care`}
           </div>
         </header>
+
+        {activeGroup && (
+          <div className="group-filter-banner">
+            <span className="gfb-label">Filtered by welfare group:</span>
+            <span className="gfb-pill">{activeGroup.name}</span>
+            <button className="gfb-clear" onClick={() => setGroupFilter(null)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+              Clear filter
+            </button>
+          </div>
+        )}
 
         <div className="layout">
           <Filters
@@ -1170,11 +1321,13 @@ function App() {
 
       {view === "dogruns" && <DogRunsView />}
 
+      {view === "services" && <ServicesView />}
+
       {view === "vets" && <VetsView />}
 
       {view === "blog" && <BlogView />}
 
-      {view === "groups" && <GroupsView />}
+      {view === "groups" && <GroupsView onPickGroup={pickGroup} />}
 
       <footer className="foot">
         <span>&copy; 2026 Homeward Dog Rescue &middot; Sembawang, Singapore</span>

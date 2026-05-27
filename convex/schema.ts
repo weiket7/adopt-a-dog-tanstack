@@ -56,6 +56,16 @@ export default defineSchema({
     tag: v.optional(v.string()),
   }),
 
+  services: defineTable({
+    name: v.string(),
+    category: v.string(),
+    blurb: v.string(),
+    area: v.string(),
+    priceFrom: v.optional(v.string()),
+    website: v.optional(v.string()),
+    phone: v.optional(v.string()),
+  }),
+
   vets: defineTable({
     name: v.string(),
     block: v.string(),

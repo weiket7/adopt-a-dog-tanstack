@@ -133,6 +133,9 @@ function Nav() {
                 <Link to="/dog-runs" activeProps={{ className: "active" }}>
                   Dog Runs
                 </Link>
+                <Link to="/services" activeProps={{ className: "active" }}>
+                  Services
+                </Link>
                 <Link to="/vets" activeProps={{ className: "active" }}>
                   Vets
                 </Link>

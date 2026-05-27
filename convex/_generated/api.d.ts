@@ -13,6 +13,7 @@ import type * as dogs from "../dogs.js";
 import type * as events from "../events.js";
 import type * as http from "../http.js";
 import type * as seed from "../seed.js";
+import type * as services from "../services.js";
 import type * as users from "../users.js";
 import type * as vets from "../vets.js";
 import type * as welfareGroups from "../welfareGroups.js";
@@ -29,6 +30,7 @@ declare const fullApi: ApiFromModules<{
   events: typeof events;
   http: typeof http;
   seed: typeof seed;
+  services: typeof services;
   users: typeof users;
   vets: typeof vets;
   welfareGroups: typeof welfareGroups;

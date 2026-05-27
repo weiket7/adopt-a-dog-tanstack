@@ -234,3 +234,40 @@ export const seedVets = internalMutation({
     return `Seeded ${VETS.length} vets.`;
   },
 });
+
+const SERVICES = [
+  { name: "Paws & Pencils Studio", category: "Artists", blurb: "Hand-drawn graphite portraits and full-colour pastel commissions of your dog. Two-week turnaround, ships in a tube.", area: "Tiong Bahru", priceFrom: "$120", website: "https://pawsandpencils.sg", phone: "+65 9123 4567" },
+  { name: "Tiny Snout Watercolours", category: "Artists", blurb: "Loose, joyful watercolour portraits by Bukit Timah-based illustrator Lin Wei. Originals come in A5 to A3.", area: "Bukit Timah", priceFrom: "$85", website: "https://tinysnout.studio" },
+  { name: "Forever Paws — Clay Casting", category: "Artists", blurb: "Memorial paw-print clay impressions and 3D-printed scans. Often booked for end-of-life keepsakes.", area: "Geylang", priceFrom: "$60", website: "https://foreverpaws.sg", phone: "+65 8234 9921" },
+  { name: "Mobile Aftercare Services", category: "Cremation", blurb: "Compassionate individual cremation with home pick-up. Family viewings available; ashes returned in a hand-finished urn.", area: "Mandai (collection)", priceFrom: "$280", website: "https://mobileaftercare.sg", phone: "+65 6452 0500" },
+  { name: "Pets Cremation Services SG", category: "Cremation", blurb: "Group and private cremation, scatter garden, paw-print impression service. Open daily including public holidays.", area: "Ulu Pandan", priceFrom: "$220", website: "https://petscremation.sg", phone: "+65 8101 8101" },
+  { name: "The Pet Memorial Park", category: "Cremation", blurb: "Memorial niches, annual remembrance day, and grief-support volunteers for families saying goodbye.", area: "Mandai", priceFrom: "$450", website: "https://petmemorial.sg" },
+  { name: "Pawfect Provisions", category: "Pet shops", blurb: "Independent shop carrying air-dried kibble, raw meals, and SG-made enrichment toys. Free delivery above $80.", area: "Joo Chiat", website: "https://pawfectprovisions.sg", phone: "+65 6440 1188" },
+  { name: "The Tail Wag Shoppe", category: "Pet shops", blurb: "Small but mighty — local brands, single-protein treats and harnesses fitted in-store by ex-vet-nurse Mei.", area: "Tiong Bahru", website: "https://tailwagshoppe.sg", phone: "+65 6555 2099" },
+  { name: "Kibble & Co.", category: "Pet shops", blurb: "Subscription kibble (rotational proteins, freshly milled), cold-pressed treats, and the friendliest counter staff in town.", area: "Holland Village", priceFrom: "$32/mo", website: "https://kibbleco.sg" },
+  { name: "PawFresh Meals", category: "Small businesses", blurb: "Gently cooked fresh meals delivered weekly across the island. Vet-formulated; bowls portioned by your dog's weight.", area: "Islandwide delivery", priceFrom: "$18/wk", website: "https://pawfresh.sg", phone: "+65 8800 4733" },
+  { name: "Bone Appétit Bakery", category: "Small businesses", blurb: "Birthday cakes, peanut-butter pupcakes, and biscuit tins decorated with your dog's name in soft icing.", area: "East Coast", priceFrom: "$28", website: "https://boneappetit.sg" },
+  { name: "Wagtail Apothecary", category: "Small businesses", blurb: "SG-made shampoos, paw balms, and calming sprays in refillable amber bottles. Small-batch, fragrance-light.", area: "Jurong East", priceFrom: "$14", website: "https://wagtailapothecary.sg" },
+  { name: "Quiet Conversations — Lina Toh", category: "Animal communication", blurb: "Intuitive sessions for behaviour issues, transitions, and end-of-life care. Sessions over video or in-person.", area: "Online & home visits", priceFrom: "$160/session", website: "https://quietconversations.sg" },
+  { name: "Heart-to-Heart Animal Talk", category: "Animal communication", blurb: "By Joanna Chan, certified by the Animal Spirit Network. Specialises in newly-adopted shelter dogs settling in.", area: "Online", priceFrom: "$120/session", website: "https://heart2heart.sg" },
+  { name: "Fresh Paws Laundromat", category: "Pet laundromats", blurb: "Dedicated machines for pet bedding, harnesses, and cooling mats. Hot-rinse cycle for tick & flea removal.", area: "Bedok", priceFrom: "$8/load", website: "https://freshpaws.sg" },
+  { name: "Woof Wash", category: "Pet laundromats", blurb: "Self-service pet textiles wash with pet-safe enzyme detergent. Drying rack and lint-removal station included.", area: "Ang Mo Kio", priceFrom: "$10/load", website: "https://woofwash.sg" },
+  { name: "The Pet Laundry Co.", category: "Pet laundromats", blurb: "Drop-off service for heavily soiled crate liners and waterproof beds. 24-hour turnaround.", area: "Kallang", priceFrom: "$15/kg", website: "https://petlaundry.sg", phone: "+65 6244 5520" },
+  { name: "Country Boarding by Annie", category: "Boarding", blurb: "Annie hosts 6 dogs at a time in her landed home with a large garden. Daily walks, photo updates, no kennels.", area: "Lim Chu Kang", priceFrom: "$55/night", website: "https://countryboarding.sg", phone: "+65 9888 3401" },
+  { name: "The Wagington Hotel & Resort", category: "Boarding", blurb: "Boutique hotel suites with private patios. Webcam access, daily grooming, and pool sessions for water-lovers.", area: "Cluny Court", priceFrom: "$95/night", website: "https://wagington.com", phone: "+65 6471 5152" },
+  { name: "Sembawang Senior Pet Stay", category: "Boarding", blurb: "Specialised in older and medical-needs dogs. Quiet rooms, soft bedding, ex-vet-tech overnight on duty.", area: "Sembawang", priceFrom: "$70/night", website: "https://seniorpetstay.sg", phone: "+65 6555 0142" },
+  { name: "The Patient Groomer", category: "Grooming", blurb: "One dog at a time, no cages, no dryers if your dog hates them. Specialises in anxious and elderly pups.", area: "Tanjong Pagar", priceFrom: "$80", website: "https://patientgroomer.sg", phone: "+65 9221 7700" },
+  { name: "Soapy Tails Mobile Grooming", category: "Grooming", blurb: "Self-contained grooming van comes to your block. Hydrobath, hand-finished cuts, quiet clippers.", area: "Mobile, islandwide", priceFrom: "$95", website: "https://soapytails.sg", phone: "+65 8123 9090" },
+  { name: "Bishan Tail & Trim", category: "Grooming", blurb: "Neighbourhood favourite by groomer Helen. Walk-in nail trims, breed-standard cuts, gentle senior packages.", area: "Bishan", priceFrom: "$55", website: "https://tailtrim.sg", phone: "+65 6258 4488" },
+];
+
+export const seedServices = internalMutation({
+  handler: async (ctx) => {
+    const existing = await ctx.db.query("services").collect();
+    if (existing.length > 0) return "Services already seeded.";
+    for (const svc of SERVICES) {
+      await ctx.db.insert("services", svc);
+    }
+    return `Seeded ${SERVICES.length} services.`;
+  },
+});

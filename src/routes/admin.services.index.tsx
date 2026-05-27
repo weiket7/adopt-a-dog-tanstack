@@ -14,13 +14,12 @@ export const Route = createFileRoute("/admin/services/")({
 
 const CATEGORIES = [
   "Artists",
-  "Cremation",
   "Pet shops",
-  "Small businesses",
   "Animal communication",
   "Pet laundromats",
   "Boarding",
   "Grooming",
+  "Cremation",
 ];
 
 /* ---------- icons ---------- */

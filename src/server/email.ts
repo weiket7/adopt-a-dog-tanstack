@@ -6,6 +6,8 @@ import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 
 const apiKey = process.env.RESEND_API_KEY;
+if (!apiKey) {
+  console.warn("email.ts - RESEND_API_KEY not set. Emails will not be sent.");
 
 export const emailWelfareGroup = createServerFn({ method: "POST" })
   .inputValidator(

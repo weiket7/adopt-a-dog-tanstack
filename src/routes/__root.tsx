@@ -150,14 +150,14 @@ function Nav() {
                 >
                   Welfare Groups
                 </Link>
+                <Link to="/services" activeProps={{ className: "active" }}>
+                  Services
+                </Link>
                 <Link to="/events" activeProps={{ className: "active" }}>
                   Events
                 </Link>
                 <Link to="/dog-runs" activeProps={{ className: "active" }}>
                   Dog Runs
-                </Link>
-                <Link to="/services" activeProps={{ className: "active" }}>
-                  Services
                 </Link>
                 <Link to="/vets" activeProps={{ className: "active" }}>
                   Vets
@@ -227,6 +227,14 @@ function Nav() {
             Welfare Groups
           </Link>
           <Link
+            to="/services"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            onClick={close}
+          >
+            Services
+          </Link>
+          <Link
             to="/events"
             className="nav-mobile-link"
             activeProps={{ className: "nav-mobile-link active" }}
@@ -241,14 +249,6 @@ function Nav() {
             onClick={close}
           >
             Dog Runs
-          </Link>
-          <Link
-            to="/services"
-            className="nav-mobile-link"
-            activeProps={{ className: "nav-mobile-link active" }}
-            onClick={close}
-          >
-            Services
           </Link>
           <Link
             to="/vets"

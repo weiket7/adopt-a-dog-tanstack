@@ -15,7 +15,6 @@ const SERVICE_CATEGORIES = [
   "Artists",
   "Cremation",
   "Pet shops",
-  "Small businesses",
   "Animal communication",
   "Pet laundromats",
   "Boarding",
@@ -136,8 +135,8 @@ function ServicesPage() {
       const qq = q.toLowerCase();
       if (
         !s.name.toLowerCase().includes(qq) &&
-        !s.blurb.toLowerCase().includes(qq) &&
-        !s.area.toLowerCase().includes(qq) &&
+        !(s.blurb ?? "").toLowerCase().includes(qq) &&
+        !(s.area ?? "").toLowerCase().includes(qq) &&
         !s.category.toLowerCase().includes(qq)
       )
         return false;
@@ -147,7 +146,7 @@ function ServicesPage() {
 
   return (
     <main className="page">
-      <header className="page-header">
+      <header className="header">
         <div>
           <h1>
             Services <em>for the good life.</em>

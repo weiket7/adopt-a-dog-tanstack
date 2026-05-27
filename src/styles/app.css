@@ -166,6 +166,25 @@ input { font: inherit; color: inherit; }
   content: ""; position: absolute; left: 0; right: 0; bottom: -2px;
   height: 2px; background: var(--accent);
 }
+.nav-section-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent);
+  padding: 6px 0;
+  user-select: none;
+}
+.nav-signout {
+  font-size: 15px; font-weight: 500;
+  color: var(--ink-2);
+  background: none; border: none; padding: 6px 0;
+  cursor: pointer;
+}
+.nav-signout:hover { color: var(--accent); }
+.nav-divider {
+  width: 1px; height: 16px;
+  background: var(--line-2);
+  align-self: center;
+}
 .nav-cta {
   font-size: 14px; font-weight: 600;
   background: var(--ink); color: var(--paper);

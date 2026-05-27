@@ -10,8 +10,9 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useConvexAuth } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import * as React from "react";
+import { api } from "../../convex/_generated/api";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
 import appCss from "~/styles/app.css?url";
@@ -63,6 +64,16 @@ function PawIcon() {
 }
 
 function Nav() {
+  const role = useQuery(api.users.role);
+  const { isAuthenticated } = useConvexAuth();
+  const { signOut } = useAuthActions();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/" });
+  };
+
   return (
     <nav className="nav">
       <div className="nav-inner">
@@ -75,44 +86,76 @@ function Nav() {
         </Link>
         <div className="nav-right">
           <div className="nav-menu">
-            <Link
-              to="/"
-              activeProps={{ className: "active" }}
-              activeOptions={{ exact: true }}
-            >
-              Dogs
-            </Link>
-            <Link to="/welfare-groups" activeProps={{ className: "active" }}>
-              Welfare Groups
-            </Link>
-            <Link to="/events" activeProps={{ className: "active" }}>
-              Events
-            </Link>
-            <Link to="/dog-runs" activeProps={{ className: "active" }}>
-              Dog Runs
-            </Link>
-            <Link to="/vets" activeProps={{ className: "active" }}>
-              Vets
-            </Link>
-            {/* <Link to="/blog" activeProps={{ className: "active" }}>
-            Blog
-          </Link> */}
+            {role === "Admin" ? (
+              <>
+                <Link to="/admin/dogs" activeProps={{ className: "active" }}>
+                  Dogs
+                </Link>
+                <Link to="/admin/events" activeProps={{ className: "active" }}>
+                  Events
+                </Link>
+                <Link to="/admin/users" activeProps={{ className: "active" }}>
+                  Users
+                </Link>
+                <span className="nav-divider" aria-hidden="true" />
+                <button className="nav-signout" onClick={handleSignOut}>
+                  Log out
+                </button>
+              </>
+            ) : role === "Member" ? (
+              <>
+                <Link to="/admin/dogs" activeProps={{ className: "active" }}>
+                  Dogs
+                </Link>
+                <span className="nav-divider" aria-hidden="true" />
+                <button className="nav-signout" onClick={handleSignOut}>
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/"
+                  activeProps={{ className: "active" }}
+                  activeOptions={{ exact: true }}
+                >
+                  Dogs
+                </Link>
+                <Link
+                  to="/welfare-groups"
+                  activeProps={{ className: "active" }}
+                >
+                  Welfare Groups
+                </Link>
+                <Link to="/events" activeProps={{ className: "active" }}>
+                  Events
+                </Link>
+                <Link to="/dog-runs" activeProps={{ className: "active" }}>
+                  Dog Runs
+                </Link>
+                <Link to="/vets" activeProps={{ className: "active" }}>
+                  Vets
+                </Link>
+              </>
+            )}
           </div>
-          <a
-            className="nav-support"
-            href="https://ko-fi.com/adoptadogsg"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Support us on Ko-fi — donations go towards hosting this site"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z" />
-            </svg>
-            Support us
-            <span className="nav-support-tip" role="tooltip">
-              Donations go towards hosting this site
-            </span>
-          </a>
+          {!isAuthenticated && (
+            <a
+              className="nav-support"
+              href="https://ko-fi.com/adoptadogsg"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Support us on Ko-fi — donations go towards hosting this site"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z" />
+              </svg>
+              Support us
+              <span className="nav-support-tip" role="tooltip">
+                Donations go towards hosting this site
+              </span>
+            </a>
+          )}
         </div>
       </div>
     </nav>
@@ -278,10 +321,6 @@ function Footer() {
           &nbsp; | &nbsp;
           {isAuthenticated ? (
             <>
-              <Link to="/admin/dogs" style={linkStyle}>
-                Admin
-              </Link>{" "}
-              &middot;{" "}
               <a
                 href="#"
                 onClick={async (e) => {

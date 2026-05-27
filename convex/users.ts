@@ -1,11 +1,20 @@
 import { v } from "convex/values";
 import { action, internalMutation, mutation, query } from "./_generated/server";
-import { createAccount } from "@convex-dev/auth/server";
+import { createAccount, getAuthUserId } from "@convex-dev/auth/server";
 import { internal } from "./_generated/api";
 
 export const list = query({
   handler: async (ctx) => {
     return await ctx.db.query("users").collect();
+  },
+});
+
+export const role = query({
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return null;
+    const user = await ctx.db.get(userId);
+    return user?.role ?? null;
   },
 });
 

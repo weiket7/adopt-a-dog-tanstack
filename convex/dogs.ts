@@ -15,22 +15,24 @@ export const all = query({
         imageUrl: dog.imageStorageId
           ? await ctx.storage.getUrl(dog.imageStorageId)
           : null,
-      }))
+      })),
     );
   },
 });
 
 export const listAll = query({
   handler: async (ctx) => {
-    const dogs = await ctx.db.query("dogs").collect();
-    const active = dogs.filter((d) => d.status !== "inactive");
+    const dogs = await ctx.db
+      .query("dogs")
+      .filter((q) => q.neq(q.field("status"), "inactive"))
+      .collect();
     return await Promise.all(
-      active.map(async (dog) => ({
+      dogs.map(async (dog) => ({
         ...dog,
         imageUrl: dog.imageStorageId
           ? await ctx.storage.getUrl(dog.imageStorageId)
           : null,
-      }))
+      })),
     );
   },
 });
@@ -44,7 +46,9 @@ export const list = query({
     description: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    let q = ctx.db.query("dogs");
+    let q = ctx.db
+      .query("dogs")
+      .filter((q) => q.neq(q.field("status"), "inactive"));
     if (args.name) {
       q = q.filter((q) => q.eq(q.field("name"), args.name));
     }
@@ -60,10 +64,10 @@ export const list = query({
     const pageWithUrls = await Promise.all(
       results.page.map(async (dog) => ({
         ...dog,
-        imageUrl: dog.imageStorageId 
-          ? await ctx.storage.getUrl(dog.imageStorageId) 
+        imageUrl: dog.imageStorageId
+          ? await ctx.storage.getUrl(dog.imageStorageId)
           : "/img/products/product-grey-4.jpg",
-      }))
+      })),
     );
 
     return { ...results, page: pageWithUrls };
@@ -78,8 +82,8 @@ export const get = query({
 
     return {
       ...dog,
-      imageUrl: dog.imageStorageId 
-        ? await ctx.storage.getUrl(dog.imageStorageId) 
+      imageUrl: dog.imageStorageId
+        ? await ctx.storage.getUrl(dog.imageStorageId)
         : null,
     };
   },
@@ -88,12 +92,13 @@ export const get = query({
 export const add = mutation({
   args: {
     name: v.string(),
-    gender: v.string(),
-    hdbApproved: v.string(),
+    gender: v.union(v.literal("Male"), v.literal("Female")),
+    hdbApproved: v.union(v.literal("Yes"), v.literal("No")),
     birthday: v.optional(v.string()),
     description: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
     imageStorageId: v.optional(v.id("_storage")),
+    status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("dogs", args);
@@ -104,12 +109,13 @@ export const update = mutation({
   args: {
     id: v.id("dogs"),
     name: v.string(),
-    gender: v.string(),
-    hdbApproved: v.string(),
+    gender: v.union(v.literal("Male"), v.literal("Female")),
+    hdbApproved: v.union(v.literal("Yes"), v.literal("No")),
     birthday: v.optional(v.string()),
     description: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
     imageStorageId: v.optional(v.id("_storage")),
+    status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;

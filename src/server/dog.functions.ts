@@ -16,12 +16,13 @@ export const saveDogAction = createServerFn({ method: "POST" })
     const dogId = data.get("dogId") as string | null;
     const imageFile = data.get("image") as File;
     const name = data.get("name") as string;
-    const gender = data.get("gender") as string;
-    const hdbApproved = data.get("hdbApproved") as string;
+    const gender = z.enum(["Male", "Female"]).parse(data.get("gender"));
+    const hdbApproved = z.enum(["Yes", "No"]).parse(data.get("hdbApproved"));
     const birthday = data.get("birthday") as string;
+    const status = z.enum(["active", "inactive"]).parse(data.get("status"));
     const welfareGroupId = data.get("welfareGroupId") as Id<"welfareGroups">;
 
-    let storageId = data.get("existingStorageId") as string | undefined;
+    let storageId = data.get("existingStorageId") as Id<"_storage"> | undefined;
 
     // 1. Handle Image Upload if a new file exists
     if (imageFile && imageFile.size > 0) {
@@ -32,7 +33,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
         body: imageFile,
       });
       const json = await result.json();
-      storageId = json.storageId;
+      storageId = json.storageId as Id<"_storage">;
     }
 
     // 2. Decide Mutation
@@ -42,11 +43,15 @@ export const saveDogAction = createServerFn({ method: "POST" })
       hdbApproved,
       birthday,
       welfareGroupId,
-      imageStorageId: storageId as any,
+      imageStorageId: storageId,
+      status,
     };
 
     if (dogId) {
-      await convex.mutation(api.dogs.update, { id: dogId as any, ...payload });
+      await convex.mutation(api.dogs.update, {
+        id: dogId as Id<"dogs">,
+        ...payload,
+      });
     } else {
       await convex.mutation(api.dogs.add, payload);
     }

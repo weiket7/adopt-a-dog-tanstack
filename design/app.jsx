@@ -424,6 +424,105 @@ function DogCard({ dog, fine, fav, onFav, onOpen, showPhoto }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Login modal                                                         */
+/* ------------------------------------------------------------------ */
+function LoginModal({ onClose }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [msg, setMsg] = useState(null);
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!email.trim() || !password) return;
+    setSubmitting(true);
+    setMsg(null);
+    setTimeout(() => {
+      setSubmitting(false);
+      setMsg({ kind: 'info', text: "Login is not connected yet — we'll get back to you soon." });
+    }, 700);
+  };
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div
+        className="login-sheet"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="login-title"
+      >
+        <button className="login-close" onClick={onClose} aria-label="Close">
+          <Icon.Close/>
+        </button>
+
+        <div className="login-body">
+          <h2 id="login-title">Welcome back.</h2>
+          <p className="login-sub">Sign in to manage your fosters, volunteer shifts and adoption applications.</p>
+
+          <form onSubmit={submit} className="login-form">
+            <label className="login-field">
+              <span>Email</span>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoFocus
+                required
+              />
+            </label>
+
+            <label className="login-field">
+              <span>Password</span>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+            </label>
+
+            <div className="login-row">
+              <label className="login-remember">
+                <input type="checkbox" defaultChecked /> Remember me
+              </label>
+              <a href="#" className="login-link" onClick={(e) => e.preventDefault()}>Forgot password?</a>
+            </div>
+
+            <button type="submit" className="login-submit" disabled={submitting}>
+              {submitting ? "Signing in…" : "Sign in"}
+            </button>
+
+            {msg && (
+              <div className="login-msg">{msg.text}</div>
+            )}
+
+            <p className="login-foot">
+              No account yet?{" "}
+              <a href="#" className="login-link" onClick={(e) => e.preventDefault()}>Get in touch with us</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Dog detail modal                                                    */
 /* ------------------------------------------------------------------ */
 function DogDetail({ dog, onClose, showPhoto }) {
@@ -982,6 +1081,7 @@ function App() {
 
   // selected dog for detail modal
   const [selectedDog, setSelectedDog] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
 
   const ordered = useMemo(() => seededShuffle(DOGS, seed), [seed]);
 
@@ -1080,6 +1180,12 @@ function App() {
         <span>&copy; 2026 Homeward Dog Rescue &middot; Sembawang, Singapore</span>
         <span>
           hello@homeward.sg &middot; +65 6555 0142 &middot;{" "}
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); setShowLogin(true); }}
+            style={{color:'var(--muted)', textDecoration:'underline', textUnderlineOffset:'3px'}}
+          >Log in</a>
+          {" "}&middot;{" "}
           <a href="admin.html" style={{color:'var(--muted)', textDecoration:'underline', textUnderlineOffset:'3px'}}>Admin</a>
         </span>
       </footer>
@@ -1087,6 +1193,8 @@ function App() {
       {selectedDog && (
         <DogDetail dog={selectedDog} onClose={() => setSelectedDog(null)} showPhoto={t.showPhotos} />
       )}
+
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
 
       <TweaksPanel title="Tweaks">
         <TweakSection label="Palette">

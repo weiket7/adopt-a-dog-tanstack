@@ -375,7 +375,7 @@ function DogCard({
         <div className="card-meta">
           {dog.birthday ? toAge(dog.birthday) : <span>&nbsp;</span>}
         </div>
-        <div className="card-fine">{dog.description || fine}</div>
+        {/* <div className="card-fine">{dog.description || fine}</div> */}
       </div>
     </article>
   );

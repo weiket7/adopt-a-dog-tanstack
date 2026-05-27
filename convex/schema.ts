@@ -59,11 +59,12 @@ export default defineSchema({
   services: defineTable({
     name: v.string(),
     category: v.string(),
-    blurb: v.string(),
-    area: v.string(),
+    blurb: v.optional(v.string()),
+    area: v.optional(v.string()),
     priceFrom: v.optional(v.string()),
     website: v.optional(v.string()),
     phone: v.optional(v.string()),
+    imageStorageId: v.optional(v.id("_storage")),
   }),
 
   vets: defineTable({

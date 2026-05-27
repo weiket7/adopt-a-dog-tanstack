@@ -70,13 +70,31 @@ function pickFine(dogId: string, seed: number): string {
 /* ------------------------------------------------------------------ */
 
 const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="11" cy="11" r="7" />
     <path d="m20 20-3.5-3.5" />
   </svg>
 );
 const CheckIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width="11"
+    height="11"
+  >
     <polyline points="4 12 10 18 20 6" />
   </svg>
 );
@@ -95,7 +113,16 @@ const VenusIcon = () => (
   </svg>
 );
 const ShuffleIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M16 3h5v5" />
     <path d="M4 20 21 3" />
     <path d="M21 16v5h-5" />
@@ -104,12 +131,29 @@ const ShuffleIcon = () => (
   </svg>
 );
 const CloseIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <path d="M6 6l12 12M18 6 6 18" />
   </svg>
 );
 const SendIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M22 2 11 13" />
     <path d="M22 2 15 22l-4-9-9-4z" />
   </svg>
@@ -120,18 +164,28 @@ const SendIcon = () => (
 /* ------------------------------------------------------------------ */
 
 function Filters({
-  q, setQ, hdb, setHdb, gender, setGender,
+  q,
+  setQ,
+  hdb,
+  setHdb,
+  gender,
+  setGender,
 }: {
-  q: string; setQ: (v: string) => void;
-  hdb: boolean; setHdb: (v: boolean) => void;
-  gender: string; setGender: (v: string) => void;
+  q: string;
+  setQ: (v: string) => void;
+  hdb: boolean;
+  setHdb: (v: boolean) => void;
+  gender: string;
+  setGender: (v: string) => void;
 }) {
   return (
     <aside className="filters">
       <div className="filter-eyebrow">Find your match</div>
 
       <div className="filter-group">
-        <label className="filter-label" htmlFor="dog-search">Search by name</label>
+        <label className="filter-label" htmlFor="dog-search">
+          Search by name
+        </label>
         <div className="search">
           <SearchIcon />
           <input
@@ -147,7 +201,10 @@ function Filters({
 
       <div className="filter-group">
         <span className="filter-label">HDB approved</span>
-        <p className="filter-help">Show only dogs that meet HDB&rsquo;s approved breed &amp; size list for flat-living.</p>
+        <p className="filter-help">
+          Show only dogs that meet HDB&rsquo;s approved breed &amp; size list
+          for flat-living.
+        </p>
         <button
           type="button"
           className={"toggle-row" + (hdb ? " on" : "")}
@@ -157,7 +214,9 @@ function Filters({
           <span className="switch" />
           <span>
             <div className="toggle-label">HDB-approved only</div>
-            <div className="toggle-sub">{hdb ? "Showing flat-friendly dogs" : "Showing all dogs"}</div>
+            <div className="toggle-sub">
+              {hdb ? "Showing flat-friendly dogs" : "Showing all dogs"}
+            </div>
           </span>
         </button>
       </div>
@@ -165,9 +224,27 @@ function Filters({
       <div className="filter-group">
         <span className="filter-label">Gender</span>
         <div className="seg" role="radiogroup" aria-label="Gender">
-          <button role="radio" aria-pressed={gender === "all"} onClick={() => setGender("all")}>All</button>
-          <button role="radio" aria-pressed={gender === "Male"} onClick={() => setGender("Male")}>Male</button>
-          <button role="radio" aria-pressed={gender === "Female"} onClick={() => setGender("Female")}>Female</button>
+          <button
+            role="radio"
+            aria-pressed={gender === "all"}
+            onClick={() => setGender("all")}
+          >
+            All
+          </button>
+          <button
+            role="radio"
+            aria-pressed={gender === "Male"}
+            onClick={() => setGender("Male")}
+          >
+            Male
+          </button>
+          <button
+            role="radio"
+            aria-pressed={gender === "Female"}
+            onClick={() => setGender("Female")}
+          >
+            Female
+          </button>
         </div>
       </div>
     </aside>
@@ -188,19 +265,29 @@ function DogCard({ dog, onOpen }: { dog: any; onOpen: (dog: any) => void }) {
       tabIndex={0}
       onClick={() => onOpen(dog)}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(dog); }
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen(dog);
+        }
       }}
       aria-label={`View ${dog.name}'s profile`}
     >
       <div className="card-photo">
         {dog.imageUrl && imgOk ? (
-          <img src={dog.imageUrl} alt={dog.name} loading="lazy" onError={() => setImgOk(false)} />
+          <img
+            src={dog.imageUrl}
+            alt={dog.name}
+            loading="lazy"
+            onError={() => setImgOk(false)}
+          />
         ) : (
           <div className="placeholder">{dog.name[0].toUpperCase()}</div>
         )}
         <div className="badges">
           {dog.hdbApproved === "Yes" && (
-            <span className="badge hdb"><CheckIcon /> HDB</span>
+            <span className="badge hdb">
+              <CheckIcon /> HDB
+            </span>
           )}
         </div>
       </div>
@@ -225,14 +312,21 @@ function DogCard({ dog, onOpen }: { dog: any; onOpen: (dog: any) => void }) {
 /* ------------------------------------------------------------------ */
 
 function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [imgOk, setImgOk] = useState(true);
   const sheetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
@@ -240,7 +334,9 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, []);
 
   useEffect(() => {
@@ -260,7 +356,13 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
     if (!form.name.trim() || !form.email.trim()) return;
     setSending(true);
     await emailWelfareGroup({
-      data: { dogId: dog._id, name: form.name, email: form.email, mobile: form.phone, message: form.message },
+      data: {
+        dogId: dog._id,
+        name: form.name,
+        email: form.email,
+        mobile: form.phone,
+        message: form.message,
+      },
     });
     setSending(false);
     setSubmitted(true);
@@ -276,17 +378,25 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
         aria-modal="true"
         aria-label={`${dog.name}'s profile`}
       >
-        <button className="modal-close" onClick={onClose} aria-label="Close"><CloseIcon /></button>
+        <button className="modal-close" onClick={onClose} aria-label="Close">
+          <CloseIcon />
+        </button>
 
         <div className="modal-body">
           <div>
             <div className="detail-head">
               <div className="detail-eyebrow">Available for adoption</div>
-              <h2 className="detail-name">Meet <em>{dog.name}</em></h2>
+              <h2 className="detail-name">
+                Meet <em>{dog.name}</em>
+              </h2>
             </div>
             <div className="modal-portrait">
               {dog.imageUrl && imgOk ? (
-                <img src={dog.imageUrl} alt={dog.name} onError={() => setImgOk(false)} />
+                <img
+                  src={dog.imageUrl}
+                  alt={dog.name}
+                  onError={() => setImgOk(false)}
+                />
               ) : (
                 <div className="placeholder">{dog.name[0]}</div>
               )}
@@ -294,15 +404,22 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
             <div className="detail-grid">
               <div className="detail-cell">
                 <div className="k">Gender</div>
-                <div className="v">{dog.gender === "Male" ? <MarsIcon /> : <VenusIcon />}{dog.gender}</div>
+                <div className="v">
+                  {dog.gender === "Male" ? <MarsIcon /> : <VenusIcon />}
+                  {dog.gender}
+                </div>
               </div>
               <div className="detail-cell">
                 <div className="k">Age</div>
-                <div className="v">{dog.birthday ? toAge(dog.birthday) : "—"}</div>
+                <div className="v">
+                  {dog.birthday ? toAge(dog.birthday) : "—"}
+                </div>
               </div>
               <div className="detail-cell">
                 <div className="k">HDB approved</div>
-                <div className="v">{dog.hdbApproved === "Yes" ? "Yes" : "Landed only"}</div>
+                <div className="v">
+                  {dog.hdbApproved === "Yes" ? "Yes" : "Landed only"}
+                </div>
               </div>
             </div>
             {dog.description && (
@@ -317,31 +434,61 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
             <div className="form-card">
               {submitted ? (
                 <div className="form-success">
-                  <span className="check-ring"><CheckIcon /></span>
+                  <span className="check-ring">
+                    <CheckIcon />
+                  </span>
                   <h4>Thanks, {form.name.split(" ")[0] || "friend"}.</h4>
-                  <p>We&rsquo;ve received your interest in {dog.name}. Our adoption team will be in touch within 2 working days.</p>
+                  <p>
+                    We&rsquo;ve received your interest in {dog.name}. Our
+                    adoption team will be in touch within 2 working days.
+                  </p>
                 </div>
               ) : (
                 <>
                   <h3>Interested in {dog.name}?</h3>
-                  <p className="form-sub">Tell us a little about yourself and we&rsquo;ll arrange a meet at the shelter.</p>
+                  <p className="form-sub">
+                    Tell us a little about yourself and we&rsquo;ll arrange a
+                    meet at the shelter.
+                  </p>
                   <form onSubmit={submit}>
                     <div className="form-field">
                       <label htmlFor="adopter-name">Your name</label>
-                      <input id="adopter-name" type="text" placeholder="Full name" value={form.name} onChange={update("name")} required />
+                      <input
+                        id="adopter-name"
+                        type="text"
+                        placeholder="Full name"
+                        value={form.name}
+                        onChange={update("name")}
+                        required
+                      />
                     </div>
                     <div className="form-row">
                       <div className="form-field">
                         <label htmlFor="adopter-email">Email</label>
-                        <input id="adopter-email" type="email" placeholder="you@example.com" value={form.email} onChange={update("email")} required />
+                        <input
+                          id="adopter-email"
+                          type="email"
+                          placeholder="you@example.com"
+                          value={form.email}
+                          onChange={update("email")}
+                          required
+                        />
                       </div>
                       <div className="form-field">
                         <label htmlFor="adopter-phone">Phone</label>
-                        <input id="adopter-phone" type="tel" placeholder="+65 9123 4567" value={form.phone} onChange={update("phone")} />
+                        <input
+                          id="adopter-phone"
+                          type="tel"
+                          placeholder="+65 9123 4567"
+                          value={form.phone}
+                          onChange={update("phone")}
+                        />
                       </div>
                     </div>
                     <div className="form-field">
-                      <label htmlFor="adopter-message">Tell us about your home</label>
+                      <label htmlFor="adopter-message">
+                        Tell us about your home
+                      </label>
                       <textarea
                         id="adopter-message"
                         placeholder={`Where do you live, who else is at home, and what made ${dog.name} catch your eye?`}
@@ -349,10 +496,16 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
                         onChange={update("message")}
                       />
                     </div>
-                    <button type="submit" className="form-submit" disabled={sending}>
+                    <button
+                      type="submit"
+                      className="form-submit"
+                      disabled={sending}
+                    >
                       <SendIcon /> {sending ? "Sending…" : "Send interest"}
                     </button>
-                    <div className="form-disclaimer">Adoption is subject to home visit &amp; suitability check.</div>
+                    <div className="form-disclaimer">
+                      Adoption is subject to home visit &amp; suitability check.
+                    </div>
                   </form>
                 </>
               )}
@@ -372,8 +525,12 @@ function WelfareGroupDogsPage() {
   const { welfareGroupId } = Route.useParams();
   const id = welfareGroupId as Id<"welfareGroups">;
 
-  const { data: group } = useSuspenseQuery(convexQuery(api.welfareGroups.getById, { id }));
-  const { data: allDogs } = useSuspenseQuery(convexQuery(api.dogs.listByWelfareGroup, { welfareGroupId: id }));
+  const { data: group } = useSuspenseQuery(
+    convexQuery(api.welfareGroups.getById, { id }),
+  );
+  const { data: allDogs } = useSuspenseQuery(
+    convexQuery(api.dogs.listByWelfareGroup, { welfareGroupId: id }),
+  );
 
   const [q, setQ] = useState("");
   const [hdb, setHdb] = useState(false);
@@ -381,7 +538,10 @@ function WelfareGroupDogsPage() {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1e6) + 1);
   const [selectedDog, setSelectedDog] = useState<any>(null);
 
-  const shuffled = useMemo(() => seededShuffle(allDogs ?? [], seed), [allDogs, seed]);
+  const shuffled = useMemo(
+    () => seededShuffle(allDogs ?? [], seed),
+    [allDogs, seed],
+  );
 
   const filtered = useMemo(() => {
     const ql = q.trim().toLowerCase();
@@ -393,11 +553,15 @@ function WelfareGroupDogsPage() {
     });
   }, [shuffled, q, hdb, gender]);
 
-  const clearFilters = () => { setQ(""); setHdb(false); setGender("all"); };
+  const clearFilters = () => {
+    setQ("");
+    setHdb(false);
+    setGender("all");
+  };
 
   return (
     <main className="page">
-      <header className="page-header">
+      <header className="header">
         <div>
           <div className="page-header-back">
             <Link to="/welfare-groups">&larr; Welfare groups</Link>
@@ -406,7 +570,8 @@ function WelfareGroupDogsPage() {
             {group?.name ?? "Welfare group"} <em>dogs for adoption.</em>
           </h1>
           <p>
-            Browse dogs currently available through {group?.name}. Every dog is fully vaccinated, sterilised and waiting for someone patient.
+            Browse dogs currently available through {group?.name}. Every dog is
+            fully vaccinated, sterilised and waiting for someone patient.
           </p>
         </div>
         <div className="stat">
@@ -416,7 +581,14 @@ function WelfareGroupDogsPage() {
       </header>
 
       <div className="layout">
-        <Filters q={q} setQ={setQ} hdb={hdb} setHdb={setHdb} gender={gender} setGender={setGender} />
+        <Filters
+          q={q}
+          setQ={setQ}
+          hdb={hdb}
+          setHdb={setHdb}
+          gender={gender}
+          setGender={setGender}
+        />
 
         <section>
           <div className="results-meta">
@@ -437,7 +609,10 @@ function WelfareGroupDogsPage() {
             {filtered.length === 0 ? (
               <div className="empty">
                 <h3>No dogs match those filters</h3>
-                <p>Try widening your search &mdash; the right match may not be the one you came in for.</p>
+                <p>
+                  Try widening your search &mdash; the right match may not be
+                  the one you came in for.
+                </p>
                 <button onClick={clearFilters}>Clear all filters</button>
               </div>
             ) : (

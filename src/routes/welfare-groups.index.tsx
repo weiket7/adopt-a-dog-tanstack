@@ -213,7 +213,7 @@ function WelfareGroupsPage() {
 
   return (
     <main className="page">
-      <header className="page-header">
+      <header className="header">
         <div>
           <h1>
             Welfare groups <em>doing the work.</em>

@@ -4,6 +4,7 @@ window.SERVICES = [
   /* ---------- artists & portraits ---------- */
   {
     id: 1,
+    featured: true,
     name: "Paws & Pencils Studio",
     category: "Artists",
     blurb: "Hand-drawn graphite portraits and full-colour pastel commissions of your dog. Two-week turnaround, ships in a tube.",
@@ -55,6 +56,7 @@ window.SERVICES = [
   },
   {
     id: 12,
+    featured: true,
     name: "The Pet Memorial Park",
     category: "Cremation",
     blurb: "Memorial niches, annual remembrance day, and grief-support volunteers for families saying goodbye.",
@@ -66,6 +68,7 @@ window.SERVICES = [
   /* ---------- pet shops & supplies ---------- */
   {
     id: 20,
+    featured: true,
     name: "Pawfect Provisions",
     category: "Pet shops",
     blurb: "Independent shop carrying air-dried kibble, raw meals, and SG-made enrichment toys. Free delivery above $80.",
@@ -97,6 +100,7 @@ window.SERVICES = [
   /* ---------- small businesses (raw / fresh food etc) ---------- */
   {
     id: 30,
+    featured: true,
     name: "PawFresh Meals",
     category: "Small businesses",
     blurb: "Gently cooked fresh meals delivered weekly across the island. Vet-formulated; bowls portioned by your dog's weight.",
@@ -177,6 +181,7 @@ window.SERVICES = [
   /* ---------- boarding ---------- */
   {
     id: 60,
+    featured: true,
     name: "Country Boarding by Annie",
     category: "Boarding",
     blurb: "Annie hosts 6 dogs at a time in her landed home with a large garden. Daily walks, photo updates, no kennels.",
@@ -209,6 +214,7 @@ window.SERVICES = [
   /* ---------- grooming ---------- */
   {
     id: 70,
+    featured: true,
     name: "The Patient Groomer",
     category: "Grooming",
     blurb: "One dog at a time, no cages, no dryers if your dog hates them. Specialises in anxious and elderly pups.",

@@ -15,35 +15,60 @@ export const Route = createFileRoute("/events")({
 function PawIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <ellipse cx="6"  cy="10" rx="2"  ry="2.6"/>
-      <ellipse cx="10" cy="6.5" rx="2" ry="2.6"/>
-      <ellipse cx="14" cy="6.5" rx="2" ry="2.6"/>
-      <ellipse cx="18" cy="10" rx="2"  ry="2.6"/>
-      <path d="M12 12c-3 0-5.5 2.4-5.5 5 0 1.8 1.3 3 3 3 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.7 0 3-1.2 3-3 0-2.6-2.5-5-5.5-5z"/>
+      <ellipse cx="6" cy="10" rx="2" ry="2.6" />
+      <ellipse cx="10" cy="6.5" rx="2" ry="2.6" />
+      <ellipse cx="14" cy="6.5" rx="2" ry="2.6" />
+      <ellipse cx="18" cy="10" rx="2" ry="2.6" />
+      <path d="M12 12c-3 0-5.5 2.4-5.5 5 0 1.8 1.3 3 3 3 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.7 0 3-1.2 3-3 0-2.6-2.5-5-5.5-5z" />
     </svg>
   );
 }
 
 function CalIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 9h18M8 3v4M16 3v4" />
     </svg>
   );
 }
 
 function PinIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22s7-7 7-13a7 7 0 1 0-14 0c0 6 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 22s7-7 7-13a7 7 0 1 0-14 0c0 6 7 13 7 13z" />
+      <circle cx="12" cy="9" r="2.5" />
     </svg>
   );
 }
 
 function ArrowRightIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14M13 5l7 7-7 7"/>
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14M13 5l7 7-7 7" />
     </svg>
   );
 }
@@ -94,9 +119,11 @@ function EventsPage() {
 
   return (
     <main className="page">
-      <header className="page-header">
+      <header className="header">
         <div>
-          <h1>What&rsquo;s on at <em>Homeward.</em></h1>
+          <h1>
+            What&rsquo;s on at <em>Homeward.</em>
+          </h1>
           <p>
             Adoption drives, fairs, community walks and the occasional vet
             clinic. Everyone&rsquo;s welcome — dogs included.
@@ -109,7 +136,9 @@ function EventsPage() {
       </header>
 
       <section className="events-list">
-        {events.map((ev) => <EventCard key={ev._id} ev={ev} />)}
+        {events.map((ev) => (
+          <EventCard key={ev._id} ev={ev} />
+        ))}
       </section>
     </main>
   );

@@ -654,7 +654,7 @@ function Home() {
 
   return (
     <main className="page">
-      <header className="page-header">
+      <header className="header">
         <div>
           <h1>
             Meet the dogs <em>looking for home.</em>

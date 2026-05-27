@@ -68,16 +68,33 @@ function Nav() {
   const { isAuthenticated } = useConvexAuth();
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
 
   const handleSignOut = async () => {
     await signOut();
     navigate({ to: "/" });
   };
 
+  const close = () => setMenuOpen(false);
+
   return (
-    <nav className="nav">
+    <nav className={"nav" + (menuOpen ? " nav--open" : "")}>
       <div className="nav-inner">
-        <Link to="/" className="logo">
+        <Link to="/" className="logo" onClick={close}>
           <span className="mark">
             <PawIcon />
           </span>
@@ -94,7 +111,10 @@ function Nav() {
                 <Link to="/admin/events" activeProps={{ className: "active" }}>
                   Events
                 </Link>
-                <Link to="/admin/services" activeProps={{ className: "active" }}>
+                <Link
+                  to="/admin/services"
+                  activeProps={{ className: "active" }}
+                >
                   Services
                 </Link>
                 <Link to="/admin/users" activeProps={{ className: "active" }}>
@@ -146,24 +166,112 @@ function Nav() {
             )}
           </div>
           {!isAuthenticated && (
-            <a
-              className="nav-support"
-              href="https://ko-fi.com/adoptadogsg"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Support us on Ko-fi — donations go towards hosting this site"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z" />
-              </svg>
-              Support us
-              <span className="nav-support-tip" role="tooltip">
-                Donations go towards hosting this site
-              </span>
-            </a>
+            <>
+              <a
+                className="nav-support"
+                href="https://ko-fi.com/adoptadogsg"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Support us on Ko-fi — donations go towards hosting this site"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z" />
+                </svg>
+                Suppawt us
+                <span className="nav-support-tip" role="tooltip">
+                  Donations go towards hosting this site
+                </span>
+              </a>
+              <button
+                type="button"
+                className="nav-burger"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={menuOpen}
+                aria-controls="nav-mobile-panel"
+                onClick={() => setMenuOpen((v) => !v)}
+              >
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+              </button>
+            </>
           )}
         </div>
       </div>
+
+      {menuOpen && (
+        <div className="nav-mobile-scrim" onClick={close} aria-hidden="true" />
+      )}
+
+      {!isAuthenticated && (
+        <div
+          id="nav-mobile-panel"
+          className={"nav-mobile" + (menuOpen ? " open" : "")}
+          aria-hidden={!menuOpen}
+        >
+          <Link
+            to="/"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            activeOptions={{ exact: true }}
+            onClick={close}
+          >
+            Dogs
+          </Link>
+          <Link
+            to="/welfare-groups"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            onClick={close}
+          >
+            Welfare Groups
+          </Link>
+          <Link
+            to="/events"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            onClick={close}
+          >
+            Events
+          </Link>
+          <Link
+            to="/dog-runs"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            onClick={close}
+          >
+            Dog Runs
+          </Link>
+          <Link
+            to="/services"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            onClick={close}
+          >
+            Services
+          </Link>
+          <Link
+            to="/vets"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            onClick={close}
+          >
+            Vets
+          </Link>
+          <a
+            className="nav-mobile-support"
+            href="https://ko-fi.com/adoptadogsg"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={close}
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z" />
+            </svg>
+            Support us on Ko-fi
+          </a>
+        </div>
+      )}
     </nav>
   );
 }

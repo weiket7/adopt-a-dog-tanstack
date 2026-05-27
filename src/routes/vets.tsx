@@ -154,7 +154,7 @@ function VetsPage() {
 
   return (
     <main className="page">
-      <header className="page-header">
+      <header className="header">
         <div>
           <h1>
             Our partner <em>vets.</em>

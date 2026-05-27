@@ -7,6 +7,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=301",
     size: "Large",
+    area: "Central",
   },
   {
     id: 2,
@@ -15,6 +16,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=302",
     size: "Large",
+    area: "West",
   },
   {
     id: 3,
@@ -23,6 +25,7 @@ window.DOGRUNS = [
     hours: "7am – 7pm daily",
     image: "https://placedog.net/600/400?id=303",
     size: "Medium",
+    area: "East",
   },
   {
     id: 4,
@@ -31,6 +34,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=304",
     size: "Small",
+    area: "East",
   },
   {
     id: 5,
@@ -39,6 +43,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=305",
     size: "Medium",
+    area: "North-East",
   },
   {
     id: 6,
@@ -47,6 +52,7 @@ window.DOGRUNS = [
     hours: "5am – 11pm daily",
     image: "https://placedog.net/600/400?id=306",
     size: "Medium",
+    area: "Central",
   },
   {
     id: 7,
@@ -55,6 +61,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=307",
     size: "Large",
+    area: "West",
   },
   {
     id: 8,
@@ -63,6 +70,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=308",
     size: "Medium",
+    area: "East",
   },
   {
     id: 9,
@@ -71,6 +79,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=309",
     size: "Small",
+    area: "North-East",
   },
   {
     id: 10,
@@ -79,6 +88,7 @@ window.DOGRUNS = [
     hours: "6am – 10pm daily",
     image: "https://placedog.net/600/400?id=310",
     size: "Small",
+    area: "East",
   },
   {
     id: 11,
@@ -87,6 +97,7 @@ window.DOGRUNS = [
     hours: "Open 24 hours",
     image: "https://placedog.net/600/400?id=311",
     size: "Large",
+    area: "East",
   },
   {
     id: 12,
@@ -95,5 +106,6 @@ window.DOGRUNS = [
     hours: "5am – 11pm daily",
     image: "https://placedog.net/600/400?id=312",
     size: "Small",
+    area: "Central",
   },
 ];

@@ -209,20 +209,41 @@ const Icon = {
 function Nav({ view, setView }) {
   const items = [
     { id: "dogs",     label: "Dogs" },
-    { id: "events",   label: "Events" },
-    { id: "services", label: "Services" },
-    { id: "dogruns",  label: "Dog Runs" },
     { id: "groups",   label: "Welfare Groups" },
+    { id: "services", label: "Services" },
+    { id: "events",   label: "Events" },
     { id: "blog",     label: "Blog" },
-    { id: "vets",    label: "Vets" },
+    { id: "dogruns",  label: "Dog Runs" },
+    { id: "vets",     label: "Vets" },
   ];
+
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // close on Esc + lock body when open
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
+
+  const go = (id) => {
+    setView(id);
+    setMenuOpen(false);
+  };
+
   return (
-    <nav className="nav">
+    <nav className={"nav" + (menuOpen ? " nav--open" : "")}>
       <div className="nav-inner">
         <a
           href="#"
           className="logo"
-          onClick={(e) => { e.preventDefault(); setView("dogs"); }}
+          onClick={(e) => { e.preventDefault(); go("dogs"); }}
         >
           <span className="mark"><Icon.Paw/></span>
           Homeward
@@ -235,7 +256,7 @@ function Nav({ view, setView }) {
                 key={it.id}
                 href="#"
                 className={view === it.id ? "active" : ""}
-                onClick={(e) => { e.preventDefault(); setView(it.id); }}
+                onClick={(e) => { e.preventDefault(); go(it.id); }}
               >
                 {it.label}
               </a>
@@ -251,12 +272,55 @@ function Nav({ view, setView }) {
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z"/>
             </svg>
-            Support us
+            <span className="nav-support-label">Support us</span>
             <span className="nav-support-tip" role="tooltip">
               Donations go towards hosting this site. Thank you!
             </span>
           </a>
+          <button
+            type="button"
+            className="nav-burger"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="nav-mobile-panel"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </button>
         </div>
+      </div>
+
+      {menuOpen && (
+        <div className="nav-mobile-scrim" onClick={() => setMenuOpen(false)} aria-hidden="true"></div>
+      )}
+      <div
+        id="nav-mobile-panel"
+        className={"nav-mobile" + (menuOpen ? " open" : "")}
+        aria-hidden={!menuOpen}
+      >
+        {items.map((it) => (
+          <a
+            key={it.id}
+            href="#"
+            className={"nav-mobile-link" + (view === it.id ? " active" : "")}
+            onClick={(e) => { e.preventDefault(); go(it.id); }}
+          >
+            {it.label}
+          </a>
+        ))}
+        <a
+          className="nav-mobile-support"
+          href="https://ko-fi.com/homewardsg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 21s-7.5-4.6-9.6-9.2C1.1 8.7 3 5.5 6.1 5.5c1.9 0 3.3 1 3.9 2.6.6-1.6 2-2.6 3.9-2.6 3.1 0 5 3.2 3.7 6.3C19.5 16.4 12 21 12 21z"/>
+          </svg>
+          Support us on Ko-fi
+        </a>
       </div>
     </nav>
   );
@@ -858,7 +922,13 @@ const SERVICE_CATEGORIES = [
 
 function ServiceCard({ service }) {
   return (
-    <article className="svc-card">
+    <article className={"svc-card" + (service.featured ? " svc-card--featured" : "")}>
+      {service.featured && (
+        <span className="svc-featured-flag" aria-label="Featured listing">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 6.95H22l-5.94 4.32L18.45 22 12 17.77 5.55 22l2.39-8.73L2 8.95h7.61z"/></svg>
+          Featured
+        </span>
+      )}
       <div className="svc-head">
         <span className={"svc-cat svc-cat--" + service.category.toLowerCase().replace(/[^a-z]/g, "")}>
           {service.category}
@@ -897,6 +967,12 @@ function ServicesView() {
     }
     return true;
   });
+  // featured first, otherwise preserve source order
+  const sorted = list.slice().sort((a, b) => {
+    const af = a.featured ? 0 : 1;
+    const bf = b.featured ? 0 : 1;
+    return af - bf;
+  });
   return (
     <main className="page">
       <header className="header">
@@ -909,6 +985,29 @@ function ServicesView() {
           businesses across {SERVICE_CATEGORIES.length} categories
         </div>
       </header>
+
+      <aside className="pitch" aria-labelledby="pitch-title">
+        <div className="pitch-body">
+          <span className="pitch-eyebrow">For small businesses</span>
+          <h2 id="pitch-title">List your dog-loving business with <em>Homeward.</em></h2>
+          <p>
+            We&rsquo;re a volunteer-run directory of trusted, dog-friendly small businesses in Singapore.
+            If you make beautiful things for dogs, care for them, feed them, photograph them, or send them off with dignity &mdash; we&rsquo;d love to share what you do with our adopters and fosters.
+          </p>
+          <ul className="pitch-list">
+            <li>Free to list. No paid placements, ever.</li>
+            <li>Independent Singapore businesses preferred &mdash; sole traders welcome.</li>
+            <li>Listings stay so long as our community continues to recommend you.</li>
+          </ul>
+        </div>
+        <div className="pitch-cta">
+          <a className="pitch-button" href="mailto:services@homeward.sg?subject=Service listing — Homeward">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+            Apply to be listed
+          </a>
+          <span className="pitch-note">Drop us a line at <b>services@homeward.sg</b> with a short intro, your website, and where you&rsquo;re based.</span>
+        </div>
+      </aside>
 
       <div className="runs-toolbar">
         <div className="search" style={{maxWidth: 320}}>
@@ -948,7 +1047,7 @@ function ServicesView() {
         </div>
       ) : (
         <section className="svc-grid">
-          {list.map((s) => <ServiceCard key={s.id} service={s} />)}
+          {sorted.map((s) => <ServiceCard key={s.id} service={s} />)}
         </section>
       )}
     </main>
@@ -1002,8 +1101,8 @@ function VetsView() {
     <main className="page">
       <header className="header">
         <div>
-          <h1>Our partner <em>vets.</em></h1>
-          <p>A small directory of clinics our adopters and fosters know and trust. Always call ahead, especially after hours.</p>
+          <h1>Licensed <em>vet clinics.</em></h1>
+          <p>Clinics licensed by the <b>Animal &amp; Veterinary Service (AVS)</b>, the Singapore government agency overseeing animal welfare. Always call ahead, especially after hours.</p>
         </div>
         <div className="stat"><b>{window.VETS.length}</b>clinics islandwide</div>
       </header>
@@ -1025,6 +1124,20 @@ function VetsView() {
         </div>
       </div>
 
+      <aside className="pitch pitch--mini" aria-label="Vet info correction">
+        <div className="pitch-mini-body">
+          <svg className="pitch-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+          <span>
+            <b>Spotted something out of date?</b>{" "}
+            Vet clinics change hours, move, or close. If anything here looks wrong, drop us a line and we&rsquo;ll update it.
+          </span>
+        </div>
+        <a className="pitch-button pitch-button--sm" href="mailto:vets@homeward.sg?subject=Vet directory — update">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+          Send an update
+        </a>
+      </aside>
+
       <section className="vets-grid">
         {list.map((v) => <VetCard key={v.id} vet={v} />)}
       </section>
@@ -1035,18 +1148,35 @@ function VetsView() {
 /* ------------------------------------------------------------------ */
 /* Dog runs view                                                       */
 /* ------------------------------------------------------------------ */
-function DogRunCard({ run }) {
+function runGalleryUrls(run) {
+  // First entry is the existing thumbnail. The rest are derived placedog ids
+  // so each run gets a distinct, stable set of photos.
+  const base = 300 + run.id;
+  const offsets = [0, 13, 27, 41, 55];
+  return offsets.map((o) => `https://placedog.net/1200/800?id=${base + o}`);
+}
+
+function DogRunCard({ run, onOpenGallery }) {
   const [imgOk, setImgOk] = useState(true);
   return (
     <article className="run-card">
-      <div className="run-photo">
+      <button
+        type="button"
+        className="run-photo"
+        onClick={() => onOpenGallery(run)}
+        aria-label={`Open photo gallery for ${run.name}`}
+      >
         {imgOk ? (
           <img src={run.image} alt={run.name} loading="lazy" onError={() => setImgOk(false)} />
         ) : (
           <div className="run-placeholder"><Icon.Paw/></div>
         )}
         <span className="run-size">{run.size}</span>
-      </div>
+        <span className="run-gallery-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M7 21h12a2 2 0 0 0 2-2V9"/><path d="m7 13 3-3 4 4"/></svg>
+          <span>5</span>
+        </span>
+      </button>
       <div className="run-body">
         <h3 className="run-name">{run.name}</h3>
         <div className="run-meta">
@@ -1058,11 +1188,91 @@ function DogRunCard({ run }) {
   );
 }
 
+function DogRunGallery({ run, onClose }) {
+  const images = useMemo(() => (run ? runGalleryUrls(run) : []), [run?.id]);
+  const [idx, setIdx] = useState(0);
+  const total = images.length;
+
+  useEffect(() => { setIdx(0); }, [run?.id]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose();
+      else if (e.key === 'ArrowRight') setIdx((i) => (i + 1) % total);
+      else if (e.key === 'ArrowLeft')  setIdx((i) => (i - 1 + total) % total);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, total]);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  if (!run) return null;
+
+  return (
+    <div className="gallery-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label={`${run.name} photo gallery`}>
+      <button className="gallery-close" onClick={onClose} aria-label="Close gallery">
+        <Icon.Close/>
+      </button>
+      <div className="gallery-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="gallery-stage">
+          <button
+            className="gallery-nav prev"
+            onClick={() => setIdx((i) => (i - 1 + total) % total)}
+            aria-label="Previous photo"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <img className="gallery-main" src={images[idx]} alt={`${run.name} — photo ${idx + 1} of ${total}`} />
+          <button
+            className="gallery-nav next"
+            onClick={() => setIdx((i) => (i + 1) % total)}
+            aria-label="Next photo"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div className="gallery-foot">
+          <div className="gallery-caption">
+            <b>{run.name}</b>
+            <span>{run.address} · {idx + 1} / {total}</span>
+          </div>
+          <div className="gallery-thumbs" role="tablist">
+            {images.map((src, i) => (
+              <button
+                key={i}
+                className={`gallery-thumb${i === idx ? ' is-active' : ''}`}
+                onClick={() => setIdx(i)}
+                role="tab"
+                aria-selected={i === idx}
+                aria-label={`Show photo ${i + 1}`}
+              >
+                <img src={src} alt="" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const RUN_AREAS = ["Central", "East", "North", "North-East", "West"];
+
 function DogRunsView() {
   const [q, setQ] = useState("");
-  const filtered = window.DOGRUNS.filter((r) =>
-    !q.trim() || r.name.toLowerCase().includes(q.toLowerCase()) || r.address.toLowerCase().includes(q.toLowerCase())
-  );
+  const [area, setArea] = useState("all");
+  const [galleryRun, setGalleryRun] = useState(null);
+  const filtered = window.DOGRUNS.filter((r) => {
+    if (area !== "all" && r.area !== area) return false;
+    if (!q.trim()) return true;
+    const qq = q.toLowerCase();
+    return r.name.toLowerCase().includes(qq) || r.address.toLowerCase().includes(qq) || (r.area || "").toLowerCase().includes(qq);
+  });
   return (
     <main className="page">
       <header className="header">
@@ -1086,9 +1296,36 @@ function DogRunsView() {
         <span className="runs-count">{filtered.length} {filtered.length === 1 ? "run" : "runs"}</span>
       </div>
 
-      <section className="runs-grid">
-        {filtered.map((r) => <DogRunCard key={r.id} run={r} />)}
-      </section>
+      <div className="svc-cats" role="tablist" aria-label="Filter dog runs by area">
+        <button
+          role="tab"
+          aria-selected={area === "all"}
+          className={"svc-cat-chip" + (area === "all" ? " active" : "")}
+          onClick={() => setArea("all")}
+        >All</button>
+        {RUN_AREAS.map((a) => (
+          <button
+            key={a}
+            role="tab"
+            aria-selected={area === a}
+            className={"svc-cat-chip" + (area === a ? " active" : "")}
+            onClick={() => setArea(a)}
+          >{a}</button>
+        ))}
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="empty" style={{padding: "48px 20px"}}>
+          <h3 style={{fontFamily:'var(--serif)', fontWeight:500, fontSize:22, margin:'0 0 6px'}}>No dog runs here yet</h3>
+          <p>Nothing in {area === "all" ? "this search" : area} matches — try another area.</p>
+        </div>
+      ) : (
+        <section className="runs-grid">
+          {filtered.map((r) => <DogRunCard key={r.id} run={r} onOpenGallery={setGalleryRun} />)}
+        </section>
+      )}
+
+      {galleryRun && <DogRunGallery run={galleryRun} onClose={() => setGalleryRun(null)} />}
     </main>
   );
 }
@@ -1155,6 +1392,29 @@ function EventsView() {
           upcoming events
         </div>
       </header>
+
+      <aside className="pitch" aria-labelledby="evt-pitch-title">
+        <div className="pitch-body">
+          <span className="pitch-eyebrow">For organisers &amp; community groups</span>
+          <h2 id="evt-pitch-title">Have a dog event? <em>Tell us.</em></h2>
+          <p>
+            Running an adoption drive, a pack walk, a foster mixer, a vet talk, or a small fair?
+            We&rsquo;ll happily share it here so our adopters, fosters and volunteers know to come along.
+          </p>
+          <ul className="pitch-list">
+            <li>Free to list. Non-commercial events get priority.</li>
+            <li>Singapore-based, dog-related, and open to the public.</li>
+            <li>Send us the date, location, a short blurb, and a photo if you have one.</li>
+          </ul>
+        </div>
+        <div className="pitch-cta">
+          <a className="pitch-button" href="mailto:events@homeward.sg?subject=Event listing — Homeward">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+            Submit an event
+          </a>
+          <span className="pitch-note">Email <b>events@homeward.sg</b> at least two weeks ahead. We list events as space allows.</span>
+        </div>
+      </aside>
 
       <section className="events-list">
         {window.EVENTS.map((ev) => <EventCard key={ev.id} ev={ev} />)}

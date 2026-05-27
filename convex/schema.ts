@@ -4,6 +4,19 @@ import { v } from "convex/values";
 
 export default defineSchema({
   ...authTables,
+  users: defineTable({
+    name: v.optional(v.string()),
+    image: v.optional(v.string()),
+    email: v.optional(v.string()),
+    emailVerificationTime: v.optional(v.number()),
+    phone: v.optional(v.string()),
+    phoneVerificationTime: v.optional(v.number()),
+    isAnonymous: v.optional(v.boolean()),
+    role: v.optional(v.union(v.literal("Admin"), v.literal("Member"))),
+    welfareGroupId: v.optional(v.id("welfareGroups")),
+  })
+    .index("email", ["email"])
+    .index("phone", ["phone"]),
   dogs: defineTable({
     name: v.string(),
     status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),

@@ -1,6 +1,7 @@
 import { query, mutation, action } from "./_generated/server";
 import { v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
+import { getAuthUserId } from "@convex-dev/auth/server";
 
 export const generateUploadUrl = action(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
@@ -8,7 +9,22 @@ export const generateUploadUrl = action(async (ctx) => {
 
 export const all = query({
   handler: async (ctx) => {
-    const dogs = await ctx.db.query("dogs").collect();
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    const user = await ctx.db.get(userId);
+    if (!user) return [];
+
+    let dogsQuery = ctx.db.query("dogs");
+
+    if (user.role !== "Admin") {
+      if (!user.welfareGroupId) return [];
+      dogsQuery = dogsQuery.filter((q) =>
+        q.eq(q.field("welfareGroupId"), user.welfareGroupId),
+      ) as typeof dogsQuery;
+    }
+
+    const dogs = await dogsQuery.collect();
     return await Promise.all(
       dogs.map(async (dog) => ({
         ...dog,

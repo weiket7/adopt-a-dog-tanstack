@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm view *)",
+      "Bash(npm install *)",
+      "Bash(npm ls *)",
+      "Bash(curl -s \"https://registry.npmjs.org/@cloudflare/vite-plugin/1.36.4\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('description',''\\)\\)\")",
+      "Bash(npm info *)",
+      "Bash(npx tsc *)",
+      "Bash(git -C /Users/weiketong/Workspace/adopt-a-dog-tanstack status --short)",
+      "Bash(xargs cat)"
+    ]
+  }
+}

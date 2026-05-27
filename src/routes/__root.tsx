@@ -173,12 +173,8 @@ function LoginModal({
       await signIn("password", { email, password, flow: "signIn" });
       onClose();
       onSuccess();
-    } catch (err) {
-      setMsg(
-        err instanceof Error
-          ? err.message
-          : "Sign in failed. Please try again.",
-      );
+    } catch {
+      setMsg("Wrong email and/or password.");
     } finally {
       setSubmitting(false);
     }

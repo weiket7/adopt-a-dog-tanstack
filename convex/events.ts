@@ -21,6 +21,10 @@ export const create = mutation({
     image: v.optional(v.string()),
     dateTime: v.string(),
     link: v.optional(v.string()),
+    kind: v.optional(v.string()),
+    short: v.optional(v.string()),
+    cta: v.optional(v.string()),
+    tag: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("events", args);
@@ -35,6 +39,10 @@ export const update = mutation({
     image: v.optional(v.string()),
     dateTime: v.string(),
     link: v.optional(v.string()),
+    kind: v.optional(v.string()),
+    short: v.optional(v.string()),
+    cta: v.optional(v.string()),
+    tag: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;

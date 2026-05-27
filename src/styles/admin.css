@@ -440,11 +440,57 @@
   @keyframes toastIn { from { transform: translate(-50%, 8px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
   .toast svg { width: 14px; height: 14px; color: var(--ok-soft); }
 
+  /* event table */
+  th.col-banner, td.col-banner { width: 80px; }
+  .row-banner {
+    width: 64px; height: 40px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    background: var(--line);
+    display: block;
+  }
+  .row-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .row-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  th.col-kind, td.col-kind { width: 120px; }
+  th.col-location, td.col-location { max-width: 200px; }
+
+  /* kind pills */
+  .pill.featured       { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
+  .pill.kind-adoption  { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
+  .pill.kind-petfair   { background: #dce8f2; border-color: #a0bed8; color: #2a5472; }
+  .pill.kind-clinic    { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+  .pill.kind-community { background: #ead9f2; border-color: #c09ad8; color: #6a3a8a; }
+  .pill.kind-training  { background: #f5ead0; border-color: #d4aa60; color: #7a5210; }
+  .pill.kind-other     { background: var(--bg); border-color: var(--line-2); color: var(--muted); }
+
+  /* banner preview in form */
+  .banner-preview {
+    width: 100%; height: 120px;
+    border-radius: var(--r-md);
+    border: 1px dashed var(--line-2);
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    color: var(--muted); font-size: 13px;
+  }
+  .banner-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* field validation error */
+  .field-err { color: var(--bad); font-size: 12px; }
+
   @media (max-width: 720px) {
     .form-grid { grid-template-columns: 1fr; }
     .page-head h1 { font-size: 32px; }
     td.col-meta { display: none; }
     td.col-birthday { display: none; }
         td.col-group, th.col-group { display: none; }
-
+    td.col-banner, th.col-banner { display: none; }
+    td.col-location, th.col-location { display: none; }
   }

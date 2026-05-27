@@ -1271,6 +1271,11 @@ input { font: inherit; color: inherit; }
 }
 
 /* ---------- detail modal ---------- */
+.login-page {
+  min-height: calc(100vh - var(--nav-h, 60px));
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 16px;
+}
 .modal-backdrop {
   position: fixed; inset: 0; z-index: 100;
   background: rgba(28, 26, 22, 0.55);

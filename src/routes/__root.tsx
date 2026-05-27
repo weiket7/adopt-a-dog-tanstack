@@ -162,149 +162,10 @@ function Nav() {
   );
 }
 
-function CloseIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    >
-      <path d="M6 6l12 12M18 6 6 18" />
-    </svg>
-  );
-}
-
-function LoginModal({
-  onClose,
-  onSuccess,
-}: {
-  onClose: () => void;
-  onSuccess: () => void;
-}) {
-  const { signIn } = useAuthActions();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [submitting, setSubmitting] = React.useState(false);
-  const [msg, setMsg] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  React.useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, []);
-
-  const submit = async (e: { preventDefault(): void }) => {
-    e.preventDefault();
-    if (!email.trim() || !password) return;
-    setSubmitting(true);
-    setMsg(null);
-    try {
-      await signIn("password", { email, password, flow: "signIn" });
-      onClose();
-      onSuccess();
-    } catch {
-      setMsg("Wrong email and/or password.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div
-        className="login-sheet"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="login-title"
-      >
-        <button className="login-close" onClick={onClose} aria-label="Close">
-          <CloseIcon />
-        </button>
-        <div className="login-body">
-          <h2 id="login-title">Welcome back.</h2>
-          <p className="login-sub">
-            Sign in to manage your fosters, volunteer shifts and adoption
-            applications.
-          </p>
-          <form onSubmit={submit} className="login-form">
-            <label className="login-field">
-              <span>Email</span>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                autoFocus
-                required
-              />
-            </label>
-            <label className="login-field">
-              <span>Password</span>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-              />
-            </label>
-            <div className="login-row">
-              <label className="login-remember">
-                <input type="checkbox" defaultChecked /> Remember me
-              </label>
-              <a
-                href="#"
-                className="login-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                Forgot password?
-              </a>
-            </div>
-            <button
-              type="submit"
-              className="login-submit"
-              disabled={submitting}
-            >
-              {submitting ? "Signing in…" : "Sign in"}
-            </button>
-            {msg && <div className="login-msg">{msg}</div>}
-            <p className="login-foot">
-              No account yet?{" "}
-              <a
-                href="#"
-                className="login-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                Get in touch with us
-              </a>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function Footer() {
   const navigate = useNavigate();
   const { isAuthenticated } = useConvexAuth();
   const { signOut } = useAuthActions();
-  const [showLogin, setShowLogin] = React.useState(false);
 
   const linkStyle = {
     color: "var(--muted)",
@@ -334,25 +195,12 @@ function Footer() {
               </a>
             </>
           ) : (
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                setShowLogin(true);
-              }}
-              style={linkStyle}
-            >
+            <Link to="/login" style={linkStyle}>
               Log in
-            </a>
+            </Link>
           )}
         </span>
       </footer>
-      {showLogin && (
-        <LoginModal
-          onClose={() => setShowLogin(false)}
-          onSuccess={() => navigate({ to: "/admin/dogs" })}
-        />
-      )}
     </>
   );
 }

@@ -1437,32 +1437,17 @@
   }
 
   /* ---------- dog runs (compact grid) ---------- */
-  .runs-controls {
-    display: flex; align-items: center;
-    gap: 12px 18px;
+  .runs-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
     padding-top: 28px;
     margin-bottom: 20px;
     flex-wrap: wrap;
-  }
-  .runs-search {
-    flex: 0 0 280px;
-    min-width: 0;
-  }
-  .runs-chips {
-    margin: 0;
-    flex: 1 1 auto;
-    min-width: 0;
   }
   .runs-count {
     font-size: 13px;
     color: var(--muted);
     letter-spacing: 0.02em;
-    margin-left: auto;
-    white-space: nowrap;
-  }
-  @media (max-width: 720px) {
-    .runs-search { flex: 1 1 100%; }
-    .runs-count { margin-left: 0; }
   }
 
   .runs-grid {

@@ -1297,8 +1297,8 @@ function DogRunsView() {
         </a>
       </aside>
 
-      <div className="runs-controls">
-        <div className="search runs-search">
+      <div className="runs-toolbar">
+        <div className="search" style={{maxWidth: 360}}>
           <Icon.Search/>
           <input
             type="text"
@@ -1307,24 +1307,25 @@ function DogRunsView() {
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <div className="svc-cats runs-chips" role="tablist" aria-label="Filter dog runs by area">
-          <button
-            role="tab"
-            aria-selected={area === "all"}
-            className={"svc-cat-chip" + (area === "all" ? " active" : "")}
-            onClick={() => setArea("all")}
-          >All</button>
-          {RUN_AREAS.map((a) => (
-            <button
-              key={a}
-              role="tab"
-              aria-selected={area === a}
-              className={"svc-cat-chip" + (area === a ? " active" : "")}
-              onClick={() => setArea(a)}
-            >{a}</button>
-          ))}
-        </div>
         <span className="runs-count">{filtered.length} {filtered.length === 1 ? "run" : "runs"}</span>
+      </div>
+
+      <div className="svc-cats" role="tablist" aria-label="Filter dog runs by area">
+        <button
+          role="tab"
+          aria-selected={area === "all"}
+          className={"svc-cat-chip" + (area === "all" ? " active" : "")}
+          onClick={() => setArea("all")}
+        >All</button>
+        {RUN_AREAS.map((a) => (
+          <button
+            key={a}
+            role="tab"
+            aria-selected={area === a}
+            className={"svc-cat-chip" + (area === a ? " active" : "")}
+            onClick={() => setArea(a)}
+          >{a}</button>
+        ))}
       </div>
 
       {filtered.length === 0 ? (

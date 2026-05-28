@@ -1283,8 +1283,22 @@ function DogRunsView() {
         <div className="stat"><b>{window.DOGRUNS.length}</b>dog runs island-wide</div>
       </header>
 
-      <div className="runs-toolbar">
-        <div className="search" style={{maxWidth: 360}}>
+      <aside className="pitch pitch--mini" aria-label="Dog run info correction">
+        <div className="pitch-mini-body">
+          <svg className="pitch-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+          <span>
+            <b>Something off about a run?</b>{" "}
+            Gates close, parks get fenced, hours shift. If anything here looks wrong, let us know and we&rsquo;ll fix it.
+          </span>
+        </div>
+        <a className="pitch-button pitch-button--sm" href="mailto:dogruns@homeward.sg?subject=Dog run directory — update">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+          Send an update
+        </a>
+      </aside>
+
+      <div className="runs-controls">
+        <div className="search runs-search">
           <Icon.Search/>
           <input
             type="text"
@@ -1293,25 +1307,24 @@ function DogRunsView() {
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <span className="runs-count">{filtered.length} {filtered.length === 1 ? "run" : "runs"}</span>
-      </div>
-
-      <div className="svc-cats" role="tablist" aria-label="Filter dog runs by area">
-        <button
-          role="tab"
-          aria-selected={area === "all"}
-          className={"svc-cat-chip" + (area === "all" ? " active" : "")}
-          onClick={() => setArea("all")}
-        >All</button>
-        {RUN_AREAS.map((a) => (
+        <div className="svc-cats runs-chips" role="tablist" aria-label="Filter dog runs by area">
           <button
-            key={a}
             role="tab"
-            aria-selected={area === a}
-            className={"svc-cat-chip" + (area === a ? " active" : "")}
-            onClick={() => setArea(a)}
-          >{a}</button>
-        ))}
+            aria-selected={area === "all"}
+            className={"svc-cat-chip" + (area === "all" ? " active" : "")}
+            onClick={() => setArea("all")}
+          >All</button>
+          {RUN_AREAS.map((a) => (
+            <button
+              key={a}
+              role="tab"
+              aria-selected={area === a}
+              className={"svc-cat-chip" + (area === a ? " active" : "")}
+              onClick={() => setArea(a)}
+            >{a}</button>
+          ))}
+        </div>
+        <span className="runs-count">{filtered.length} {filtered.length === 1 ? "run" : "runs"}</span>
       </div>
 
       {filtered.length === 0 ? (

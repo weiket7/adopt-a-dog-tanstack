@@ -3,6 +3,7 @@ import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { SERVICE_CATEGORIES } from "~/constants/serviceCategories";
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
@@ -10,16 +11,6 @@ export const Route = createFileRoute("/services")({
     await queryClient.ensureQueryData(convexQuery(api.services.listAll, {}));
   },
 });
-
-const SERVICE_CATEGORIES = [
-  "Artists",
-  "Cremation",
-  "Pet shops",
-  "Animal communication",
-  "Pet laundromats",
-  "Boarding",
-  "Grooming",
-];
 
 function SearchIcon() {
   return (
@@ -162,6 +153,55 @@ function ServicesPage() {
           businesses across {SERVICE_CATEGORIES.length} categories
         </div>
       </header>
+
+      <aside className="pitch" aria-labelledby="pitch-title">
+        <div className="pitch-body">
+          <span className="pitch-eyebrow">For small businesses</span>
+          <h2 id="pitch-title">
+            List your dog-loving business with <em>Homeward.</em>
+          </h2>
+          <p>
+            We&rsquo;re a volunteer-run directory of trusted, dog-friendly small
+            businesses in Singapore. If you make beautiful things for dogs, care
+            for them, feed them, photograph them, or send them off with dignity
+            &mdash; we&rsquo;d love to share what you do with our adopters and
+            fosters.
+          </p>
+          <ul className="pitch-list">
+            <li>Free to list. No paid placements, ever.</li>
+            <li>
+              Independent Singapore businesses preferred &mdash; sole traders
+              welcome.
+            </li>
+            <li>
+              Listings stay so long as our community continues to recommend you.
+            </li>
+          </ul>
+        </div>
+        <div className="pitch-cta">
+          <a
+            className="pitch-button"
+            href="mailto:services@homeward.sg?subject=Service listing — Homeward"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 6h16v12H4z" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+            Apply to be listed
+          </a>
+          <span className="pitch-note">
+            Drop us a line at <b>services@homeward.sg</b> with a short intro,
+            your website, and where you&rsquo;re based.
+          </span>
+        </div>
+      </aside>
 
       <div className="runs-toolbar">
         <div className="search" style={{ maxWidth: 320 }}>

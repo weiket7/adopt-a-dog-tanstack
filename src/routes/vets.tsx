@@ -170,6 +170,46 @@ function VetsPage() {
         </div>
       </header>
 
+      <aside className="pitch pitch--mini" aria-label="Vet info correction">
+        <div className="pitch-mini-body">
+          <svg
+            className="pitch-mini-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 8v4M12 16h.01" />
+          </svg>
+          <span>
+            <b>Spotted something out of date?</b> Vet clinics change hours,
+            move, or close. If anything here looks wrong, drop us a line and
+            we&rsquo;ll update it.
+          </span>
+        </div>
+        <a
+          className="pitch-button pitch-button--sm"
+          href="mailto:vets@homeward.sg?subject=Vet directory — update"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M4 6h16v12H4z" />
+            <path d="m4 7 8 6 8-6" />
+          </svg>
+          Send an update
+        </a>
+      </aside>
+
       <div className="runs-toolbar">
         <div className="search" style={{ maxWidth: 320 }}>
           <SearchIcon />

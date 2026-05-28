@@ -135,6 +135,53 @@ function EventsPage() {
         </div>
       </header>
 
+      <aside className="pitch" aria-labelledby="evt-pitch-title">
+        <div className="pitch-body">
+          <span className="pitch-eyebrow">
+            For organisers &amp; community groups
+          </span>
+          <h2 id="evt-pitch-title">
+            Have a dog event? <em>Tell us.</em>
+          </h2>
+          <p>
+            Running an adoption drive, a pack walk, a foster mixer, a vet talk,
+            or a small fair? We&rsquo;ll happily share it here so our adopters,
+            fosters and volunteers know to come along.
+          </p>
+          <ul className="pitch-list">
+            <li>Free to list. Non-commercial events get priority.</li>
+            <li>Singapore-based, dog-related, and open to the public.</li>
+            <li>
+              Send us the date, location, a short blurb, and a photo if you have
+              one.
+            </li>
+          </ul>
+        </div>
+        <div className="pitch-cta">
+          <a
+            className="pitch-button"
+            href="mailto:events@homeward.sg?subject=Event listing — Homeward"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="5" width="18" height="16" rx="2" />
+              <path d="M8 3v4M16 3v4M3 10h18" />
+            </svg>
+            Submit an event
+          </a>
+          <span className="pitch-note">
+            Email <b>events@homeward.sg</b> at least two weeks ahead. We list
+            events as space allows.
+          </span>
+        </div>
+      </aside>
+
       <section className="events-list">
         {events.map((ev) => (
           <EventCard key={ev._id} ev={ev} />

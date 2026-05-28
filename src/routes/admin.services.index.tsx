@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { useState, useMemo, useEffect, useRef } from "react";
 import adminCss from "~/styles/admin.css?url";
+import { SERVICE_CATEGORIES as CATEGORIES } from "~/constants/serviceCategories";
 
 export const Route = createFileRoute("/admin/services/")({
   head: () => ({
@@ -11,16 +12,6 @@ export const Route = createFileRoute("/admin/services/")({
   }),
   component: ServicesAdminPage,
 });
-
-const CATEGORIES = [
-  "Artists",
-  "Pet shops",
-  "Animal communication",
-  "Pet laundromats",
-  "Boarding",
-  "Grooming",
-  "Cremation",
-];
 
 /* ---------- icons ---------- */
 const SearchIcon = () => (

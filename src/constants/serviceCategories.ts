@@ -1,10 +1,11 @@
 export enum ServiceCategory {
   Artists = "Artists",
-  Cremation = "Cremation",
-  PetShops = "Pet shops",
-  CakesAndTreats = "Cakes and treats",
+  PetShop = "Pet shop",
+  PetFood = "Pet food",
+  Training = "Training",
+  //CakesAndTreats = "Cakes and treats",
   AnimalCommunication = "Animal communication",
-  PetLaundromats = "Pet laundromats",
+  Laundromats = "Laundromats",
   Boarding = "Boarding",
   Grooming = "Grooming",
 }

@@ -67,7 +67,7 @@ function LoginPage() {
                 required
               />
             </label>
-            <div className="login-row">
+            {/* <div className="login-row">
               <label className="login-remember">
                 <input type="checkbox" defaultChecked /> Remember me
               </label>
@@ -78,7 +78,7 @@ function LoginPage() {
               >
                 Forgot password?
               </a>
-            </div>
+            </div> */}
             <button
               type="submit"
               className="login-submit"
@@ -87,7 +87,7 @@ function LoginPage() {
               {submitting ? "Signing in…" : "Sign in"}
             </button>
             {msg && <div className="login-msg">{msg}</div>}
-            <p className="login-foot">
+            {/* <p className="login-foot">
               No account yet?{" "}
               <a
                 href="#"
@@ -96,7 +96,7 @@ function LoginPage() {
               >
                 Get in touch with us
               </a>
-            </p>
+            </p> */}
           </form>
         </div>
       </div>

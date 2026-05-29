@@ -98,7 +98,7 @@ type DogRow = {
   welfareGroupId?: Id<"welfareGroups">;
   imageStorageId?: Id<"_storage">;
   imageUrl: string | null;
-  status?: "Active" | "Inactive";
+  status: "Active" | "Inactive";
 };
 
 type FormState = {
@@ -145,6 +145,7 @@ function DogForm({
   const [saving, setSaving] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const isNew = !initial.id;
+  const isAdmin = useQuery(api.users.isAdmin);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -304,26 +305,30 @@ function DogForm({
               </div>
             </div>
 
-            <div className="field">
-              <label htmlFor="f-welfare-group">Welfare Group</label>
-              <select
-                id="f-welfare-group"
-                value={d.welfareGroupId}
-                onChange={(e) =>
-                  setD((p) => ({
-                    ...p,
-                    welfareGroupId: e.target.value as Id<"welfareGroups"> | "",
-                  }))
-                }
-              >
-                <option value="">— None —</option>
-                {welfareGroups.map((g) => (
-                  <option key={g._id} value={g._id}>
-                    {g.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {isAdmin && (
+              <div className="field">
+                <label htmlFor="f-welfare-group">Welfare Group</label>
+                <select
+                  id="f-welfare-group"
+                  value={d.welfareGroupId}
+                  onChange={(e) =>
+                    setD((p) => ({
+                      ...p,
+                      welfareGroupId: e.target.value as
+                        | Id<"welfareGroups">
+                        | "",
+                    }))
+                  }
+                >
+                  <option value="">— None —</option>
+                  {welfareGroups.map((g) => (
+                    <option key={g._id} value={g._id}>
+                      {g.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="field full">
               <label>Photo</label>

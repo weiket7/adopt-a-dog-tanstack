@@ -1,16 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation, useAction } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import adminCss from "~/styles/admin.css?url";
-import { SERVICE_CATEGORIES as CATEGORIES } from "~/constants/serviceCategories";
 
-export const Route = createFileRoute("/admin/services/")({
+export const Route = createFileRoute("/admin/dog-runs/")({
   head: () => ({
     links: [{ rel: "stylesheet", href: adminCss }],
   }),
-  component: ServicesAdminPage,
+  component: DogRunsAdminPage,
 });
 
 /* ---------- icons ---------- */
@@ -89,67 +88,65 @@ const CheckIcon = () => (
 );
 
 /* ---------- types ---------- */
-type ServiceRow = {
-  _id: Id<"services">;
+type DogRunRow = {
+  _id: Id<"dogRuns">;
+  sortOrder: number;
   name: string;
-  category: string;
-  blurb: string;
   area: string;
-  priceFrom?: string;
+  size: string;
+  address: string;
+  waterPoint: boolean;
+  description?: string;
+  openingHours?: string;
+  image?: string;
+  map?: string;
   website?: string;
-  instagram?: string;
-  phone?: string;
-  imageStorageId?: Id<"_storage">;
-  imageUrl: string | null;
-  featured: boolean | false;
 };
 
 type FormState = {
+  sortOrder: string;
   name: string;
-  category: string;
-  blurb: string;
   area: string;
-  priceFrom: string;
+  size: string;
+  address: string;
+  waterPoint: boolean;
+  description: string;
+  openingHours: string;
+  image: string;
+  map: string;
   website: string;
-  instagram: string;
-  phone: string;
-  featured: boolean;
 };
 
 const EMPTY_FORM: FormState = {
+  sortOrder: "0",
   name: "",
-  category: CATEGORIES[0],
-  blurb: "",
   area: "",
-  priceFrom: "",
+  size: "",
+  address: "",
+  waterPoint: false,
+  description: "",
+  openingHours: "",
+  image: "",
+  map: "",
   website: "",
-  instagram: "",
-  phone: "",
-  featured: false,
 };
 
-/* ---------- ServiceForm ---------- */
-function ServiceForm({
+const AREAS = ["Central", "East", "North", "North-East", "West"];
+
+/* ---------- DogRunForm modal ---------- */
+function DogRunForm({
   initial,
-  initialImageUrl,
-  isNew,
   onSave,
   onClose,
 }: {
-  initial: FormState;
-  initialImageUrl: string | null;
-  isNew: boolean;
-  onSave: (form: FormState, file: File | null) => Promise<void>;
+  initial: FormState & { id?: Id<"dogRuns"> };
+  onSave: (form: FormState) => Promise<void>;
   onClose: () => void;
 }) {
   const [d, setD] = useState<FormState>(initial);
-  const [errs, setErrs] = useState<Partial<Record<keyof FormState, string>>>(
-    {},
-  );
-  const [serverErr, setServerErr] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [errs, setErrs] = useState<Partial<Record<keyof FormState, string>>>({});
   const [saving, setSaving] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const isNew = !initial.id;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -169,33 +166,26 @@ function ServiceForm({
 
   const set =
     (k: keyof FormState) =>
-    (
-      e: React.ChangeEvent<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      >,
-    ) => {
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       setD((p) => ({ ...p, [k]: e.target.value }));
-      setErrs((p) => ({ ...p, [k]: undefined }));
     };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const nextErrs: typeof errs = {};
     if (!d.name.trim()) nextErrs.name = "Required";
+    if (!d.area.trim()) nextErrs.area = "Required";
+    if (!d.size.trim()) nextErrs.size = "Required";
+    if (!d.address.trim()) nextErrs.address = "Required";
     setErrs(nextErrs);
     if (Object.keys(nextErrs).length) return;
-    setServerErr(null);
     setSaving(true);
     try {
-      await onSave(d, file);
-    } catch (err) {
-      setServerErr(err instanceof Error ? err.message : "Failed to save");
+      await onSave(d);
     } finally {
       setSaving(false);
     }
   };
-
-  const previewUrl = file ? URL.createObjectURL(file) : initialImageUrl;
 
   return (
     <div className="backdrop" onClick={onClose}>
@@ -205,7 +195,7 @@ function ServiceForm({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="dialog-head">
-          <h2>{isNew ? "Add a new service" : `Edit ${d.name}`}</h2>
+          <h2>{isNew ? "Add a dog run" : `Edit ${initial.name}`}</h2>
           <button
             type="button"
             className="dialog-close"
@@ -225,56 +215,112 @@ function ServiceForm({
                 type="text"
                 value={d.name}
                 onChange={set("name")}
-                placeholder="e.g. Pawsome Grooming"
+                placeholder="e.g. Bishan-Ang Mo Kio Dog Run"
               />
               {errs.name && <small className="field-err">{errs.name}</small>}
             </div>
 
             <div className="field">
-              <label htmlFor="f-category">Category *</label>
-              <select
-                id="f-category"
-                value={d.category}
-                onChange={set("category")}
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+              <label htmlFor="f-area">Area *</label>
+              <select id="f-area" value={d.area} onChange={set("area")}>
+                <option value="">— Select —</option>
+                {AREAS.map((a) => (
+                  <option key={a} value={a}>
+                    {a}
                   </option>
                 ))}
               </select>
+              {errs.area && <small className="field-err">{errs.area}</small>}
             </div>
 
             <div className="field">
-              <label htmlFor="f-area">Area</label>
+              <label htmlFor="f-size">Size *</label>
               <input
-                id="f-area"
+                id="f-size"
                 type="text"
-                value={d.area}
-                onChange={set("area")}
-                placeholder="e.g. Tampines"
+                value={d.size}
+                onChange={set("size")}
+                placeholder="e.g. Large"
+              />
+              {errs.size && <small className="field-err">{errs.size}</small>}
+            </div>
+
+            <div className="field full">
+              <label htmlFor="f-address">Address *</label>
+              <input
+                id="f-address"
+                type="text"
+                value={d.address}
+                onChange={set("address")}
+                placeholder="e.g. 1382 Ang Mo Kio Ave 1"
+              />
+              {errs.address && <small className="field-err">{errs.address}</small>}
+            </div>
+
+            <div className="field">
+              <label htmlFor="f-opening-hours">Opening Hours</label>
+              <input
+                id="f-opening-hours"
+                type="text"
+                value={d.openingHours}
+                onChange={set("openingHours")}
+                placeholder="e.g. 24 hours"
               />
             </div>
 
             <div className="field">
-              <label htmlFor="f-price">Price from</label>
+              <label htmlFor="f-sort-order">Sort Order</label>
               <input
-                id="f-price"
-                type="text"
-                value={d.priceFrom}
-                onChange={set("priceFrom")}
-                placeholder="e.g. $30"
+                id="f-sort-order"
+                type="number"
+                value={d.sortOrder}
+                onChange={set("sortOrder")}
               />
             </div>
 
             <div className="field">
-              <label htmlFor="f-phone">Phone</label>
+              <label>Water Point</label>
+              <div
+                className="seg-input cols-2"
+                role="radiogroup"
+                aria-label="Water Point"
+              >
+                <button
+                  type="button"
+                  aria-pressed={d.waterPoint === true}
+                  onClick={() => setD((p) => ({ ...p, waterPoint: true }))}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={d.waterPoint === false}
+                  onClick={() => setD((p) => ({ ...p, waterPoint: false }))}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+
+            <div className="field full">
+              <label htmlFor="f-image">Image URL</label>
               <input
-                id="f-phone"
+                id="f-image"
                 type="text"
-                value={d.phone}
-                onChange={set("phone")}
-                placeholder="e.g. 9123 4567"
+                value={d.image}
+                onChange={set("image")}
+                placeholder="https://…"
+              />
+            </div>
+
+            <div className="field full">
+              <label htmlFor="f-map">Map URL</label>
+              <input
+                id="f-map"
+                type="text"
+                value={d.map}
+                onChange={set("map")}
+                placeholder="https://maps.google.com/…"
               />
             </div>
 
@@ -290,76 +336,15 @@ function ServiceForm({
             </div>
 
             <div className="field full">
-              <label htmlFor="f-instagram">Instagram</label>
-              <input
-                id="f-instagram"
-                type="text"
-                value={d.instagram}
-                onChange={set("instagram")}
-                placeholder="https://…"
-              />
-            </div>
-
-            <div className="field">
-              <label>Featured</label>
-              <div
-                className="seg-input cols-2"
-                role="radiogroup"
-                aria-label="Featured"
-              >
-                <button
-                  type="button"
-                  aria-pressed={d.featured === true}
-                  onClick={() => setD((p) => ({ ...p, featured: true }))}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={d.featured === false}
-                  onClick={() => setD((p) => ({ ...p, featured: false }))}
-                >
-                  No
-                </button>
-              </div>
-            </div>
-
-            <div className="field full">
-              <label>Photo</label>
-              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                {previewUrl && (
-                  <span
-                    className="row-photo"
-                    style={{ width: 56, height: 56, flexShrink: 0 }}
-                  >
-                    <img src={previewUrl} alt="preview" />
-                  </span>
-                )}
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  style={{ flex: 1 }}
-                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                />
-              </div>
-            </div>
-
-            <div className="field full">
-              <label htmlFor="f-blurb">Description</label>
+              <label htmlFor="f-description">Description</label>
               <textarea
-                id="f-blurb"
-                value={d.blurb}
-                onChange={set("blurb")}
-                placeholder="A short description of the service…"
+                id="f-description"
+                value={d.description}
+                onChange={set("description")}
+                placeholder="Details about the dog run…"
               />
             </div>
           </div>
-          {serverErr && (
-            <p style={{ color: "var(--bad)", fontSize: 13, marginTop: 8 }}>
-              {serverErr}
-            </p>
-          )}
         </div>
 
         <div className="dialog-foot">
@@ -374,13 +359,7 @@ function ServiceForm({
             </button>
             <button type="submit" className="btn primary" disabled={saving}>
               <CheckIcon />{" "}
-              {saving
-                ? isNew
-                  ? "Adding…"
-                  : "Saving…"
-                : isNew
-                  ? "Add service"
-                  : "Save changes"}
+              {saving ? "Saving…" : isNew ? "Add dog run" : "Save changes"}
             </button>
           </div>
         </div>
@@ -389,7 +368,7 @@ function ServiceForm({
   );
 }
 
-/* ---------- Confirm ---------- */
+/* ---------- confirm dialog ---------- */
 function Confirm({
   title,
   body,
@@ -452,20 +431,17 @@ function Confirm({
 }
 
 /* ---------- page ---------- */
-function ServicesAdminPage() {
-  const services = useQuery(api.services.listAll) as ServiceRow[] | undefined;
-  const createService = useMutation(api.services.create);
-  const updateService = useMutation(api.services.update);
-  const removeService = useMutation(api.services.remove);
-  const generateUploadUrl = useAction(api.services.generateUploadUrl);
+function DogRunsAdminPage() {
+  const dogRuns = useQuery(api.dogRuns.listAll) as DogRunRow[] | undefined;
+  const addDogRun = useMutation(api.dogRuns.add);
+  const updateDogRun = useMutation(api.dogRuns.update);
+  const removeDogRun = useMutation(api.dogRuns.remove);
 
   const [q, setQ] = useState("");
-  const [catFilter, setCatFilter] = useState("all");
-  const [editing, setEditing] = useState<{
-    form: FormState;
-    id: Id<"services"> | null;
-    imageUrl: string | null;
-  } | null>(null);
+  const [areaFilter, setAreaFilter] = useState("all");
+  const [editing, setEditing] = useState<
+    (FormState & { id?: Id<"dogRuns"> }) | null
+  >(null);
   const [confirm, setConfirm] = useState<{
     title: string;
     body: React.ReactNode;
@@ -481,101 +457,83 @@ function ServicesAdminPage() {
   };
 
   const filtered = useMemo(() => {
-    if (!services) return [];
+    if (!dogRuns) return [];
     const ql = q.trim().toLowerCase();
-    return services.filter((s) => {
-      if (ql) {
-        const hay = (s.name + " " + s.blurb + " " + s.area).toLowerCase();
-        if (!hay.includes(ql)) return false;
-      }
-      if (catFilter !== "all" && s.category !== catFilter) return false;
+    return dogRuns.filter((r) => {
+      if (ql && !r.name.toLowerCase().includes(ql)) return false;
+      if (areaFilter !== "all" && r.area !== areaFilter) return false;
       return true;
     });
-  }, [services, q, catFilter]);
+  }, [dogRuns, q, areaFilter]);
 
-  const handleAdd = () =>
-    setEditing({ form: EMPTY_FORM, id: null, imageUrl: null });
+  const handleAdd = () => {
+    setEditing({ ...EMPTY_FORM });
+  };
 
-  const handleEdit = (s: ServiceRow) =>
+  const handleEdit = (run: DogRunRow) => {
     setEditing({
-      form: {
-        name: s.name,
-        category: s.category,
-        blurb: s.blurb,
-        area: s.area,
-        priceFrom: s.priceFrom ?? "",
-        website: s.website ?? "",
-        instagram: s.instagram ?? "",
-        phone: s.phone ?? "",
-        featured: s.featured,
-      },
-      id: s._id,
-      imageUrl: s.imageUrl,
+      id: run._id,
+      sortOrder: String(run.sortOrder),
+      name: run.name,
+      area: run.area,
+      size: run.size,
+      address: run.address,
+      waterPoint: run.waterPoint,
+      description: run.description ?? "",
+      openingHours: run.openingHours ?? "",
+      image: run.image ?? "",
+      map: run.map ?? "",
+      website: run.website ?? "",
     });
+  };
 
-  const handleSave = async (form: FormState, file: File | null) => {
+  const handleSave = async (form: FormState) => {
     if (!editing) return;
 
-    let imageStorageId: Id<"_storage"> | undefined;
-    if (file) {
-      const uploadUrl = await generateUploadUrl();
-      const res = await fetch(uploadUrl, {
-        method: "POST",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-      const { storageId } = await res.json();
-      imageStorageId = storageId;
-    }
-
-    const payload = {
-      name: form.name.trim(),
-      category: form.category,
-      blurb: form.blurb ? form.blurb.trim() : undefined,
-      area: form.area ? form.area.trim() : undefined,
-      priceFrom: form.priceFrom ? form.priceFrom.trim() : undefined,
-      website: form.website ? form.website.trim() : undefined,
-      phone: form.phone ? form.phone.trim() : undefined,
-      featured: form.featured,
+    const fields = {
+      sortOrder: Number(form.sortOrder),
+      name: form.name,
+      area: form.area,
+      size: form.size,
+      address: form.address,
+      waterPoint: form.waterPoint,
+      description: form.description || undefined,
+      openingHours: form.openingHours || undefined,
+      image: form.image || undefined,
+      map: form.map || undefined,
+      website: form.website || undefined,
     };
 
-    if (editing.id === null) {
-      await createService({
-        ...payload,
-        ...(imageStorageId ? { imageStorageId } : {}),
-      });
+    if (!editing.id) {
+      await addDogRun(fields);
       flash(`Added ${form.name}`);
     } else {
-      await updateService({
-        id: editing.id,
-        ...payload,
-        ...(imageStorageId ? { imageStorageId } : {}),
-      });
+      await updateDogRun({ id: editing.id, ...fields });
       flash(`Updated ${form.name}`);
     }
     setEditing(null);
   };
 
-  const handleDelete = (s: ServiceRow) => {
+  const handleDelete = (run: DogRunRow) => {
     setConfirm({
-      title: "Delete this service?",
+      title: "Delete this dog run?",
       body: (
         <>
-          <b>{s.name}</b> will be permanently removed. This can&rsquo;t be
-          undone.
+          <b>{run.name}</b> will be removed from the directory. This can&rsquo;t
+          be undone.
         </>
       ),
       confirmLabel: "Delete",
       danger: true,
       onConfirm: async () => {
-        await removeService({ id: s._id });
-        flash(`Deleted ${s.name}`);
+        await removeDogRun({ id: run._id });
+        flash(`Deleted ${run.name}`);
         setConfirm(null);
       },
     });
   };
 
-  if (services === undefined) {
+  if (dogRuns === undefined) {
     return (
       <div className="page" style={{ color: "var(--muted)" }}>
         Loading…
@@ -588,13 +546,13 @@ function ServicesAdminPage() {
       <div className="page-head">
         <div>
           <h1>
-            Manage <em>services.</em>
+            Manage <em>dog runs.</em>
           </h1>
-          <p>Create, edit, and remove pet services shown on the public site.</p>
+          <p>Create, edit, and remove dog runs in the directory.</p>
         </div>
         <div className="actions-row">
           <button className="btn primary" onClick={handleAdd}>
-            <PlusIcon /> Add a service
+            <PlusIcon /> Add a dog run
           </button>
         </div>
       </div>
@@ -604,36 +562,40 @@ function ServicesAdminPage() {
           <SearchIcon />
           <input
             type="text"
-            placeholder="Search by name, description, or area…"
+            placeholder="Search by name…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <label className="filter-select narrow" aria-label="Filter by category">
+        <label className="filter-select" aria-label="Filter by area">
           <select
-            value={catFilter}
-            onChange={(e) => setCatFilter(e.target.value)}
+            value={areaFilter}
+            onChange={(e) => setAreaFilter(e.target.value)}
           >
-            <option value="all">All categories</option>
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
+            <option value="all">All areas</option>
+            {AREAS.map((a) => (
+              <option key={a} value={a}>
+                {a}
               </option>
             ))}
           </select>
         </label>
         <span className="stat-chip">
-          {services.length} total · {filtered.length} shown
+          {dogRuns.length} total · {filtered.length} shown
         </span>
       </div>
 
       <div className="table-wrap">
         {filtered.length === 0 ? (
           <div className="empty">
-            <h3>{services.length === 0 ? "No services yet" : "No matches"}</h3>
+            <h3>
+              {dogRuns.length === 0
+                ? "No dog runs in the directory"
+                : "No matches"}
+            </h3>
             <p>
-              {services.length === 0
-                ? "Add your first service to get started."
+              {dogRuns.length === 0
+                ? "Add your first dog run to get started."
                 : "Try a different search."}
             </p>
           </div>
@@ -641,27 +603,24 @@ function ServicesAdminPage() {
           <table>
             <thead>
               <tr>
-                <th className="col-photo" />
+                <th>#</th>
                 <th>Name</th>
-                <th className="col-kind">Category</th>
-                <th className="col-location">Area</th>
-                <th>Featured</th>
+                <th>Area</th>
+                <th>Size</th>
+                <th>Address</th>
+                <th>Water</th>
                 <th style={{ textAlign: "right" }}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((s) => (
-                <tr key={s._id}>
-                  <td className="col-photo">
-                    <span className="row-photo">
-                      {s.imageUrl && (
-                        <img src={s.imageUrl} alt={s.name} loading="lazy" />
-                      )}
-                    </span>
+              {filtered.map((run) => (
+                <tr key={run._id}>
+                  <td style={{ color: "var(--muted)", width: 40 }}>
+                    {run.sortOrder}
                   </td>
                   <td>
-                    <div className="row-title">{s.name}</div>
-                    {s.blurb && (
+                    <div className="row-name">{run.name}</div>
+                    {run.description && (
                       <div
                         className="row-sub"
                         style={{
@@ -671,48 +630,35 @@ function ServicesAdminPage() {
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {s.blurb}
+                        {run.description}
                       </div>
                     )}
                   </td>
-                  <td className="col-kind">
-                    <span
-                      className={`pill kind-${s.category.toLowerCase().replace(/[^a-z]/g, "")}`}
-                    >
-                      {s.category}
-                    </span>
-                  </td>
-                  <td
-                    className="col-location"
-                    style={{ color: "var(--ink-2)" }}
-                  >
-                    {s.area}
-                  </td>
-                  <td style={{ color: "var(--muted)", fontSize: 13 }}>
-                    {s.featured && (
-                      <span
-                        className={`pill status-${(s.featured ? "Active" : "Inactive").toLowerCase()}`}
-                      >
-                        <span className="status-dot"></span>
-                        Featured
-                      </span>
+                  <td>{run.area}</td>
+                  <td>{run.size}</td>
+                  <td style={{ color: "var(--muted)" }}>{run.address}</td>
+                  <td>
+                    {run.waterPoint ? (
+                      <span className="pill hdb-yes">Yes</span>
+                    ) : (
+                      <span className="pill hdb-no">No</span>
                     )}
                   </td>
                   <td>
                     <div className="row-actions">
                       <button
                         className="icon-btn"
-                        onClick={() => handleEdit(s)}
+                        onClick={() => handleEdit(run)}
+                        aria-label={`Edit ${run.name}`}
                         title="Edit"
-                        aria-label={`Edit ${s.name}`}
                       >
                         <EditIcon />
                       </button>
                       <button
                         className="icon-btn danger"
-                        onClick={() => handleDelete(s)}
+                        onClick={() => handleDelete(run)}
+                        aria-label={`Delete ${run.name}`}
                         title="Delete"
-                        aria-label={`Delete ${s.name}`}
                       >
                         <TrashIcon />
                       </button>
@@ -725,17 +671,24 @@ function ServicesAdminPage() {
         )}
       </div>
 
-      {editing !== null && (
-        <ServiceForm
-          initial={editing.form}
-          initialImageUrl={editing.imageUrl}
-          isNew={editing.id === null}
+      {editing && (
+        <DogRunForm
+          initial={editing}
           onSave={handleSave}
           onClose={() => setEditing(null)}
         />
       )}
 
-      {confirm && <Confirm {...confirm} onClose={() => setConfirm(null)} />}
+      {confirm && (
+        <Confirm
+          title={confirm.title}
+          body={confirm.body}
+          confirmLabel={confirm.confirmLabel}
+          danger={confirm.danger}
+          onConfirm={confirm.onConfirm}
+          onClose={() => setConfirm(null)}
+        />
+      )}
 
       {toast && (
         <div className="toast">

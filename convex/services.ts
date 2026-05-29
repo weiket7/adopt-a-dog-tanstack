@@ -27,7 +27,9 @@ export const create = mutation({
     area: v.optional(v.string()),
     priceFrom: v.optional(v.string()),
     website: v.optional(v.string()),
+    instagram: v.optional(v.string()),
     phone: v.optional(v.string()),
+    featured: v.optional(v.boolean()),
     imageStorageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
@@ -44,7 +46,9 @@ export const update = mutation({
     area: v.optional(v.string()),
     priceFrom: v.optional(v.string()),
     website: v.optional(v.string()),
+    instagram: v.optional(v.string()),
     phone: v.optional(v.string()),
+    featured: v.optional(v.boolean()),
     imageStorageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {

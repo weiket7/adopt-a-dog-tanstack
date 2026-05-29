@@ -1,262 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { api } from "convex/_generated/api";
+import { convexQuery } from "@convex-dev/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 
 export const Route = createFileRoute("/dog-runs")({
   component: DogRunsPage,
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(convexQuery(api.dogRuns.listAll, {}));
+  },
 });
-
-const dogRuns = [
-  {
-    id: 1,
-    name: "Bishan-Ang Mo Kio Park Dog Run (It consists of two parts)",
-    area: "Central",
-    size: "Approximately 240 Sqm",
-    description: "",
-    address: "453 Ang Mo Kio Ave 1, Singapore 569972",
-    openingHours: "24/7",
-  },
-  {
-    id: 2,
-    name: "Toa Payoh Dog Run Park",
-    area: "Central",
-    size: "Approximately 420 Sqm",
-    description: "",
-    address: "Toa Payoh Lorong 1 near Blk 128.",
-    openingHours: "7am - 9pm",
-  },
-  {
-    id: 3,
-    name: "Potong Pasir Dog Run",
-    area: "Central",
-    size: "approximately: 850 Sqm",
-    description: "",
-    address: "Potong Pasir Ave 3, S357682",
-    openingHours: null,
-  },
-  {
-    id: 4,
-    name: "Tiong Bahru Dog Run Park",
-    area: "Central",
-    size: "approximately 2,100 Sqm",
-    description: "",
-    address: "1 Henderson Rd, Singapore 15956",
-    openingHours: null,
-  },
-  {
-    id: 5,
-    name: "East Coast Dog Run Park",
-    area: "East",
-    size: "Approximately 400 square meters",
-    description: "",
-    address: "Parkland Green, East Coast Park Service Rd, Singapore 449875",
-    openingHours: null,
-  },
-  {
-    id: 6,
-    name: "Bedok Town Park Dog Run",
-    area: "East",
-    size: "Approximately 500–600 square meters",
-    description: "",
-    address: "* Bedok Town Park, along Bedok North Road.",
-    openingHours: "Open 24 hours daily",
-  },
-  {
-    id: 7,
-    name: "Pasir Ris Park Dog Run",
-    area: "East",
-    size: "~ Approximately 800 sqm",
-    description: "",
-    address: "125 Pasir Ris Rd (Near Carpark E).",
-    openingHours: "24/7",
-  },
-  {
-    id: 8,
-    name: "Telok Kurau Dog Run",
-    area: "East",
-    size: "~ Approximately 400–500 Sqm",
-    description: "",
-    address:
-      "Telok Kurau Park, located at the junction of Telok Kurau Lorong N and Lorong M.",
-    openingHours: "24/7",
-  },
-  {
-    id: 9,
-    name: "Tampines Boulevard Park Dog Run",
-    area: "East",
-    size: "Approximately 1,200 sqm",
-    description: "",
-    address: "Along Tampines Ave 12.",
-    openingHours: "24/7",
-  },
-  {
-    id: 10,
-    name: "Katong Park Dog Run Park",
-    area: "East",
-    size: "Approximately 150 sqm (Small/Cozy)",
-    description: "",
-    address: "Junction of Meyer Road and Fort Road.",
-    openingHours: "24/7 (Lights until 10 PM)",
-  },
-  {
-    id: 11,
-    name: "Lengkong Enam Interim Park Dog Run",
-    area: "East",
-    size: "Approximately 1,000 sqm",
-    description: "",
-    address: "Along Jalan Selamat and Lengkong Tujuh.",
-    openingHours: "24/7",
-  },
-  {
-    id: 12,
-    name: "Mariam Way Dog Run Park",
-    area: "East",
-    size: "Approximately 300 sqm",
-    description: "",
-    address: "Mariam Way Playground.",
-    openingHours: "24/7",
-  },
-  {
-    id: 13,
-    name: "Opera Estate Dog Run",
-    area: "East",
-    size: "Approximately 300–400 Sqm",
-    description: "",
-    address:
-      "Located at Opera Estate Football Field, along Swan Lake Avenue (near the junction of Fidelio Street), Singapore 455707.",
-    openingHours: "Open 24 hours daily",
-  },
-  {
-    id: 14,
-    name: "Koon Seng Park Dog Run",
-    area: "East",
-    size: "Approximately 250-300 Sqm",
-    description: "",
-    address:
-      "Located within Koon Seng Park, at the junction of Koon Seng Road and Joo Chiat Lane, Singapore 427013.",
-    openingHours: "Open 24 hours daily",
-    image: "koon-seng.png",
-  },
-  {
-    id: 15,
-    name: "Guillemard Road Open Space Dog Run",
-    area: "East",
-    size: "Approximately 300–400 Sqm",
-    description: "",
-    address:
-      "Located at the junction of Guillemard Road and Lorong 22 Geylang (opposite the former Guillemard Camp area).",
-    openingHours: "Open 24 hours daily",
-  },
-  {
-    id: 16,
-    name: "Sembawang Dog Run Park",
-    area: "North",
-    size: "Approximately 2,700 sqm",
-    description: "",
-    address: "Northern end of Sembawang Road.",
-    openingHours: "24/7 (No dedicated lighting)",
-  },
-  {
-    id: 17,
-    name: "Yishun Park Dog Run",
-    area: "North",
-    size: "Approximately 500 sqm",
-    description: "",
-    address: "Yishun Central (Opposite Adora Green). Hours: 24/7.",
-    openingHours: null,
-  },
-  {
-    id: 18,
-    name: "Punggol Waterway Park Dog Run",
-    area: "North-East",
-    size: "Approximately 500 sqm",
-    description: "",
-    address: "Sentul Crescent. Hours: 24/7.",
-    openingHours: null,
-  },
-  {
-    id: 19,
-    name: "Rivervale Dog Run (Sengkang)",
-    area: "North-East",
-    size: "Approximately 450 sqm",
-    description: "",
-    address: "Near Block 178 Rivervale Crescent. Hours: 7:00 AM – 10:00 PM.",
-    openingHours: null,
-  },
-  {
-    id: 20,
-    name: "Woodlands Waterfront Dog Run",
-    area: "North",
-    size: "Approximately 600 sqm",
-    description: "",
-    address: "Admiralty Road West. Hours: 24/7.",
-    openingHours: null,
-  },
-  {
-    id: 21,
-    name: "K9 Park @ NEX (Mall Dog Run)",
-    area: "North-East",
-    size: "Approximately 180 sqm",
-    description: "",
-    address: "23 Serangoon Central, NEX Level 4R",
-    openingHours: "10:30 AM – 10:30 PM",
-  },
-  {
-    id: 22,
-    name: "Sun Plaza Park Dog Run",
-    area: "East",
-    size: "Approximately 600 sqm",
-    description: "",
-    address:
-      "Tampines Avenue 7 and Tampines Avenue 9, Singapore 520558. (The dog run is situated closer to the Tampines Regional Library and the Tampines Eco Green entrance side of the park).",
-    openingHours: "24/7",
-  },
-  {
-    id: 23,
-    name: "West Coast Park Dog Run",
-    area: "West",
-    size: "Massive (Part of the 50-hectare park)",
-    description: "",
-    address: "Parallel to West Coast Highway (Near Carpark 1).",
-    openingHours: "24/7 (Lights until 7 PM)",
-  },
-  {
-    id: 24,
-    name: "Clementi Woods Park Dog Run",
-    area: "West",
-    size: "Approximately 4,000 sqm",
-    description: "",
-    address: "152 West Coast Road (next to West Coast Plaza).",
-    openingHours: "24/7 (Lights until 7 AM)",
-  },
-  {
-    id: 25,
-    name: "Jurong Lake Gardens Dog Run",
-    area: "West",
-    size: "Approximately 2,200 sqm",
-    description: "",
-    address: "104 Yuan Ching Road.",
-    openingHours: "8:00 AM – 10:00 PM",
-  },
-  {
-    id: 26,
-    name: "Bukit Gombak Park Dog Run",
-    area: "West",
-    size: "Approximately 400 sqm",
-    description: "",
-    address: "Bukit Batok West Ave 5.",
-    openingHours: "24/7",
-  },
-  {
-    id: 27,
-    name: "Villa Verde Park Dog Run",
-    area: "West",
-    size: "Approximately 400-500 Sqm",
-    description: "",
-    address:
-      "Located within Villa Verde Park, at the end of Verde View, Singapore 688644 (along the Pang Sua Park Connector)",
-    openingHours: "Open 24 hours daily",
-  },
-];
 
 const RUN_AREAS = ["Central", "East", "North", "North-East", "West"] as const;
 
@@ -338,12 +91,14 @@ function CloseIcon() {
   );
 }
 
-type Run = (typeof dogRuns)[number];
+import type { Doc } from "convex/_generated/dataModel";
+
+type Run = Doc<"dogRuns">;
 
 const GALLERY_OFFSETS = [0, 13, 27, 41, 55];
 
 function runGalleryUrls(run: Run): string[] {
-  const base = 300 + run.id;
+  const base = 300 + run.sortOrder;
   return GALLERY_OFFSETS.map(
     (o) => `https://placedog.net/1200/800?id=${base + o}`,
   );
@@ -410,13 +165,13 @@ function DogRunCard({
 }
 
 function DogRunGallery({ run, onClose }: { run: Run; onClose: () => void }) {
-  const images = useMemo(() => runGalleryUrls(run), [run.id]);
+  const images = useMemo(() => runGalleryUrls(run), [run._id]);
   const [idx, setIdx] = useState(0);
   const total = images.length;
 
   useEffect(() => {
     setIdx(0);
-  }, [run.id]);
+  }, [run._id]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -519,6 +274,7 @@ function DogRunGallery({ run, onClose }: { run: Run; onClose: () => void }) {
 }
 
 function DogRunsPage() {
+  const { data: dogRuns } = useSuspenseQuery(convexQuery(api.dogRuns.listAll, {}));
   const [q, setQ] = useState("");
   const [area, setArea] = useState<"all" | (typeof RUN_AREAS)[number]>("all");
   const [galleryRun, setGalleryRun] = useState<Run | null>(null);
@@ -650,7 +406,7 @@ function DogRunsPage() {
       ) : (
         <section className="runs-grid">
           {filtered.map((r) => (
-            <DogRunCard key={r.id} run={r} onOpenGallery={setGalleryRun} />
+            <DogRunCard key={r._id} run={r} onOpenGallery={setGalleryRun} />
           ))}
         </section>
       )}

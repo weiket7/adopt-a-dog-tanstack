@@ -119,10 +119,16 @@ function Nav() {
                 >
                   Services
                 </Link>
+                <Link
+                  to="/admin/dog-runs"
+                  activeProps={{ className: "active" }}
+                >
+                  Dog Runs
+                </Link>
                 <Link to="/admin/users" activeProps={{ className: "active" }}>
                   Users
                 </Link>
-                <span className="nav-divider" aria-hidden="true" />
+                {/* <span className="nav-divider" aria-hidden="true" /> */}
                 <button className="nav-signout" onClick={handleSignOut}>
                   Log out
                 </button>
@@ -158,6 +164,9 @@ function Nav() {
                 <Link to="/events" activeProps={{ className: "active" }}>
                   Events
                 </Link>
+                {/* <Link to="/blog" activeProps={{ className: "active" }}>
+                  Blog
+                </Link> */}
                 <Link to="/dog-runs" activeProps={{ className: "active" }}>
                   Dog Runs
                 </Link>
@@ -244,6 +253,14 @@ function Nav() {
           >
             Events
           </Link>
+          {/* <Link
+            to="/blog"
+            className="nav-mobile-link"
+            activeProps={{ className: "nav-mobile-link active" }}
+            onClick={close}
+          >
+            Blog
+          </Link> */}
           <Link
             to="/dog-runs"
             className="nav-mobile-link"

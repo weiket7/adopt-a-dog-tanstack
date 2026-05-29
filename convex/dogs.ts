@@ -141,7 +141,17 @@ export const add = mutation({
     status: v.optional(v.union(v.literal("Active"), v.literal("Inactive"))),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("dogs", args);
+    const userId = await getAuthUserId(ctx);
+    const user = userId ? await ctx.db.get(userId) : null;
+    const welfareGroupId =
+      user?.role !== "Admin"
+        ? (user?.welfareGroupId ?? args.welfareGroupId)
+        : args.welfareGroupId;
+    return await ctx.db.insert("dogs", {
+      ...args,
+      welfareGroupId,
+      status: args.status ?? "Active",
+    });
   },
 });
 
@@ -155,10 +165,16 @@ export const update = mutation({
     description: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
     imageStorageId: v.optional(v.id("_storage")),
-    status: v.optional(v.union(v.literal("Active"), v.literal("Inactive"))),
+    status: v.union(v.literal("Active"), v.literal("Inactive")),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;
+
+    const userId = await getAuthUserId(ctx);
+    const user = userId ? await ctx.db.get(userId) : null;
+    if (user?.role !== "Admin" && user?.welfareGroupId) {
+      data.welfareGroupId = user.welfareGroupId;
+    }
 
     const oldDog = await ctx.db.get(id);
     await ctx.db.patch(id, data);
@@ -206,7 +222,9 @@ export const remove = mutation({
           ),
         )
         .collect();
-      await ctx.db.patch(dog.welfareGroupId, { dogsAvailable: activeDogs.length });
+      await ctx.db.patch(dog.welfareGroupId, {
+        dogsAvailable: activeDogs.length,
+      });
     }
   },
 });

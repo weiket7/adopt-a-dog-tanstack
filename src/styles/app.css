@@ -305,6 +305,7 @@
     align-items: end;
     gap: 24px;
     border-bottom: 1px solid var(--line);
+    position: relative;
   }
   .header h1 {
     font-family: var(--serif);
@@ -319,6 +320,7 @@
     font-style: italic;
     color: var(--accent);
     font-weight: 500;
+    position: relative;
   }
   .header p {
     margin: 18px 0 0;
@@ -343,6 +345,37 @@
     letter-spacing: -0.02em;
     line-height: 1;
     margin-bottom: 6px;
+  }
+  .header-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px;
+  }
+  .back-link {
+    position: absolute;
+    top: 56px;
+    right: 0;
+    appearance: none;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 14px 7px 11px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .back-link svg { width: 15px; height: 15px; }
+  .back-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(181, 74, 44, 0.05);
   }
 
   /* ---------- layout ---------- */
@@ -1121,6 +1154,63 @@
       linear-gradient(180deg, rgba(242, 217, 203, 0.45), rgba(251, 247, 236, 0)) ,
       var(--paper);
   }
+
+  /* featured-only thumbnail at top of card */
+  .svc-photo {
+    appearance: none;
+    border: 0;
+    padding: 0;
+    margin: -20px -20px 14px;
+    background: var(--paper-2, #f1ede4);
+    cursor: zoom-in;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 8 / 5;
+    display: block;
+    font: inherit;
+    color: inherit;
+    transform: translateZ(0);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+  }
+  .svc-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .4s ease;
+  }
+  .svc-card--featured:hover .svc-photo img { transform: scale(1.03); }
+  .svc-photo-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    background: var(--paper-2, #f1ede4);
+  }
+  .svc-photo-placeholder svg { width: 32px; height: 32px; opacity: .4; }
+  .svc-photo-badge {
+    position: absolute;
+    right: 10px; bottom: 10px;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 8px 4px 7px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: rgba(28, 26, 22, 0.62);
+    backdrop-filter: blur(6px);
+    border-radius: 999px;
+    line-height: 1;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+  }
+  .svc-photo-badge svg { width: 12px; height: 12px; }
+  .svc-card--featured:hover .svc-photo-badge,
+  .svc-photo:focus-visible .svc-photo-badge {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .svc-card--featured:hover {
     border-color: var(--accent);
     box-shadow:
@@ -1131,6 +1221,7 @@
     position: absolute;
     top: -10px;
     right: 16px;
+    z-index: 3;
     display: inline-flex; align-items: center; gap: 5px;
     font-size: 11px;
     font-weight: 600;
@@ -2326,4 +2417,5 @@
     .nav-inner, .page { padding-left: 24px; padding-right: 24px; }
     .header { grid-template-columns: 1fr; }
     .header .stat { text-align: left; }
+    .back-link { position: static; margin-bottom: 18px; align-self: flex-start; }
   }

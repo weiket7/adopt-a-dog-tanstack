@@ -62,7 +62,9 @@ export default defineSchema({
     area: v.optional(v.string()),
     priceFrom: v.optional(v.string()),
     website: v.optional(v.string()),
+    instagram: v.optional(v.string()),
     phone: v.optional(v.string()),
+    featured: v.optional(v.boolean()),
     imageStorageId: v.optional(v.id("_storage")),
   }),
 
@@ -79,5 +81,19 @@ export default defineSchema({
     area: v.string(),
     emergency: v.boolean(),
     publicHolidays: v.boolean(),
+  }),
+
+  dogRuns: defineTable({
+    sortOrder: v.number(),
+    name: v.string(),
+    area: v.string(),
+    size: v.string(),
+    description: v.optional(v.string()),
+    address: v.string(),
+    openingHours: v.optional(v.string()),
+    image: v.optional(v.string()),
+    map: v.optional(v.string()),
+    website: v.optional(v.string()),
+    waterPoint: v.optional(v.boolean()),
   }),
 });

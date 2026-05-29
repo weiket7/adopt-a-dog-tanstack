@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SERVICE_CATEGORIES } from "~/constants/serviceCategories";
 
 export const Route = createFileRoute("/services")({
@@ -61,9 +61,225 @@ function PhoneIcon() {
   );
 }
 
-function ServiceCard({ service }: { service: any }) {
+function PawIcon() {
   return (
-    <article className="svc-card">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <ellipse cx="6" cy="10" rx="2" ry="2.6" />
+      <ellipse cx="10" cy="6.5" rx="2" ry="2.6" />
+      <ellipse cx="14" cy="6.5" rx="2" ry="2.6" />
+      <ellipse cx="18" cy="10" rx="2" ry="2.6" />
+      <path d="M12 12c-3 0-5.5 2.4-5.5 5 0 1.8 1.3 3 3 3 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.7 0 3-1.2 3-3 0-2.6-2.5-5-5.5-5z" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Photo gallery lightbox                                              */
+/* ------------------------------------------------------------------ */
+
+function PhotoGallery({
+  title,
+  subtitle,
+  images,
+  onClose,
+}: {
+  title: string;
+  subtitle?: string;
+  images: string[];
+  onClose: () => void;
+}) {
+  const [idx, setIdx] = useState(0);
+  const total = images.length;
+
+  useEffect(() => {
+    setIdx(0);
+  }, [title]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowRight") setIdx((i) => (i + 1) % total);
+      else if (e.key === "ArrowLeft") setIdx((i) => (i - 1 + total) % total);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose, total]);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
+  if (!images.length) return null;
+
+  return (
+    <div
+      className="gallery-backdrop"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${title} photo gallery`}
+    >
+      <button
+        className="gallery-close"
+        onClick={onClose}
+        aria-label="Close gallery"
+      >
+        <CloseIcon />
+      </button>
+      <div className="gallery-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="gallery-stage">
+          {total > 1 && (
+            <button
+              className="gallery-nav prev"
+              onClick={() => setIdx((i) => (i - 1 + total) % total)}
+              aria-label="Previous photo"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+          )}
+          <img
+            className="gallery-main"
+            src={images[idx]}
+            alt={`${title} — photo ${idx + 1} of ${total}`}
+          />
+          {total > 1 && (
+            <button
+              className="gallery-nav next"
+              onClick={() => setIdx((i) => (i + 1) % total)}
+              aria-label="Next photo"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            </button>
+          )}
+        </div>
+        <div className="gallery-foot">
+          <div className="gallery-caption">
+            <b>{title}</b>
+            <span>
+              {subtitle ? `${subtitle} · ` : ""}
+              {idx + 1} / {total}
+            </span>
+          </div>
+          {total > 1 && (
+            <div className="gallery-thumbs" role="tablist">
+              {images.map((src, i) => (
+                <button
+                  key={i}
+                  className={`gallery-thumb${i === idx ? " is-active" : ""}`}
+                  onClick={() => setIdx(i)}
+                  role="tab"
+                  aria-selected={i === idx}
+                  aria-label={`Show photo ${i + 1}`}
+                >
+                  <img src={src} alt="" loading="lazy" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Service card                                                        */
+/* ------------------------------------------------------------------ */
+
+function ServiceCard({
+  service,
+  onOpenGallery,
+}: {
+  service: any;
+  onOpenGallery: (service: any) => void;
+}) {
+  const [imgOk, setImgOk] = useState(true);
+  const featured = service.featured;
+
+  return (
+    <article className={"svc-card" + (featured ? " svc-card--featured" : "")}>
+      {featured && (
+        <span className="svc-featured-flag" aria-label="Featured listing">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2l2.39 6.95H22l-5.94 4.32L18.45 22 12 17.77 5.55 22l2.39-8.73L2 8.95h7.61z" />
+          </svg>
+          Featured
+        </span>
+      )}
+      {featured && (
+        <button
+          type="button"
+          className="svc-photo"
+          onClick={() => onOpenGallery(service)}
+          aria-label={`Open photo for ${service.name}`}
+        >
+          {imgOk ? (
+            <img
+              src={service.imageUrl}
+              alt={service.name}
+              loading="lazy"
+              onError={() => setImgOk(false)}
+            />
+          ) : (
+            <div className="svc-photo-placeholder">
+              <PawIcon />
+            </div>
+          )}
+          <span className="svc-photo-badge" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="14" height="14" rx="2" />
+              <path d="M7 21h12a2 2 0 0 0 2-2V9" />
+              <path d="m7 13 3-3 4 4" />
+            </svg>
+            <span>View</span>
+          </span>
+        </button>
+      )}
       <div className="svc-head">
         <span
           className={
@@ -119,6 +335,7 @@ function ServicesPage() {
   );
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("all");
+  const [galleryService, setGalleryService] = useState<any>(null);
 
   const list = allServices.filter((s) => {
     if (cat !== "all" && s.category !== cat) return false;
@@ -133,6 +350,12 @@ function ServicesPage() {
         return false;
     }
     return true;
+  });
+
+  const sorted = list.slice().sort((a, b) => {
+    const af = a.featured ? 0 : 1;
+    const bf = b.featured ? 0 : 1;
+    return af - bf;
   });
 
   return (
@@ -256,10 +479,23 @@ function ServicesPage() {
         </div>
       ) : (
         <section className="svc-grid">
-          {list.map((s) => (
-            <ServiceCard key={s._id} service={s} />
+          {sorted.map((s) => (
+            <ServiceCard
+              key={s._id}
+              service={s}
+              onOpenGallery={setGalleryService}
+            />
           ))}
         </section>
+      )}
+
+      {galleryService && (
+        <PhotoGallery
+          title={galleryService.name}
+          subtitle={`${galleryService.category}${galleryService.area ? ` · ${galleryService.area}` : ""}`}
+          images={[galleryService.imageUrl]}
+          onClose={() => setGalleryService(null)}
+        />
       )}
     </main>
   );

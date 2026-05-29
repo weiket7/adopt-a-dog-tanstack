@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 import { toAge } from "~/utils/extensions";
@@ -69,21 +69,6 @@ function pickFine(dogId: string, seed: number): string {
 /* Icons                                                               */
 /* ------------------------------------------------------------------ */
 
-const SearchIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="7" />
-    <path d="m20 20-3.5-3.5" />
-  </svg>
-);
 const CheckIcon = () => (
   <svg
     viewBox="0 0 24 24"
@@ -180,9 +165,9 @@ function Filters({
 }) {
   return (
     <aside className="filters">
-      <div className="filter-eyebrow">Find your match</div>
+      {/* <div className="filter-eyebrow">Find your match</div> */}
 
-      <div className="filter-group">
+      {/* <div className="filter-group">
         <label className="filter-label" htmlFor="dog-search">
           Search by name
         </label>
@@ -197,7 +182,7 @@ function Filters({
             autoComplete="off"
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="filter-group">
         <span className="filter-label">HDB approved</span>
@@ -524,6 +509,7 @@ function DogDetail({ dog, onClose }: { dog: any; onClose: () => void }) {
 function WelfareGroupDogsPage() {
   const { welfareGroupId } = Route.useParams();
   const id = welfareGroupId as Id<"welfareGroups">;
+  const navigate = useNavigate();
 
   const { data: group } = useSuspenseQuery(
     convexQuery(api.welfareGroups.getById, { id }),
@@ -560,12 +546,26 @@ function WelfareGroupDogsPage() {
   };
 
   return (
-    <main className="page">
+    <main className="page" style={{ position: "relative" }}>
       <header className="header">
+        <button
+          type="button"
+          className="back-link"
+          onClick={() => navigate({ to: "/welfare-groups" })}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Back to welfare groups
+        </button>
         <div>
-          <div className="page-header-back">
-            <Link to="/welfare-groups">&larr; Welfare groups</Link>
-          </div>
           <h1>
             {group?.name ?? "Welfare group"} <em>dogs for adoption.</em>
           </h1>
@@ -575,8 +575,9 @@ function WelfareGroupDogsPage() {
           </p>
         </div>
         <div className="stat">
-          <b>{allDogs?.length ?? 0}</b>
-          dogs currently in care
+          <div>
+            <b>{allDogs?.length ?? 0}</b> dogs currently in care
+          </div>
         </div>
       </header>
 

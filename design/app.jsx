@@ -920,7 +920,15 @@ const SERVICE_CATEGORIES = [
   "Grooming",
 ];
 
-function ServiceCard({ service }) {
+function svcGalleryUrls(svc) {
+  return [0, 11, 22, 33, 44].map((o) => `https://picsum.photos/seed/svc-${svc.id}-${o}/1200/800`);
+}
+function svcThumbUrl(svc) {
+  return `https://picsum.photos/seed/svc-${svc.id}-0/640/400`;
+}
+
+function ServiceCard({ service, onOpenGallery }) {
+  const [imgOk, setImgOk] = useState(true);
   return (
     <article className={"svc-card" + (service.featured ? " svc-card--featured" : "")}>
       {service.featured && (
@@ -928,6 +936,24 @@ function ServiceCard({ service }) {
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 6.95H22l-5.94 4.32L18.45 22 12 17.77 5.55 22l2.39-8.73L2 8.95h7.61z"/></svg>
           Featured
         </span>
+      )}
+      {service.featured && (
+        <button
+          type="button"
+          className="svc-photo"
+          onClick={() => onOpenGallery(service)}
+          aria-label={`Open photo gallery for ${service.name}`}
+        >
+          {imgOk ? (
+            <img src={svcThumbUrl(service)} alt={service.name} loading="lazy" onError={() => setImgOk(false)} />
+          ) : (
+            <div className="svc-photo-placeholder"><Icon.Paw/></div>
+          )}
+          <span className="svc-photo-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M7 21h12a2 2 0 0 0 2-2V9"/><path d="m7 13 3-3 4 4"/></svg>
+            <span>5</span>
+          </span>
+        </button>
       )}
       <div className="svc-head">
         <span className={"svc-cat svc-cat--" + service.category.toLowerCase().replace(/[^a-z]/g, "")}>
@@ -956,6 +982,7 @@ function ServiceCard({ service }) {
 function ServicesView() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("all");
+  const [galleryService, setGalleryService] = useState(null);
   const list = (window.SERVICES || []).filter((s) => {
     if (cat !== "all" && s.category !== cat) return false;
     if (q.trim()) {
@@ -1047,8 +1074,17 @@ function ServicesView() {
         </div>
       ) : (
         <section className="svc-grid">
-          {sorted.map((s) => <ServiceCard key={s.id} service={s} />)}
+          {sorted.map((s) => <ServiceCard key={s.id} service={s} onOpenGallery={setGalleryService} />)}
         </section>
+      )}
+
+      {galleryService && (
+        <PhotoGallery
+          title={galleryService.name}
+          subtitle={`${galleryService.category} · ${galleryService.area}`}
+          images={svcGalleryUrls(galleryService)}
+          onClose={() => setGalleryService(null)}
+        />
       )}
     </main>
   );
@@ -1188,12 +1224,11 @@ function DogRunCard({ run, onOpenGallery }) {
   );
 }
 
-function DogRunGallery({ run, onClose }) {
-  const images = useMemo(() => (run ? runGalleryUrls(run) : []), [run?.id]);
+function PhotoGallery({ title, subtitle, images, onClose }) {
   const [idx, setIdx] = useState(0);
   const total = images.length;
 
-  useEffect(() => { setIdx(0); }, [run?.id]);
+  useEffect(() => { setIdx(0); }, [title]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -1211,10 +1246,10 @@ function DogRunGallery({ run, onClose }) {
     return () => { document.body.style.overflow = prev; };
   }, []);
 
-  if (!run) return null;
+  if (!images || images.length === 0) return null;
 
   return (
-    <div className="gallery-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label={`${run.name} photo gallery`}>
+    <div className="gallery-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label={`${title} photo gallery`}>
       <button className="gallery-close" onClick={onClose} aria-label="Close gallery">
         <Icon.Close/>
       </button>
@@ -1227,7 +1262,7 @@ function DogRunGallery({ run, onClose }) {
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
-          <img className="gallery-main" src={images[idx]} alt={`${run.name} — photo ${idx + 1} of ${total}`} />
+          <img className="gallery-main" src={images[idx]} alt={`${title} — photo ${idx + 1} of ${total}`} />
           <button
             className="gallery-nav next"
             onClick={() => setIdx((i) => (i + 1) % total)}
@@ -1238,8 +1273,8 @@ function DogRunGallery({ run, onClose }) {
         </div>
         <div className="gallery-foot">
           <div className="gallery-caption">
-            <b>{run.name}</b>
-            <span>{run.address} · {idx + 1} / {total}</span>
+            <b>{title}</b>
+            <span>{subtitle ? `${subtitle} · ` : ""}{idx + 1} / {total}</span>
           </div>
           <div className="gallery-thumbs" role="tablist">
             {images.map((src, i) => (
@@ -1259,6 +1294,12 @@ function DogRunGallery({ run, onClose }) {
       </div>
     </div>
   );
+}
+
+function DogRunGallery({ run, onClose }) {
+  const images = useMemo(() => (run ? runGalleryUrls(run) : []), [run?.id]);
+  if (!run) return null;
+  return <PhotoGallery title={run.name} subtitle={run.address} images={images} onClose={onClose} />;
 }
 
 const RUN_AREAS = ["Central", "East", "North", "North-East", "West"];
@@ -1517,6 +1558,16 @@ function App() {
       {view === "dogs" && (
         <main className="page">
         <header className="header">
+          {activeGroup && (
+            <button
+              type="button"
+              className="back-link"
+              onClick={() => { setGroupFilter(null); setView("groups"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              Back to welfare groups
+            </button>
+          )}
           <div>
             <h1>
               {activeGroup ? <>Dogs from <em>{activeGroup.name.split(" — ")[0]}.</em></> : <>Meet the dogs <em>looking for home.</em></>}

@@ -191,7 +191,7 @@ function BlogPage() {
         </div>
       </header>
 
-      <div className="runs-toolbar">
+      <div className="page-controls">
         <div className="blog-tabs" role="tablist">
           {cats.map((c) => (
             <button
@@ -205,7 +205,7 @@ function BlogPage() {
             </button>
           ))}
         </div>
-        <span className="runs-count">
+        <span className="page-count">
           {filtered.length} {filtered.length === 1 ? "post" : "posts"}
         </span>
       </div>

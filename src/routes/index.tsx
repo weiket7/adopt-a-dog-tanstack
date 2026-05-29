@@ -206,7 +206,7 @@ function Filters({
 }) {
   return (
     <aside className="filters">
-      <div className="filter-eyebrow">Find your match</div>
+      {/* <div className="filter-eyebrow">Find your match</div> */}
 
       <div className="filter-group">
         <label className="filter-label" htmlFor="dog-search">

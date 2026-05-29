@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CONTACT_EMAIL } from "~/constants/settings";
 import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -153,7 +154,17 @@ function DogRunCard({
         <h3 className="run-name">{run.name}</h3>
         <div className="run-meta">
           <span>
-            <PinIcon /> {run.address}
+            <span>
+              <PinIcon /> {run.address}
+              <a
+                className="run-maps-link"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${run.name}, ${run.address}, Singapore`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Maps ↗
+              </a>
+            </span>
           </span>
           <span>
             <ClockIcon /> {run.openingHours}
@@ -274,7 +285,9 @@ function DogRunGallery({ run, onClose }: { run: Run; onClose: () => void }) {
 }
 
 function DogRunsPage() {
-  const { data: dogRuns } = useSuspenseQuery(convexQuery(api.dogRuns.listAll, {}));
+  const { data: dogRuns } = useSuspenseQuery(
+    convexQuery(api.dogRuns.listAll, {}),
+  );
   const [q, setQ] = useState("");
   const [area, setArea] = useState<"all" | (typeof RUN_AREAS)[number]>("all");
   const [galleryRun, setGalleryRun] = useState<Run | null>(null);
@@ -329,7 +342,7 @@ function DogRunsPage() {
         </div>
         <a
           className="pitch-button pitch-button--sm"
-          href="mailto:vets@homeward.sg?subject=Vet directory — update"
+          href={`mailto:${CONTACT_EMAIL}?subject=Dog runs update`}
         >
           <svg
             viewBox="0 0 24 24"

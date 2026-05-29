@@ -596,9 +596,24 @@ function DogDetail({ dog, onClose, showPhoto }) {
 
   if (!dog) return null;
 
+  const group = (window.GROUPS || []).find((g) => g.id === effectiveGroupId(dog));
+  const groupEmail = (group && group.email) || "hello@homeward.sg";
+  const groupName = (group && group.name) || "Homeward";
+
   const submit = (e) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim()) return;
+    const subject = `Adoption enquiry — ${dog.name} (${dog.breed})`;
+    const body =
+      `Hi ${groupName} team,\n\n` +
+      `I'd love to find out more about adopting ${dog.name}.\n\n` +
+      `Name: ${form.name}\n` +
+      `Email: ${form.email}\n` +
+      `Phone: ${form.phone || "—"}\n\n` +
+      `A little about my home:\n${form.message || "—"}\n\n` +
+      `Thank you!`;
+    window.location.href =
+      `mailto:${groupEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
   };
 
@@ -665,45 +680,62 @@ function DogDetail({ dog, onClose, showPhoto }) {
           </div>
 
           <aside>
-            <div className="form-card">
-              {submitted ? (
-                <div className="form-success">
-                  <span className="check-ring"><Icon.Check/></span>
-                  <h4>Thanks, {form.name.split(' ')[0] || 'friend'}.</h4>
-                  <p>We&rsquo;ve received your interest in {dog.name}. Our adoption team will be in touch within 2 working days.</p>
+            <div className="adopt-panel">
+              {group && (
+                <div className="adopt-group">
+                  <div className="adopt-group-eyebrow">Cared for by</div>
+                  <div className="adopt-group-name">{group.name}</div>
+                  {group.blurb && (
+                    <p className="adopt-group-blurb" dangerouslySetInnerHTML={{ __html: group.blurb }} />
+                  )}
+                  <div className="group-socials adopt-group-socials">
+                    <SocialLink href={group.website}   label="Website">  <Icon.Globe/></SocialLink>
+                    <SocialLink href={group.facebook}  label="Facebook"> <Icon.FB/></SocialLink>
+                    <SocialLink href={group.instagram} label="Instagram"><Icon.IG/></SocialLink>
+                  </div>
                 </div>
-              ) : (
-                <>
-                  <h3>Interested in {dog.name}?</h3>
-                  <p className="form-sub">Tell us a little about yourself and we&rsquo;ll arrange a meet at the shelter.</p>
-                  <form onSubmit={submit}>
-                    <div className="form-field">
-                      <label htmlFor="adopter-name">Your name</label>
-                      <input id="adopter-name" type="text" placeholder="Full name" value={form.name} onChange={update('name')} required />
-                    </div>
-                    <div className="form-row">
-                      <div className="form-field">
-                        <label htmlFor="adopter-email">Email</label>
-                        <input id="adopter-email" type="email" placeholder="you@example.com" value={form.email} onChange={update('email')} required />
-                      </div>
-                      <div className="form-field">
-                        <label htmlFor="adopter-phone">Phone</label>
-                        <input id="adopter-phone" type="tel" placeholder="+65 9123 4567" value={form.phone} onChange={update('phone')} />
-                      </div>
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="adopter-message">Tell us about your home</label>
-                      <textarea id="adopter-message" placeholder={`Where do you live, who else is at home, and what made ${dog.name} catch your eye?`} value={form.message} onChange={update('message')} />
-                    </div>
-                    <button type="submit" className="form-submit">
-                      <Icon.Send/> Send interest
-                    </button>
-                    <div className="form-disclaimer">
-                      Adoption is subject to home visit &amp; suitability check.
-                    </div>
-                  </form>
-                </>
               )}
+
+              <div className="adopt-form">
+                {submitted ? (
+                  <div className="form-success">
+                    <span className="check-ring"><Icon.Check/></span>
+                    <h4>Email ready, {form.name.split(' ')[0] || 'friend'}.</h4>
+                    <p>Your message about {dog.name} is drafted to <b>{groupName}</b> — just hit send in your mail app. They&rsquo;ll be in touch directly.</p>
+                  </div>
+                ) : (
+                  <>
+                    <h3>Interested in {dog.name}?</h3>
+                    <p className="form-sub">Your note goes straight to <b>{groupName}</b>, the group caring for {dog.name}. They&rsquo;ll arrange a meet.</p>
+                    <form onSubmit={submit}>
+                      <div className="form-field">
+                        <label htmlFor="adopter-name">Your name</label>
+                        <input id="adopter-name" type="text" placeholder="Full name" value={form.name} onChange={update('name')} required />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-field">
+                          <label htmlFor="adopter-email">Email</label>
+                          <input id="adopter-email" type="email" placeholder="you@example.com" value={form.email} onChange={update('email')} required />
+                        </div>
+                        <div className="form-field">
+                          <label htmlFor="adopter-phone">Phone</label>
+                          <input id="adopter-phone" type="tel" placeholder="+65 9123 4567" value={form.phone} onChange={update('phone')} />
+                        </div>
+                      </div>
+                      <div className="form-field">
+                        <label htmlFor="adopter-message">Tell us about your home</label>
+                        <textarea id="adopter-message" placeholder={`Where do you live, who else is at home, and what made ${dog.name} catch your eye?`} value={form.message} onChange={update('message')} />
+                      </div>
+                      <button type="submit" className="form-submit">
+                        <Icon.Send/> Email {groupName}
+                      </button>
+                      <div className="form-disclaimer">
+                        Opens your mail app with the message drafted. Adoption is subject to home visit &amp; suitability check.
+                      </div>
+                    </form>
+                  </>
+                )}
+              </div>
             </div>
           </aside>
         </div>
@@ -1216,7 +1248,15 @@ function DogRunCard({ run, onOpenGallery }) {
       <div className="run-body">
         <h3 className="run-name">{run.name}</h3>
         <div className="run-meta">
-          <span><Icon.Pin/> {run.address}</span>
+          <span>
+            <Icon.Pin/> {run.address}
+            <a
+              className="run-maps-link"
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${run.name}, ${run.address}, Singapore`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >Maps ↗</a>
+          </span>
           <span><Icon.Clock/> {run.hours}</span>
         </div>
       </div>

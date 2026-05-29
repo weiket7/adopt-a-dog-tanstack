@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CONTACT_EMAIL } from "~/constants/settings";
 import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -381,7 +382,7 @@ function ServicesPage() {
         <div className="pitch-body">
           <span className="pitch-eyebrow">For small businesses</span>
           <h2 id="pitch-title">
-            List your dog-loving business with <em>Homeward.</em>
+            List your dog-loving business with <em>adoptadog.</em>
           </h2>
           <p>
             We&rsquo;re a volunteer-run directory of trusted, dog-friendly small
@@ -404,7 +405,7 @@ function ServicesPage() {
         <div className="pitch-cta">
           <a
             className="pitch-button"
-            href="mailto:services@homeward.sg?subject=Service listing — Homeward"
+            href={`mailto:${CONTACT_EMAIL}?subject=Services - Application`}
           >
             <svg
               viewBox="0 0 24 24"
@@ -420,8 +421,8 @@ function ServicesPage() {
             Apply to be listed
           </a>
           <span className="pitch-note">
-            Drop us a line at <b>services@homeward.sg</b> with a short intro,
-            your website, and where you&rsquo;re based.
+            Drop us a line at <b>{CONTACT_EMAIL}</b> with a short intro, your
+            website, and where you&rsquo;re based.
           </span>
         </div>
       </aside>

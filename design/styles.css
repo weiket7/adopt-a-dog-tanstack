@@ -1638,6 +1638,16 @@
     flex: none;
     margin-top: 3px;
   }
+  .run-maps-link {
+    margin-left: 6px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s;
+  }
+  .run-maps-link:hover { border-bottom-color: var(--accent); }
 
   .run-gallery-badge {
     position: absolute;
@@ -2164,6 +2174,52 @@
     text-wrap: pretty;
   }
 
+  /* seamless adopt panel: welfare group head + email form */
+  .adopt-panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    position: sticky;
+    top: 24px;
+  }
+  .adopt-group {
+    padding: 20px 24px 18px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .adopt-group-eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .adopt-group-name {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 21px;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .adopt-group-blurb {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin: 5px 0 0;
+  }
+  .adopt-group-socials {
+    border-top: none;
+    padding-top: 14px;
+  }
+  .adopt-group-socials .group-social {
+    background: var(--bg);
+    border-color: var(--line-2);
+  }
+  .adopt-form { padding: 24px; }
+
   /* form */
   .form-card {
     background: var(--paper);
@@ -2173,7 +2229,8 @@
     position: sticky;
     top: 24px;
   }
-  .form-card h3 {
+  .form-card h3,
+  .adopt-form h3 {
     font-family: var(--serif);
     font-weight: 500;
     font-size: 26px;
@@ -2181,7 +2238,8 @@
     margin: 0 0 4px;
     line-height: 1.1;
   }
-  .form-card .form-sub {
+  .form-card .form-sub,
+  .adopt-form .form-sub {
     color: var(--muted);
     font-size: 14px;
     margin-bottom: 22px;
@@ -2270,6 +2328,7 @@
   @media (max-width: 880px) {
     .modal-body { grid-template-columns: 1fr; padding: 24px 22px 40px; gap: 28px; }
     .form-card { position: static; padding: 22px; }
+    .adopt-panel { position: static; }
     .detail-grid { grid-template-columns: repeat(2, 1fr); }
   }
 

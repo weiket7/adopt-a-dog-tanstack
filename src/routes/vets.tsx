@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CONTACT_EMAIL } from "~/constants/settings";
 import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -193,7 +194,7 @@ function VetsPage() {
         </div>
         <a
           className="pitch-button pitch-button--sm"
-          href="mailto:vets@homeward.sg?subject=Vet directory — update"
+          href={`mailto:${CONTACT_EMAIL}?subject=Vets update`}
         >
           <svg
             viewBox="0 0 24 24"

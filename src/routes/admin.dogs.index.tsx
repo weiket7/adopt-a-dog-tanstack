@@ -87,6 +87,59 @@ const CheckIcon = () => (
   </svg>
 );
 
+/* ---------- MonthYearPicker ---------- */
+
+const CURRENT_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: 20 }, (_, i) => CURRENT_YEAR - i);
+const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+
+function MonthYearPicker({
+  value,
+  onChange,
+}: {
+  value: string; // YYYY-MM-01 or ""
+  onChange: (v: string) => void;
+}) {
+  const year = value ? value.slice(0, 4) : "";
+  const month = value ? value.slice(5, 7) : "";
+
+  const update = (y: string, m: string) => {
+    onChange(y && m ? `${y}-${m}-01` : "");
+  };
+
+  return (
+    <div style={{ display: "flex", gap: "0.5rem" }}>
+      <select
+        value={month}
+        onChange={(e) => update(year, e.target.value)}
+        style={{ flex: 2 }}
+      >
+        <option value="">Month</option>
+        {MONTHS.map((name, i) => {
+          const val = String(i + 1).padStart(2, "0");
+          return (
+            <option key={val} value={val}>
+              {name}
+            </option>
+          );
+        })}
+      </select>
+      <select
+        value={year}
+        onChange={(e) => update(e.target.value, month)}
+        style={{ flex: 1 }}
+      >
+        <option value="">Year</option>
+        {YEARS.map((y) => (
+          <option key={y} value={String(y)}>
+            {y}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 /* ---------- types ---------- */
 type DogRow = {
   _id: Id<"dogs">;
@@ -145,7 +198,7 @@ function DogForm({
   const [saving, setSaving] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const isNew = !initial.id;
-  const isAdmin = useQuery(api.users.isAdmin);
+  const role = useQuery(api.users.role);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -219,13 +272,10 @@ function DogForm({
             </div>
 
             <div className="field">
-              <label htmlFor="f-birthday">Birthday</label>
-              <input
-                id="f-birthday"
-                type="text"
+              <label>Birthday</label>
+              <MonthYearPicker
                 value={d.birthday}
-                onChange={set("birthday")}
-                placeholder="e.g. 12 Mar 2023"
+                onChange={(v) => setD((p) => ({ ...p, birthday: v }))}
               />
             </div>
 
@@ -305,7 +355,7 @@ function DogForm({
               </div>
             </div>
 
-            {isAdmin && (
+            {role === "Admin" && (
               <div className="field">
                 <label htmlFor="f-welfare-group">Welfare Group</label>
                 <select

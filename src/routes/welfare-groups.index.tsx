@@ -3,6 +3,7 @@ import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { SocialLink } from "~/components/SocialLink";
 
 export const Route = createFileRoute("/welfare-groups/")({
   component: WelfareGroupsPage,
@@ -97,30 +98,6 @@ function EmailIcon() {
       <rect x="2" y="4" width="20" height="16" rx="2" />
       <path d="m2 7 10 7 10-7" />
     </svg>
-  );
-}
-
-function SocialLink({
-  href,
-  label,
-  children,
-}: {
-  href?: string;
-  label: string;
-  children: React.ReactNode;
-}) {
-  if (!href) return null;
-  return (
-    <a
-      className="group-social"
-      href={href}
-      target="_blank"
-      rel="noreferrer noopener"
-      aria-label={label}
-      title={label}
-    >
-      {children}
-    </a>
   );
 }
 

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CONTACT_EMAIL } from "~/constants/settings";
 import { useState } from "react";
 import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
@@ -122,7 +123,7 @@ function EventsPage() {
       <header className="header">
         <div>
           <h1>
-            What&rsquo;s on at <em>Homeward.</em>
+            What&rsquo;s on in <em>Singapore.</em>
           </h1>
           <p>
             Adoption drives, fairs, community walks and the occasional vet
@@ -160,7 +161,7 @@ function EventsPage() {
         <div className="pitch-cta">
           <a
             className="pitch-button"
-            href="mailto:events@homeward.sg?subject=Event listing — Homeward"
+            href={`mailto:${CONTACT_EMAIL}?subject=Event listing — Homeward`}
           >
             <svg
               viewBox="0 0 24 24"
@@ -176,7 +177,7 @@ function EventsPage() {
             Submit an event
           </a>
           <span className="pitch-note">
-            Email <b>events@homeward.sg</b> at least two weeks ahead. We list
+            Email <b>{CONTACT_EMAIL}</b> at least two weeks ahead. We list
             events as space allows.
           </span>
         </div>

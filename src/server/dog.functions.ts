@@ -19,7 +19,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
     const gender = z.enum(["Male", "Female"]).parse(data.get("gender"));
     const hdbApproved = z.enum(["Yes", "No"]).parse(data.get("hdbApproved"));
     const birthday = data.get("birthday") as string;
-    const status = z.enum(["active", "inactive"]).parse(data.get("status"));
+    const status = z.enum(["Active", "Inactive"]).parse(data.get("status"));
     const welfareGroupId = data.get("welfareGroupId") as Id<"welfareGroups">;
 
     let storageId = data.get("existingStorageId") as Id<"_storage"> | undefined;

@@ -19,7 +19,7 @@ export default defineSchema({
     .index("phone", ["phone"]),
   dogs: defineTable({
     name: v.string(),
-    status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
+    status: v.optional(v.union(v.literal("Active"), v.literal("Inactive"))),
     gender: v.union(v.literal("Male"), v.literal("Female")),
     hdbApproved: v.union(v.literal("Yes"), v.literal("No")),
     birthday: v.optional(v.string()),
@@ -30,8 +30,7 @@ export default defineSchema({
   welfareGroups: defineTable({
     name: v.string(),
     slug: v.string(),
-    status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
-    image: v.optional(v.string()),
+    status: v.optional(v.union(v.literal("Active"), v.literal("Inactive"))),
     blurb: v.optional(v.string()),
     dogsAvailable: v.optional(v.number()),
     facebook: v.optional(v.string()),

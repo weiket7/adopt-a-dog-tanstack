@@ -98,7 +98,7 @@ type DogRow = {
   welfareGroupId?: Id<"welfareGroups">;
   imageStorageId?: Id<"_storage">;
   imageUrl: string | null;
-  status?: "active" | "inactive";
+  status?: "Active" | "Inactive";
 };
 
 type FormState = {
@@ -108,7 +108,7 @@ type FormState = {
   birthday: string;
   description: string;
   welfareGroupId: Id<"welfareGroups"> | "";
-  status: "active" | "inactive";
+  status: "Active" | "Inactive";
 };
 
 const EMPTY_FORM: FormState = {
@@ -118,7 +118,7 @@ const EMPTY_FORM: FormState = {
   birthday: "",
   description: "",
   welfareGroupId: "",
-  status: "active",
+  status: "Active",
 };
 
 type WelfareGroupOption = { _id: Id<"welfareGroups">; name: string };
@@ -289,15 +289,15 @@ function DogForm({
               >
                 <button
                   type="button"
-                  aria-pressed={d.status === "active"}
-                  onClick={() => setD((p) => ({ ...p, status: "active" }))}
+                  aria-pressed={d.status === "Active"}
+                  onClick={() => setD((p) => ({ ...p, status: "Active" }))}
                 >
                   Active
                 </button>
                 <button
                   type="button"
-                  aria-pressed={d.status === "inactive"}
-                  onClick={() => setD((p) => ({ ...p, status: "inactive" }))}
+                  aria-pressed={d.status === "Inactive"}
+                  onClick={() => setD((p) => ({ ...p, status: "Inactive" }))}
                 >
                   Inactive
                 </button>
@@ -489,7 +489,7 @@ function DogsAdminPage() {
         if (d.welfareGroupId !== groupFilter) return false;
       }
       if (statusFilter !== "all") {
-        const dogStatus = d.status ?? "active";
+        const dogStatus = d.status ?? "Active";
         if (dogStatus !== statusFilter) return false;
       }
       return true;
@@ -510,7 +510,7 @@ function DogsAdminPage() {
       birthday: dog.birthday ?? "",
       description: dog.description ?? "",
       welfareGroupId: (dog.welfareGroupId ?? "") as Id<"welfareGroups"> | "",
-      status: dog.status ?? "active",
+      status: dog.status ?? "Active",
     });
     setEditingImageUrl(dog.imageUrl);
   };
@@ -639,8 +639,8 @@ function DogsAdminPage() {
             onChange={(e) => setStatusFilter(e.target.value)}
           >
             <option value="all">All statuses</option>
-            <option value="active">Active only</option>
-            <option value="inactive">Inactive only</option>
+            <option value="Active">Active only</option>
+            <option value="Inactive">Inactive only</option>
           </select>
         </label>
         <span className="stat-chip">
@@ -725,10 +725,10 @@ function DogsAdminPage() {
                   </td>
                   <td>
                     <span
-                      className={`pill status-${dog.status ?? "active"}`}
+                      className={`pill status-${(dog.status ?? "Active").toLowerCase()}`}
                     >
                       <span className="status-dot"></span>
-                      {dog.status === "inactive" ? "Inactive" : "Active"}
+                      {dog.status === "Inactive" ? "Inactive" : "Active"}
                     </span>
                   </td>
                   <td>

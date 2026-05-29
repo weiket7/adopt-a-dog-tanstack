@@ -41,7 +41,7 @@ export const listAll = query({
   handler: async (ctx) => {
     const dogs = await ctx.db
       .query("dogs")
-      .filter((q) => q.neq(q.field("status"), "inactive"))
+      .filter((q) => q.neq(q.field("status"), "Inactive"))
       .collect();
     return await Promise.all(
       dogs.map(async (dog) => ({
@@ -65,7 +65,7 @@ export const list = query({
   handler: async (ctx, args) => {
     let q = ctx.db
       .query("dogs")
-      .filter((q) => q.neq(q.field("status"), "inactive"));
+      .filter((q) => q.neq(q.field("status"), "Inactive"));
     if (args.name) {
       q = q.filter((q) => q.eq(q.field("name"), args.name));
     }
@@ -98,7 +98,7 @@ export const listByWelfareGroup = query({
       .query("dogs")
       .filter((q) =>
         q.and(
-          q.eq(q.field("status"), "active"),
+          q.eq(q.field("status"), "Active"),
           q.eq(q.field("welfareGroupId"), welfareGroupId),
         ),
       )
@@ -138,7 +138,7 @@ export const add = mutation({
     description: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
     imageStorageId: v.optional(v.id("_storage")),
-    status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
+    status: v.optional(v.union(v.literal("Active"), v.literal("Inactive"))),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("dogs", args);
@@ -155,7 +155,7 @@ export const update = mutation({
     description: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
     imageStorageId: v.optional(v.id("_storage")),
-    status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
+    status: v.optional(v.union(v.literal("Active"), v.literal("Inactive"))),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;
@@ -173,7 +173,7 @@ export const update = mutation({
         .filter((q) =>
           q.and(
             q.eq(q.field("welfareGroupId"), groupId),
-            q.eq(q.field("status"), "active"),
+            q.eq(q.field("status"), "Active"),
           ),
         )
         .collect();
@@ -202,7 +202,7 @@ export const remove = mutation({
         .filter((q) =>
           q.and(
             q.eq(q.field("welfareGroupId"), dog.welfareGroupId),
-            q.eq(q.field("status"), "active"),
+            q.eq(q.field("status"), "Active"),
           ),
         )
         .collect();

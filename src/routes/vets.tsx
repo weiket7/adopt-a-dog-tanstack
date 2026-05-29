@@ -210,7 +210,7 @@ function VetsPage() {
         </a>
       </aside>
 
-      <div className="runs-toolbar">
+      <div className="page-controls">
         <div className="search" style={{ maxWidth: 320 }}>
           <SearchIcon />
           <input
@@ -248,6 +248,9 @@ function VetsPage() {
             Open on PH
           </button>
         </div>
+        <span className="page-count">
+          {list.length} {list.length === 1 ? "result" : "results"}
+        </span>
       </div>
 
       <section className="vets-grid">

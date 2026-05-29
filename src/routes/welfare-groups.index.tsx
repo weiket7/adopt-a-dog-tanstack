@@ -230,17 +230,17 @@ function WelfareGroupsPage() {
         </div>
       </header>
 
-      <div className="runs-toolbar">
+      <div className="page-controls">
         <div className="search" style={{ maxWidth: 320 }}>
           <SearchIcon />
           <input
             type="text"
-            placeholder="Search welfare groups…"
+            placeholder="Search by name"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <span className="runs-count">
+        <span className="page-count">
           {list.length} {list.length === 1 ? "group" : "groups"}
         </span>
       </div>

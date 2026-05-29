@@ -5,7 +5,7 @@ export const list = query({
   handler: async (ctx, args) => {
     return await ctx.db
       .query("welfareGroups")
-      .filter((q) => q.eq(q.field("status"), "active"))
+      .filter((q) => q.eq(q.field("status"), "Active"))
       .collect();
   },
 });

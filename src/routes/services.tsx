@@ -203,8 +203,8 @@ function ServicesPage() {
         </div>
       </aside>
 
-      <div className="runs-toolbar">
-        <div className="search" style={{ maxWidth: 320 }}>
+      <div className="page-controls">
+        <div className="search page-search" style={{ maxWidth: 320 }}>
           <SearchIcon />
           <input
             type="text"
@@ -213,7 +213,7 @@ function ServicesPage() {
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <span className="runs-count">
+        <span className="page-count">
           {list.length} {list.length === 1 ? "result" : "results"}
         </span>
       </div>

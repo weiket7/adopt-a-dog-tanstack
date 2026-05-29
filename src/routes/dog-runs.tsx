@@ -590,8 +590,8 @@ function DogRunsPage() {
         </a>
       </aside>
 
-      <div className="runs-controls">
-        <div className="search runs-search">
+      <div className="page-controls">
+        <div className="search page-search">
           <SearchIcon />
           <input
             type="text"
@@ -601,7 +601,7 @@ function DogRunsPage() {
           />
         </div>
         <div
-          className="svc-cats runs-chips"
+          className="svc-cats page-chips"
           role="tablist"
           aria-label="Filter dog runs by area"
         >
@@ -625,7 +625,7 @@ function DogRunsPage() {
             </button>
           ))}
         </div>
-        <span className="runs-count">
+        <span className="page-count">
           {filtered.length} {filtered.length === 1 ? "run" : "runs"}
         </span>
       </div>

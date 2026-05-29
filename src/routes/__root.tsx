@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 import { QueryClient } from "@tanstack/react-query";
-import { createRootRouteWithContext } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import {
   HeadContent,
   Link,
@@ -46,9 +46,11 @@ export const Route = createRootRouteWithContext<{
       { rel: "icon", href: "/favicon.ico" },
     ],
   }),
+
+  //component: RootComponent,
   errorComponent: DefaultCatchBoundary,
   notFoundComponent: () => <NotFound />,
-  shellComponent: RootDocument,
+  shellComponent: RootComponent,
 });
 
 function PawIcon() {
@@ -316,6 +318,14 @@ function Footer() {
         </span>
       </footer>
     </>
+  );
+}
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
   );
 }
 

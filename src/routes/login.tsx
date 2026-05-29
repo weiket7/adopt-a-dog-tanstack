@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { useConvexAuth } from "convex/react";
 import * as React from "react";
 
 export const Route = createFileRoute("/login")({
@@ -8,11 +9,18 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const { signIn } = useAuthActions();
+  const { isAuthenticated } = useConvexAuth();
   const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const [msg, setMsg] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate({ to: "/admin/dogs" });
+    }
+  }, [isAuthenticated, navigate]);
 
   const submit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
@@ -21,7 +29,6 @@ function LoginPage() {
     setMsg(null);
     try {
       await signIn("password", { email, password, flow: "signIn" });
-      navigate({ to: "/admin/dogs" });
     } catch {
       setMsg("Wrong email and/or password.");
     } finally {

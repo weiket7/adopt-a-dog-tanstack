@@ -1224,7 +1224,7 @@
     display: grid;
     grid-template-columns: 1.4fr 1fr;
     gap: 32px;
-    margin: 8px 0 28px;
+    margin: 24px 0 0;
     padding: 32px 36px;
     background: var(--paper);
     border: 1px solid var(--line);
@@ -1321,7 +1321,7 @@
     grid-template-columns: 1fr auto;
     gap: 18px;
     padding: 18px 24px;
-    margin: 8px 0 24px;
+    margin: 24px 0 0;
     align-items: center;
   }
   .pitch-mini-body {
@@ -1437,23 +1437,23 @@
   }
 
   /* ---------- dog runs (compact grid) ---------- */
-  .runs-controls {
+  .page-controls {
     display: flex; align-items: center;
     gap: 12px 18px;
     padding-top: 28px;
     margin-bottom: 20px;
     flex-wrap: wrap;
   }
-  .runs-search {
+  .page-search {
     flex: 0 0 280px;
     min-width: 0;
   }
-  .runs-chips {
+  .page-chips {
     margin: 0;
     flex: 1 1 auto;
     min-width: 0;
   }
-  .runs-count {
+  .page-count {
     font-size: 13px;
     color: var(--muted);
     letter-spacing: 0.02em;
@@ -1461,8 +1461,8 @@
     white-space: nowrap;
   }
   @media (max-width: 720px) {
-    .runs-search { flex: 1 1 100%; }
-    .runs-count { margin-left: 0; }
+    .page-search { flex: 1 1 100%; }
+    .page-count { margin-left: 0; }
   }
 
   .runs-grid {

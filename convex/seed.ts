@@ -167,7 +167,7 @@ export const seedDogs = internalMutation({
         birthday: birthday.toISOString(),
         hdbApproved: Math.random() > 0.5 ? "Yes" : "No",
         welfareGroupId: randomGroup._id,
-        status: "active",
+        status: "Active",
         // Using a placeholder image from your logic
         imageStorageId: undefined,
         description:
@@ -180,16 +180,16 @@ export const seedDogs = internalMutation({
 });
 
 const WELFARE_GROUPS = [
-  { name: "SOSD — Save Our Street Dogs", blurb: "Singapore Specials. Sanctuary in Jalan Bahar.", image: "https://placedog.net/300/300?id=501", dogsAvailable: 86, website: "https://sosd.org.sg", facebook: "https://facebook.com/sosd.sg", instagram: "https://instagram.com/sosd_sg", tiktok: "https://tiktok.com/@sosd.sg", youtube: "https://youtube.com/@sosdsingapore" },
-  { name: "Action for Singapore Dogs", blurb: "Rescue, rehab, rehome. Since 2000.", image: "https://placedog.net/300/300?id=502", dogsAvailable: 52, website: "https://asdsingapore.com", facebook: "https://facebook.com/ActionForSingaporeDogs", instagram: "https://instagram.com/asd_singapore" },
-  { name: "Causes for Animals (Singapore)", blurb: "Community cats & rescue dogs.", image: "https://placedog.net/300/300?id=503", dogsAvailable: 34, website: "https://causesforanimals.com", facebook: "https://facebook.com/CausesForAnimalsSG", instagram: "https://instagram.com/causesforanimals", youtube: "https://youtube.com/@causesforanimals" },
-  { name: "Voices for Animals", blurb: "Senior dogs & long-stayers.", image: "https://placedog.net/300/300?id=504", dogsAvailable: 41, website: "https://voicesforanimals.com.sg", facebook: "https://facebook.com/voicesforanimalssg", instagram: "https://instagram.com/voicesforanimalssg", tiktok: "https://tiktok.com/@voicesforanimals" },
-  { name: "OSCAS — Oasis Second Chance", blurb: "Farmway shelter in Sungei Tengah.", image: "https://placedog.net/300/300?id=505", dogsAvailable: 63, website: "https://oscas.com.sg", facebook: "https://facebook.com/oscas.sg", instagram: "https://instagram.com/oscas_sg" },
-  { name: "Exclusively Mongrels Ltd", blurb: "Local mongrels only. Foster-first.", image: "https://placedog.net/300/300?id=506", dogsAvailable: 28, website: "https://exclusivelymongrels.org", facebook: "https://facebook.com/exclusivelymongrels", instagram: "https://instagram.com/exclusivelymongrels" },
-  { name: "Mercylight Animal Sanctuary", blurb: "Senior & special-needs animals.", image: "https://placedog.net/300/300?id=507", dogsAvailable: 47, website: "https://mercylight.sg", facebook: "https://facebook.com/MercylightSanctuary", instagram: "https://instagram.com/mercylightsanctuary", youtube: "https://youtube.com/@mercylight" },
-  { name: "Purely Adoptions", blurb: "Adopt-don't-shop advocacy.", image: "https://placedog.net/300/300?id=508", dogsAvailable: 19, website: "https://purelyadoptions.com", facebook: "https://facebook.com/purelyadoptions", instagram: "https://instagram.com/purelyadoptions", tiktok: "https://tiktok.com/@purelyadoptions" },
-  { name: "Animal Lovers League", blurb: "Cage-free farmway shelter.", image: "https://placedog.net/300/300?id=509", dogsAvailable: 71, website: "https://animalloversleague.com", facebook: "https://facebook.com/AnimalLoversLeague", instagram: "https://instagram.com/animalloversleague" },
-  { name: "SPCA Singapore", blurb: "Adoption, inspection, advocacy.", image: "https://placedog.net/300/300?id=510", dogsAvailable: 38, website: "https://spca.org.sg", facebook: "https://facebook.com/spca.singapore", instagram: "https://instagram.com/spcasingapore", tiktok: "https://tiktok.com/@spcasingapore", youtube: "https://youtube.com/@SPCASingapore" },
+  { name: "SOSD — Save Our Street Dogs", blurb: "Singapore Specials. Sanctuary in Jalan Bahar.", dogsAvailable: 86, website: "https://sosd.org.sg", facebook: "https://facebook.com/sosd.sg", instagram: "https://instagram.com/sosd_sg", tiktok: "https://tiktok.com/@sosd.sg", youtube: "https://youtube.com/@sosdsingapore" },
+  { name: "Action for Singapore Dogs", blurb: "Rescue, rehab, rehome. Since 2000.", dogsAvailable: 52, website: "https://asdsingapore.com", facebook: "https://facebook.com/ActionForSingaporeDogs", instagram: "https://instagram.com/asd_singapore" },
+  { name: "Causes for Animals (Singapore)", blurb: "Community cats & rescue dogs.", dogsAvailable: 34, website: "https://causesforanimals.com", facebook: "https://facebook.com/CausesForAnimalsSG", instagram: "https://instagram.com/causesforanimals", youtube: "https://youtube.com/@causesforanimals" },
+  { name: "Voices for Animals", blurb: "Senior dogs & long-stayers.", dogsAvailable: 41, website: "https://voicesforanimals.com.sg", facebook: "https://facebook.com/voicesforanimalssg", instagram: "https://instagram.com/voicesforanimalssg", tiktok: "https://tiktok.com/@voicesforanimals" },
+  { name: "OSCAS — Oasis Second Chance", blurb: "Farmway shelter in Sungei Tengah.", dogsAvailable: 63, website: "https://oscas.com.sg", facebook: "https://facebook.com/oscas.sg", instagram: "https://instagram.com/oscas_sg" },
+  { name: "Exclusively Mongrels Ltd", blurb: "Local mongrels only. Foster-first.", dogsAvailable: 28, website: "https://exclusivelymongrels.org", facebook: "https://facebook.com/exclusivelymongrels", instagram: "https://instagram.com/exclusivelymongrels" },
+  { name: "Mercylight Animal Sanctuary", blurb: "Senior & special-needs animals.", dogsAvailable: 47, website: "https://mercylight.sg", facebook: "https://facebook.com/MercylightSanctuary", instagram: "https://instagram.com/mercylightsanctuary", youtube: "https://youtube.com/@mercylight" },
+  { name: "Purely Adoptions", blurb: "Adopt-don't-shop advocacy.", dogsAvailable: 19, website: "https://purelyadoptions.com", facebook: "https://facebook.com/purelyadoptions", instagram: "https://instagram.com/purelyadoptions", tiktok: "https://tiktok.com/@purelyadoptions" },
+  { name: "Animal Lovers League", blurb: "Cage-free farmway shelter.", dogsAvailable: 71, website: "https://animalloversleague.com", facebook: "https://facebook.com/AnimalLoversLeague", instagram: "https://instagram.com/animalloversleague" },
+  { name: "SPCA Singapore", blurb: "Adoption, inspection, advocacy.", dogsAvailable: 38, website: "https://spca.org.sg", facebook: "https://facebook.com/spca.singapore", instagram: "https://instagram.com/spcasingapore", tiktok: "https://tiktok.com/@spcasingapore", youtube: "https://youtube.com/@SPCASingapore" },
 ];
 
 export const seedWelfareGroups = internalMutation({
@@ -198,7 +198,7 @@ export const seedWelfareGroups = internalMutation({
     if (existing.length > 0) return "Welfare groups already seeded.";
     for (const g of WELFARE_GROUPS) {
       const slug = g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      await ctx.db.insert("welfareGroups", { ...g, slug, status: "active" });
+      await ctx.db.insert("welfareGroups", { ...g, slug, status: "Active" });
     }
     return `Seeded ${WELFARE_GROUPS.length} welfare groups.`;
   },

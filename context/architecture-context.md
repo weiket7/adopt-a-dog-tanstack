@@ -2,65 +2,93 @@
 
 ## Stack
 
-| Layer            | Technology     | Role                                                           |
-| ---------------- | -------------- | -------------------------------------------------------------- |
-| Framework        | Tanstack Start | Full-stack app with server/client boundaries                   |
-| UI               | Porto          | Component composition and styling                              |
-| Auth             | Convex         | User identity and route protection                             |
-| Database         | Convex         | Relational metadata: projects, collaborators, specs, task runs |
-| Artifact storage | Convex         | Canvas snapshots and generated Markdown specs                  |
+| Layer     | Technology           | Role                                                     |
+| --------- | -------------------- | -------------------------------------------------------- |
+| Framework | TanStack Start       | Full-stack app with file-based routing and SSR           |
+| Build     | Vite + Cloudflare    | Bundler; deployed to Cloudflare Workers via Wrangler     |
+| Routing   | TanStack Router      | Type-safe file-based routing with nested layouts         |
+| Database  | Convex               | Real-time reactive database: all domain data and storage |
+| Auth      | Convex Auth          | Email-based authentication; role-based access control    |
+| Email     | Resend               | Transactional email via @react-email/components          |
+| Maps      | Google Maps (vis.gl) | Embedded maps on dog run and vet pages                   |
+| Styling   | Custom CSS           | `app.css` for public UI; `admin.css` for admin panel     |
 
 ## System Boundaries
 
-- `app/api` — Authenticated request handlers: input validation, ownership checks, task triggering, and persistence.
-- `trigger` — Long-running background jobs: AI design generation and spec generation.
-- `lib` — Shared infrastructure: Prisma client, access control helpers, and utilities.
-- `components` — UI composition: canvas surfaces, sidebars, dialogs, and interactive elements.
-- `prisma` — Database schema and generated client output.
-- `data` — Legacy local directory. Not used for new artifacts.
+- `convex/` — Backend: schema definition, queries, mutations, file storage, auth config, and HTTP actions. All data access lives here.
+- `src/routes/` — File-based routes. Public pages render domain data; admin pages add CRUD via Convex mutations.
+- `src/components/` — Shared UI primitives (Icon, SocialLink, error boundaries).
+- `src/styles/` — Global stylesheets loaded per-route via `?url` imports.
+- `src/constants/` — Shared lookup values (areas, categories, etc.).
+- `src/utils/` — Client-side utility functions.
+- `src/server/` — Server-only utilities (called via TanStack Start server functions).
 
-<!-- ## Storage Model
+## Data Model
 
-- **Database**: metadata, ownership, relationships, and task run records.
-- **Vercel Blob**: generated artifacts — canvas snapshots at `canvas/{projectId}.json` and specs at `specs/{projectId}/{specId}.md`.
-- Project records, spec records, and task run records belong in PostgreSQL.
-- Canvas content and Markdown output are stored in and retrieved from Vercel Blob.
-- The blob URL is stored in the database (`canvasJsonPath`, `filePath`) as the reference to the artifact.
+All data is stored in Convex. Key tables:
 
-## Auth and Collaboration Model
+| Table           | Description                                                           |
+| --------------- | --------------------------------------------------------------------- |
+| `dogs`          | Adoptable dogs with status, gender, HDB approval, welfare group ref   |
+| `welfareGroups` | Rescue and welfare organisations with social links                    |
+| `events`        | Community events with date/time, location, and kind                   |
+| `services`      | Pet services (groomers, trainers, etc.) with category and pricing     |
+| `vets`          | Veterinary clinics with address, hours, emergency and PH flags        |
+| `dogRuns`       | Off-leash dog run parks with area, size, and facilities               |
+| `users`         | Auth users with role (`Admin` \| `Member`) and optional welfare group |
 
-- Every project has a single owner (Clerk user ID).
-- Projects can include additional collaborators.
-- Only authenticated users can access protected routes.
-- Only the owner or a collaborator can mutate project resources.
-- Liveblocks room tokens are issued only after verifying project membership.
+Dog profile images are stored in Convex file storage (`_storage`); the `imageStorageId` field on `dogs` and `services` references the stored file.
 
-## Starter System Designs
+## Auth Model
 
-- Prebuilt templates are static canvas snapshots stored in the codebase.
-- Templates are loaded into the active Liveblocks room when a user imports one.
-- Import can occur on canvas creation or from within the editor at any time.
-- Template data follows the same node/edge schema as user-created canvas content.
-- Templates do not require a separate database record; they are resolved by template ID at import time.
+- Authentication is handled by `@convex-dev/auth` using email (magic link or password via Resend).
+- Two application roles: `Admin` (full CRUD across all resources) and `Member` (welfare group members — can manage their own dogs).
+- Public routes are accessible without authentication.
+- `/admin/*` routes are protected by the `admin.tsx` layout, which redirects unauthenticated users.
+- Role is stored on the `users` table and checked server-side in Convex mutations.
 
-## AI Generation Model
+## Route Structure
 
-### Design Generation
+**Public**
 
-- Input: user prompt, project context, and current canvas state.
-- Execution: durable background task via Trigger.dev.
-- Output: structured node and edge updates written into the shared Liveblocks room.
+| Path                              | Content                       |
+| --------------------------------- | ----------------------------- |
+| `/`                               | Adoptable dogs listing        |
+| `/welfare-groups`                 | Welfare group directory       |
+| `/welfare-groups/:welfareGroupId` | Individual welfare group page |
+| `/services`                       | Pet services directory        |
+| `/events`                         | Community events listing      |
+| `/dog-runs`                       | Dog run parks directory       |
+| `/vets`                           | Veterinary clinics directory  |
 
-### Spec Generation
+**Admin** (`/admin/*` — requires `Admin` or `Member` role)
 
-- Input: current canvas graph and project context.
-- Execution: durable background task via Trigger.dev.
-- Output: Markdown technical spec saved to the filesystem and linked to the project in the database.
+| Path              | CRUD target |
+| ----------------- | ----------- |
+| `/admin/dogs`     | Dogs        |
+| `/admin/events`   | Events      |
+| `/admin/services` | Services    |
+| `/admin/dog-runs` | Dog runs    |
+| `/admin/vets`     | Vets        |
+| `/admin/users`    | Users       |
+
+## Admin UI Pattern
+
+Each admin page follows the same structure:
+
+1. Page header with title and "Add" button.
+2. Toolbar with search input, area/category filter, and count chip.
+3. Data table with inline edit and delete actions.
+4. Modal form (dialog + backdrop) for create and edit, with inline field validation.
+5. Confirm dialog for destructive deletes.
+6. Toast notification on success.
+
+Convex reactive queries keep the table live without manual refresh.
 
 ## Invariants
 
-1. Request handlers do not run long-lived AI work — that belongs in background tasks.
-2. Metadata and large generated artifacts are stored in separate layers.
-3. Auth and ownership are enforced at every mutation boundary.
-4. Client components are used only where browser interactivity or real-time state requires them.
-5. The canvas schema must remain consistent between user-created content and imported templates. -->
+1. All data reads and writes go through Convex queries and mutations — no direct DB access from routes.
+2. Auth and role checks are enforced in Convex mutation handlers, not only in the UI.
+3. Optional fields are stored as `undefined` (omitted), never as empty strings, in Convex documents.
+4. File storage IDs (`imageStorageId`) are cleaned up in the `remove` mutation for any table that uses them.
+5. Admin CSS is loaded per-route via `?url` import, not globally, to keep public page payloads lean.

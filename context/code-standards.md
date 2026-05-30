@@ -14,10 +14,9 @@
 - Validate unknown external input at system boundaries before trusting it.
 - Use `interface` for object contracts.
 
-## Next.js
+## Tanstack Start
 
-- Default to React Server Components.
-- Add `"use client"` only when the component needs browser interactivity, hooks, or real-time state.
+- List of dogs use client-side rendering and the rest default to server-side rendering.
 - Keep route handlers focused on a single responsibility.
 - Long-running work belongs in background tasks, not in request handlers.
 

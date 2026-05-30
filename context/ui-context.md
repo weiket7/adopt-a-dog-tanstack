@@ -2,104 +2,78 @@
 
 ## Theme
 
-Dark only. No light mode. The visual language is a dark technical workspace — near-black backgrounds, layered surfaces, and vivid accent colors for interactive elements.
+Light mode default (warm paper aesthetic). The visual language is an editorial, trustworthy, and organic community directory—featuring warm paper backgrounds, clean structured grid cards, and distinctive accent highlights for key elements.
 
-All colors are defined as CSS custom properties in `globals.css` and mapped to Tailwind tokens via `@theme inline`. Components must use these tokens — no hardcoded hex values or raw Tailwind color classes like `zinc-*`.
+All colors are defined as CSS custom properties in `app.css`. Components must utilize these variables instead of hardcoded hex values to preserve theme mapping.
 
-| Role             | CSS Variable           | Hex / Value               |
-| ---------------- | ---------------------- | ------------------------- |
-| Page background  | `--bg-base`            | `#080809`                 |
-| Surface          | `--bg-surface`         | `#111114`                 |
-| Elevated surface | `--bg-elevated`        | `#18181c`                 |
-| Subtle surface   | `--bg-subtle`          | `#1e1e23`                 |
-| Default border   | `--border-default`     | `#2a2a30`                 |
-| Subtle border    | `--border-subtle`      | `#3a3a42`                 |
-| Primary text     | `--text-primary`       | `#f0f0f4`                 |
-| Secondary text   | `--text-secondary`     | `#c0c0cc`                 |
-| Muted text       | `--text-muted`         | `#808090`                 |
-| Faint text       | `--text-faint`         | `#505060`                 |
-| Brand accent     | `--accent-primary`     | `#00c8d4` (cyan)          |
-| Brand dim        | `--accent-primary-dim` | `rgba(0, 200, 212, 0.12)` |
-| AI accent        | `--accent-ai`          | `#6457f9` (indigo-purple) |
-| AI text          | `--accent-ai-text`     | `#8b82ff`                 |
-| Error            | `--state-error`        | `#ff4d4f`                 |
-| Success          | `--state-success`      | `#34d399`                 |
-| Warning          | `--state-warning`      | `#fbbf24`                 |
+| Role                       | CSS Variable    | Hex / Value                       |
+| -------------------------- | --------------- | --------------------------------- |
+| Canvas Background          | `--bg`          | `#f4efe3` (warm light grey)       |
+| Card/Sheet Background      | `--paper`       | `#fbf7ec` (off-white paper)       |
+| Input Surface              | `--surface`     | `#ffffff` (pure white)            |
+| Primary Ink / Typography   | `--ink`         | `#1c1a16` (near-black)            |
+| Secondary Typography       | `--ink-2`       | `#3c3830` (dark charcoal)         |
+| Muted Text                 | `--muted`       | `#7a7264` (stone grey)            |
+| Primary Borders / Dividers | `--line`        | `#e3dccc` (light cream/tan)       |
+| Secondary Borders          | `--line-2`      | `#d4cbb7` (subtle tan)            |
+| Brand Accent               | `--accent`      | `#b54a2c` (terracotta orange)     |
+| Brand Accent Ink           | `--accent-ink`  | `#7a2e18` (deep rust brown)       |
+| Brand Soft Fill            | `--accent-soft` | `#f2d9cb` (pale terracotta cream) |
+| HDB Approved Base          | `--hdb`         | `#4a6b4f` (sage green)            |
+| HDB Approved Soft Fill     | `--hdb-soft`    | `#dbe6dc` (pale sage tint)        |
 
-Tailwind utility names map to these variables. Use `bg-base`, `bg-surface`, `text-copy-primary`, `text-copy-muted`, `border-surface-border`, `text-brand`, `bg-accent-dim`, etc.
+---
 
 ## Typography
 
-| Role      | Font       | CSS Variable        |
-| --------- | ---------- | ------------------- |
-| UI text   | Geist Sans | `--font-geist-sans` |
-| Code/mono | Geist Mono | `--font-geist-mono` |
+The typography leans on editorial contrast, combining an elegant serif for content focus headings and a crisp, functional sans-serif for structured text and UI layouts.
 
-Both fonts are loaded via `next/font/google` and applied as CSS variables on the `<html>` element. The base `body` uses Geist Sans with `antialiased`.
+| Role                    | Font Style                     | CSS Variable   |
+| ----------------------- | ------------------------------ | -------------- |
+| Heading / Editorial     | Newsreader, Georgia, serif     | `var(--serif)` |
+| UI Controls / Body Text | DM Sans, system-ui, sans-serif | `var(--sans)`  |
+
+- **Base Configuration:** The global `body` applies `var(--sans)` at a standard size of `15px` with a line-height of `1.5` and `-webkit-font-smoothing: antialiased`.
+- **Editorial Emphasis:** Large thematic text headings use the class `.serif` accompanied by a medium weight (`500`) and a tight letter-spacing of `-0.01em`.
+
+---
 
 ## Border Radius
 
-Radius increases with surface depth — smaller for inner elements, larger for outer containers.
+Consistent corner rounding dictates layout hierarchy and helps define the visual boundaries of interactive panels.
 
-| Context           | Class         |
-| ----------------- | ------------- |
-| Inline / small UI | `rounded-xl`  |
-| Cards / panels    | `rounded-2xl` |
-| Modal / overlay   | `rounded-3xl` |
+| Context                  | Class / Value     | Description                                             |
+| ------------------------ | ----------------- | ------------------------------------------------------- |
+| Fine UI / Small Targets  | `--r-sm` (`6px`)  | Switches, indicators, or internal elements.             |
+| Form Fields / Sub-panels | `--r-md` (`10px`) | Input bounding fields, tooltips, toggle boxes.          |
+| Components / Outer Cards | `--r-lg` (`16px`) | Grid listing cards, main filter blocks, modal overlays. |
 
-## Canvas
+---
 
-### Node Color Palette
+## Component Layouts & Interaction States
 
-8 defined color pairs. Each pair specifies a dark node fill and a vivid contrasting text color tuned for readability on the dark canvas. Defined in `types/canvas.ts` as `NODE_COLORS`.
+### Listing Cards (Dogs, Welfare Groups, Blog Posts)
 
-| Node fill | Text color | Character              |
-| --------- | ---------- | ---------------------- |
-| `#1F1F1F` | `#EDEDED`  | Neutral dark (default) |
-| `#10233D` | `#52A8FF`  | Blue                   |
-| `#2E1938` | `#BF7AF0`  | Purple                 |
-| `#331B00` | `#FF990A`  | Orange                 |
-| `#3C1618` | `#FF6166`  | Red                    |
-| `#3A1726` | `#F75F8F`  | Pink                   |
-| `#0F2E18` | `#62C073`  | Green                  |
-| `#062822` | `#0AC7B4`  | Teal                   |
+- **Visual Styling:** Built using `.card`, `.group-card`, or `.post-card`. Utilizes `--paper` for internal fill on top of a standard `--line` border, framed with an outer layout radius of `var(--r-lg)`.
+- **Hover State Behaviors:** Active card hovering applies a clean micro-interaction translation (`translateY(-2px)` or `translateY(-3px)`), a structural bounding drop shadow, and darkens borders toward `--line-2`.
 
-Default node color: `#1F1F1F` with `#EDEDED` text.
+### Directory Layout & Filter Architecture
 
-### Edge Style
+- **Layout Matrix:** Operates on a standard two-column system via `.layout` with a fixed filter utility drawer on the left side (`280px`) and a flexible, responsive data grid stream container on the right.
+- **Sticky Positioning:** The filter module features `.filters` pinned statically (`top: 96px`) to ensure accessibility remains constant during deep browsing scrolls.
+- **Segmented Controls:** Group buttons employ `.seg` blocks with an `aria-pressed="true"` layer that dynamically shifts active buttons instantly to `--ink` fills to reverse contrast readability.
 
-Smooth-step path with an arrow marker. Default edge color: `#f8fafc`. Stroke width is thin — edges are visually secondary to nodes.
+### Interaction Overlays & Action Sheets
 
-### Node Shapes
+- **Detail Drawers & Overlays:** The slide-out dynamic canvas sheet handles large data structures on a layered overlay (`.modal-backdrop`). The interactive presentation card loads gracefully utilizing transition values (`.modal-sheet` sliding left-to-right at `.28s cubic-bezier(.2,.7,.2,1)`).
+- **Lightbox Experience:** Gallery modules switch to a heavy high-contrast light focus shroud (`rgba(18, 16, 12, 0.78)`) with a blur factor filter background (`backdrop-filter: blur(6px)`) to properly showcase dynamic pet image content previews without visual distraction.
 
-6 supported shapes, defined in `types/canvas.ts` as `NODE_SHAPES`. Complex shapes (diamond, hexagon, cylinder) are rendered as inline SVGs rather than CSS borders.
-
-- `rectangle` — default general-purpose node
-- `diamond` — decision / gateway
-- `circle` — event / endpoint
-- `pill` — service / process
-- `cylinder` — database / storage
-- `hexagon` — external system / boundary
-
-### Connection Handles
-
-Small white circular handles, hidden by default, revealed on node hover. Appear at all four sides of a node.
-
-### Canvas Background
-
-React Flow `<Background>` component. Canvas sits on the base background color.
-
-## Component Library
-
-shadcn/ui on top of Tailwind. No custom design system. Components live in `components/ui/`. Use the `shadcn` CLI to add new components rather than writing them from scratch.
-
-## Layout Patterns
-
-- Editor workspace: full-viewport layout — floating sidebar overlay on the left, center canvas, slide-over AI sidebar on the right.
-- Sidebars: floating overlay with dark semi-transparent background and subtle border.
-- Modals and dialogs: centered overlay, `rounded-3xl`, dark background with backdrop blur.
-- Navbar: top bar with dark background and bottom border.
+---
 
 ## Icons
 
-Lucide React. Stroke-based icons only — no filled variants. Icon sizes: `h-4 w-4` for inline, `h-5 w-5` for buttons, `h-8 w-8` for feature icons in empty states.
+Lucide React handles inline illustrative elements. SVGs across menus, forms, and cards adjust dimensions contextually to respect design boundaries.
+
+- **Inline Text Metadata Icons:** `w-3 h-3` or `w-4 h-4` (e.g., gender symbols, tiny location glyphs inside detail grid rows).
+- **Button Interfaces / Status Flags:** `w-4 h-4` up to `w-5 h-5` (used on action bars, tooltips, and dynamic cross buttons).
+- **Large Hero Structural States:** `w-14 h-14` or `w-16 h-16` (used inside high-contrast center states like empty queries or upload fields).

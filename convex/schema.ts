@@ -96,4 +96,15 @@ export default defineSchema({
     website: v.optional(v.string()),
     waterPoint: v.optional(v.boolean()),
   }),
+
+  blogPosts: defineTable({
+    category: v.string(),
+    title: v.string(),
+    date: v.string(),
+    author: v.string(),
+    cover: v.optional(v.string()),
+    excerpt: v.string(),
+    readTime: v.string(),
+    body: v.optional(v.string()),
+  }),
 });

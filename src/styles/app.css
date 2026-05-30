@@ -294,6 +294,30 @@
   }
   .nav-cta:hover { background: var(--accent); }
 
+  /* ---------- admin subnav ---------- */
+  .admin-subnav {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .admin-subnav-inner {
+    max-width: 1440px; margin: 0 auto;
+    padding: 0 40px;
+    display: flex; align-items: center;
+  }
+  .admin-subnav-inner a {
+    font-size: 14px; font-weight: 500;
+    color: var(--muted);
+    padding: 10px 14px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .admin-subnav-inner a:hover { color: var(--ink); }
+  .admin-subnav-inner a.active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
   /* ---------- page header ---------- */
   .page {
     max-width: 1440px; margin: 0 auto; padding: 0 40px;
@@ -2580,7 +2604,7 @@
     .layout { grid-template-columns: 1fr; gap: 32px; }
     .filters { position: static; max-height: none; }
     .grid { grid-template-columns: 1fr; }
-    .nav-inner, .page { padding-left: 24px; padding-right: 24px; }
+    .nav-inner, .page, .admin-subnav-inner { padding-left: 24px; padding-right: 24px; }
     .header { grid-template-columns: 1fr; }
     .header .stat { text-align: left; }
     .back-link { position: static; margin-bottom: 18px; align-self: flex-start; }

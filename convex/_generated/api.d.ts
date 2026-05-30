@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as blogPosts from "../blogPosts.js";
 import type * as dogRuns from "../dogRuns.js";
 import type * as dogs from "../dogs.js";
 import type * as events from "../events.js";
@@ -27,6 +28,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  blogPosts: typeof blogPosts;
   dogRuns: typeof dogRuns;
   dogs: typeof dogs;
   events: typeof events;

@@ -192,6 +192,9 @@ const Icon = {
   ArrowRight: () => (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
   ),
+  ArrowLeft: () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M11 5l-7 7 7 7"/></svg>
+  ),
   Paw: () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <ellipse cx="6"  cy="10" rx="2"  ry="2.6"/>
@@ -868,10 +871,10 @@ function GroupsView({ onPickGroup }) {
 /* ------------------------------------------------------------------ */
 /* Blog view                                                           */
 /* ------------------------------------------------------------------ */
-function BlogCard({ post, featured }) {
+function BlogCard({ post, featured, onOpen }) {
   const [imgOk, setImgOk] = useState(true);
   return (
-    <article className={"post-card" + (featured ? " featured" : "")}>
+    <article className={"post-card" + (featured ? " featured" : "")} onClick={() => onOpen(post)}>
       <div className="post-cover">
         {imgOk ? (
           <img src={post.cover} alt={post.title} loading="lazy" onError={() => setImgOk(false)} />
@@ -890,18 +893,87 @@ function BlogCard({ post, featured }) {
         <p className="post-excerpt">{post.excerpt}</p>
         <div className="post-foot">
           <span className="post-author">by {post.author}</span>
-          <button className="post-cta">Read more <Icon.ArrowRight/></button>
+          <span className="post-cta">Read more <Icon.ArrowRight/></span>
         </div>
       </div>
     </article>
   );
 }
 
+function BlogPost({ post, onBack }) {
+  const [imgOk, setImgOk] = useState(true);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const onKey = (e) => { if (e.key === "Escape") onBack(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [post, onBack]);
+
+  const related = window.POSTS
+    .filter((p) => p.id !== post.id && p.category === post.category)
+    .slice(0, 3);
+
+  return (
+    <main className="page article-page">
+      <button className="article-back" onClick={onBack}>
+        <Icon.ArrowLeft/> All posts
+      </button>
+
+      <article className="article">
+        <header className="article-head">
+          <span className="article-category">{post.category}</span>
+          <h1 className="article-title">{post.title}</h1>
+          <div className="article-meta">
+            <span className="article-author">{post.author}</span>
+            <span className="dot" aria-hidden="true">·</span>
+            <span>{post.date}</span>
+            <span className="dot" aria-hidden="true">·</span>
+            <span>{post.readTime}</span>
+          </div>
+        </header>
+
+        <div className="article-cover">
+          {imgOk ? (
+            <img src={post.cover} alt={post.title} onError={() => setImgOk(false)} />
+          ) : (
+            <div className="post-placeholder"><Icon.Paw/></div>
+          )}
+        </div>
+
+        <div className="article-body" dangerouslySetInnerHTML={{ __html: post.body || `<p>${post.excerpt}</p>` }} />
+
+        <footer className="article-foot">
+          <button className="article-back" onClick={onBack}>
+            <Icon.ArrowLeft/> Back to all posts
+          </button>
+        </footer>
+      </article>
+
+      {related.length > 0 && (
+        <section className="article-related">
+          <h2 className="article-related-title">More in {post.category}</h2>
+          <div className="article-related-grid">
+            {related.map((p) => (
+              <BlogCard key={p.id} post={p} onOpen={onBack ? () => { onBack(p); } : undefined} />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+  );
+}
+
 function BlogView() {
   const [filter, setFilter] = useState("all");
+  const [selected, setSelected] = useState(null);
   const all = window.POSTS;
   const cats = ["all", ...Array.from(new Set(all.map((p) => p.category)))];
   const filtered = filter === "all" ? all : all.filter((p) => p.category === filter);
+
+  if (selected) {
+    return <BlogPost post={selected} onBack={(p) => setSelected(p && p.id ? p : null)} />;
+  }
+
   return (
     <main className="page">
       <header className="header">
@@ -931,7 +1003,7 @@ function BlogView() {
 
       <section className="blog-grid">
         {filtered.map((p, i) => (
-          <BlogCard key={p.id} post={p} featured={filter === "all" && i === 0} />
+          <BlogCard key={p.id} post={p} featured={filter === "all" && i === 0} onOpen={setSelected} />
         ))}
       </section>
     </main>

@@ -21,6 +21,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WelfareGroupsIndexRouteImport } from './routes/welfare-groups.index'
 import { Route as WelfareGroupsWelfareGroupIdRouteImport } from './routes/welfare-groups.$welfareGroupId'
+import { Route as AdminVetsIndexRouteImport } from './routes/admin.vets.index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin.users.index'
 import { Route as AdminServicesIndexRouteImport } from './routes/admin.services.index'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin.events.index'
@@ -88,6 +89,11 @@ const WelfareGroupsWelfareGroupIdRoute =
     path: '/$welfareGroupId',
     getParentRoute: () => WelfareGroupsRoute,
   } as any)
+const AdminVetsIndexRoute = AdminVetsIndexRouteImport.update({
+  id: '/vets/',
+  path: '/vets/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/admin/events/': typeof AdminEventsIndexRoute
   '/admin/services/': typeof AdminServicesIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/vets/': typeof AdminVetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AdminEventsIndexRoute
   '/admin/services': typeof AdminServicesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
+  '/admin/vets': typeof AdminVetsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/admin/events/': typeof AdminEventsIndexRoute
   '/admin/services/': typeof AdminServicesIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/vets/': typeof AdminVetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/admin/events/'
     | '/admin/services/'
     | '/admin/users/'
+    | '/admin/vets/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/services'
     | '/admin/users'
+    | '/admin/vets'
   id:
     | '__root__'
     | '/'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/admin/events/'
     | '/admin/services/'
     | '/admin/users/'
+    | '/admin/vets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -329,6 +341,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WelfareGroupsWelfareGroupIdRouteImport
       parentRoute: typeof WelfareGroupsRoute
     }
+    '/admin/vets/': {
+      id: '/admin/vets/'
+      path: '/vets'
+      fullPath: '/admin/vets/'
+      preLoaderRoute: typeof AdminVetsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/users/': {
       id: '/admin/users/'
       path: '/users'
@@ -373,6 +392,7 @@ interface AdminRouteChildren {
   AdminEventsIndexRoute: typeof AdminEventsIndexRoute
   AdminServicesIndexRoute: typeof AdminServicesIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminVetsIndexRoute: typeof AdminVetsIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -381,6 +401,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminEventsIndexRoute: AdminEventsIndexRoute,
   AdminServicesIndexRoute: AdminServicesIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminVetsIndexRoute: AdminVetsIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

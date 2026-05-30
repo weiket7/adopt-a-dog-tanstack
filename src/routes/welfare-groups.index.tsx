@@ -131,8 +131,8 @@ function GroupCard({ group }: { group: any }) {
           {group.blurb && <p className="group-blurb">{group.blurb}</p>}
           {group.dogsAvailable != null && (
             <Link
-              to="/welfare-groups/$welfareGroupId"
-              params={{ welfareGroupId: group._id }}
+              to="/welfare-groups/$welfareSlug"
+              params={{ welfareSlug: group.slug }}
               className="group-count"
             >
               View

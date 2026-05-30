@@ -40,8 +40,7 @@ export default defineSchema({
     instagram: v.optional(v.string()),
     tiktok: v.optional(v.string()),
     youtube: v.optional(v.string()),
-  }),
-  //}).index("by_slug", ["slug"]),
+  }).index("by_slug", ["slug"]),
 
   events: defineTable({
     name: v.string(),

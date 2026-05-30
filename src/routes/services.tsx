@@ -297,9 +297,11 @@ function ServiceCard({
       <h3 className="svc-name">{service.name}</h3>
       <p className="svc-blurb">{service.blurb}</p>
       <div className="svc-meta">
-        <span>
-          <PinIcon /> {service.area}
-        </span>
+        {service.area && (
+          <span>
+            <PinIcon /> {service.area}
+          </span>
+        )}
         {service.phone && (
           <span>
             <PhoneIcon /> {service.phone}

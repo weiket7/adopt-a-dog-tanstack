@@ -20,7 +20,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WelfareGroupsIndexRouteImport } from './routes/welfare-groups.index'
-import { Route as WelfareGroupsWelfareGroupIdRouteImport } from './routes/welfare-groups.$welfareGroupId'
+import { Route as WelfareGroupsWelfareSlugRouteImport } from './routes/welfare-groups.$welfareSlug'
 import { Route as AdminVetsIndexRouteImport } from './routes/admin.vets.index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin.users.index'
 import { Route as AdminServicesIndexRouteImport } from './routes/admin.services.index'
@@ -83,10 +83,10 @@ const WelfareGroupsIndexRoute = WelfareGroupsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => WelfareGroupsRoute,
 } as any)
-const WelfareGroupsWelfareGroupIdRoute =
-  WelfareGroupsWelfareGroupIdRouteImport.update({
-    id: '/$welfareGroupId',
-    path: '/$welfareGroupId',
+const WelfareGroupsWelfareSlugRoute =
+  WelfareGroupsWelfareSlugRouteImport.update({
+    id: '/$welfareSlug',
+    path: '/$welfareSlug',
     getParentRoute: () => WelfareGroupsRoute,
   } as any)
 const AdminVetsIndexRoute = AdminVetsIndexRouteImport.update({
@@ -131,7 +131,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRouteWithChildren
-  '/welfare-groups/$welfareGroupId': typeof WelfareGroupsWelfareGroupIdRoute
+  '/welfare-groups/$welfareSlug': typeof WelfareGroupsWelfareSlugRoute
   '/welfare-groups/': typeof WelfareGroupsIndexRoute
   '/admin/dog-runs/': typeof AdminDogRunsIndexRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
@@ -150,7 +150,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/services': typeof ServicesRoute
   '/vets': typeof VetsRoute
-  '/welfare-groups/$welfareGroupId': typeof WelfareGroupsWelfareGroupIdRoute
+  '/welfare-groups/$welfareSlug': typeof WelfareGroupsWelfareSlugRoute
   '/welfare-groups': typeof WelfareGroupsIndexRoute
   '/admin/dog-runs': typeof AdminDogRunsIndexRoute
   '/admin/dogs': typeof AdminDogsIndexRoute
@@ -171,7 +171,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/vets': typeof VetsRoute
   '/welfare-groups': typeof WelfareGroupsRouteWithChildren
-  '/welfare-groups/$welfareGroupId': typeof WelfareGroupsWelfareGroupIdRoute
+  '/welfare-groups/$welfareSlug': typeof WelfareGroupsWelfareSlugRoute
   '/welfare-groups/': typeof WelfareGroupsIndexRoute
   '/admin/dog-runs/': typeof AdminDogRunsIndexRoute
   '/admin/dogs/': typeof AdminDogsIndexRoute
@@ -193,7 +193,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/vets'
     | '/welfare-groups'
-    | '/welfare-groups/$welfareGroupId'
+    | '/welfare-groups/$welfareSlug'
     | '/welfare-groups/'
     | '/admin/dog-runs/'
     | '/admin/dogs/'
@@ -212,7 +212,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/services'
     | '/vets'
-    | '/welfare-groups/$welfareGroupId'
+    | '/welfare-groups/$welfareSlug'
     | '/welfare-groups'
     | '/admin/dog-runs'
     | '/admin/dogs'
@@ -232,7 +232,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/vets'
     | '/welfare-groups'
-    | '/welfare-groups/$welfareGroupId'
+    | '/welfare-groups/$welfareSlug'
     | '/welfare-groups/'
     | '/admin/dog-runs/'
     | '/admin/dogs/'
@@ -334,11 +334,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WelfareGroupsIndexRouteImport
       parentRoute: typeof WelfareGroupsRoute
     }
-    '/welfare-groups/$welfareGroupId': {
-      id: '/welfare-groups/$welfareGroupId'
-      path: '/$welfareGroupId'
-      fullPath: '/welfare-groups/$welfareGroupId'
-      preLoaderRoute: typeof WelfareGroupsWelfareGroupIdRouteImport
+    '/welfare-groups/$welfareSlug': {
+      id: '/welfare-groups/$welfareSlug'
+      path: '/$welfareSlug'
+      fullPath: '/welfare-groups/$welfareSlug'
+      preLoaderRoute: typeof WelfareGroupsWelfareSlugRouteImport
       parentRoute: typeof WelfareGroupsRoute
     }
     '/admin/vets/': {
@@ -407,12 +407,12 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface WelfareGroupsRouteChildren {
-  WelfareGroupsWelfareGroupIdRoute: typeof WelfareGroupsWelfareGroupIdRoute
+  WelfareGroupsWelfareSlugRoute: typeof WelfareGroupsWelfareSlugRoute
   WelfareGroupsIndexRoute: typeof WelfareGroupsIndexRoute
 }
 
 const WelfareGroupsRouteChildren: WelfareGroupsRouteChildren = {
-  WelfareGroupsWelfareGroupIdRoute: WelfareGroupsWelfareGroupIdRoute,
+  WelfareGroupsWelfareSlugRoute: WelfareGroupsWelfareSlugRoute,
   WelfareGroupsIndexRoute: WelfareGroupsIndexRoute,
 }
 

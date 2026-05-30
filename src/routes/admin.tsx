@@ -24,11 +24,11 @@ function AdminNav() {
         <Link to="/admin/dogs" activeProps={{ className: "active" }}>
           Dogs
         </Link>
-        <Link to="/admin/events" activeProps={{ className: "active" }}>
-          Events
-        </Link>
         {role === "Admin" && (
           <>
+            <Link to="/admin/events" activeProps={{ className: "active" }}>
+              Events
+            </Link>
             <Link to="/admin/services" activeProps={{ className: "active" }}>
               Services
             </Link>
@@ -41,18 +41,18 @@ function AdminNav() {
             <Link to="/admin/users" activeProps={{ className: "active" }}>
               Users
             </Link>
-            <a
-              href="#"
-              onClick={async (e) => {
-                e.preventDefault();
-                await signOut();
-                navigate({ to: "/" });
-              }}
-            >
-              Log out
-            </a>
           </>
         )}
+        <a
+          href="#"
+          onClick={async (e) => {
+            e.preventDefault();
+            await signOut();
+            navigate({ to: "/" });
+          }}
+        >
+          Log out
+        </a>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { Id } from "convex/_generated/dataModel";
 import { toAge } from "~/utils/extensions";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
@@ -8,18 +7,18 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DogDetail } from "~/components/DogDetail";
 
-export const Route = createFileRoute("/welfare-groups/$welfareGroupId")({
+export const Route = createFileRoute("/welfare-groups/$welfareSlug")({
   component: WelfareGroupDogsPage,
   loader: async ({ context: { queryClient }, params }) => {
-    const id = params.welfareGroupId as Id<"welfareGroups">;
-    await Promise.all([
-      queryClient.ensureQueryData(
-        convexQuery(api.welfareGroups.getById, { id }),
-      ),
-      queryClient.ensureQueryData(
-        convexQuery(api.dogs.listByWelfareGroup, { welfareGroupId: id }),
-      ),
-    ]);
+    const { welfareSlug } = params;
+    const group = await queryClient.ensureQueryData(
+      convexQuery(api.welfareGroups.getBySlug, { slug: welfareSlug }),
+    );
+    if (group) {
+      await queryClient.ensureQueryData(
+        convexQuery(api.dogs.listByWelfareGroup, { welfareGroupId: group._id }),
+      );
+    }
   },
 });
 
@@ -268,15 +267,14 @@ function DogCard({ dog, onOpen }: { dog: any; onOpen: (dog: any) => void }) {
 /* ------------------------------------------------------------------ */
 
 function WelfareGroupDogsPage() {
-  const { welfareGroupId } = Route.useParams();
-  const id = welfareGroupId as Id<"welfareGroups">;
+  const { welfareSlug } = Route.useParams();
   const navigate = useNavigate();
 
   const { data: group } = useSuspenseQuery(
-    convexQuery(api.welfareGroups.getById, { id }),
+    convexQuery(api.welfareGroups.getBySlug, { slug: welfareSlug }),
   );
   const { data: allDogs } = useSuspenseQuery(
-    convexQuery(api.dogs.listByWelfareGroup, { welfareGroupId: id }),
+    convexQuery(api.dogs.listByWelfareGroup, { welfareGroupId: group!._id }),
   );
 
   const [q, setQ] = useState("");

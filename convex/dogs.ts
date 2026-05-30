@@ -41,7 +41,7 @@ export const listAll = query({
   handler: async (ctx) => {
     const dogs = await ctx.db
       .query("dogs")
-      .filter((q) => q.neq(q.field("status"), "Inactive"))
+      .filter((q) => q.eq(q.field("status"), "Active"))
       .collect();
     return await Promise.all(
       dogs.map(async (dog) => ({

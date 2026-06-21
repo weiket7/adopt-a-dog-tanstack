@@ -10,5 +10,7 @@
       "enabled": true
     }
   },
-  "keep_vars": true
+  "secrets": {
+    "required": ["RESEND_API_KEY"]
+  }
 }

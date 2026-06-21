@@ -67,6 +67,8 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
       `,
     });
 
+    console.log(`emailWelfareGroup - data: ${data}, error: ${error}`);
+
     if (error) {
       return console.error({ error });
     }

@@ -50,27 +50,31 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
 
     const resend = new Resend(apiKey);
 
-    const { data: result, error } = await resend.emails.send({
-      from: sender,
-      to: recipient,
-      replyTo: data.email,
-      subject: `Interest in adopting ${dog.name} | Referral from adoptadog.sg`,
-      html: `
-        <h3>New Adoption Inquiry</h3>
-        <p><strong>Dog:</strong> ${dog.name}</p>
-        <hr />
-        <p><strong>From:</strong> ${data.name}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Contact:</strong> ${data.mobile}</p>
-        <p><strong>Message:</strong></p>
-        <p>${data.message}</p>
-      `,
-    });
+    try {
+      const { data: result, error } = await resend.emails.send({
+        from: sender,
+        to: recipient,
+        replyTo: data.email,
+        subject: `Interest in adopting ${dog.name} | Referral from adoptadog.sg`,
+        html: `
+          <h3>New Adoption Inquiry</h3>
+          <p><strong>Dog:</strong> ${dog.name}</p>
+          <hr />
+          <p><strong>From:</strong> ${data.name}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Contact:</strong> ${data.mobile}</p>
+          <p><strong>Message:</strong></p>
+          <p>${data.message}</p>
+        `,
+      });
 
-    console.log(`emailWelfareGroup - data: ${data}, error: ${error}`);
+      console.log(`emailWelfareGroup - result: ${JSON.stringify(result)}, error: ${error}`);
 
-    if (error) {
-      return console.error({ error });
+      if (error) {
+        return console.error({ error });
+      }
+    } catch (err) {
+      console.error("emailWelfareGroup try catch err:", err);
     }
 
     return { success: true };

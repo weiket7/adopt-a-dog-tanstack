@@ -1818,7 +1818,7 @@ const SERVICES = [
     category: "Artists",
     blurb:
       "Hand-drawn graphite portraits and full-colour pastel commissions of your dog. Two-week turnaround, ships in a tube.",
-    area: "Tiong Bahru",
+    address: " Tiong Bahru",
     priceFrom: "$120",
     website: "https://pawsandpencils.sg",
     phone: "+65 9123 4567",
@@ -1828,7 +1828,7 @@ const SERVICES = [
     category: "Artists",
     blurb:
       "Loose, joyful watercolour portraits by Bukit Timah-based illustrator Lin Wei. Originals come in A5 to A3.",
-    area: "Bukit Timah",
+    address: " Bukit Timah",
     priceFrom: "$85",
     website: "https://tinysnout.studio",
   },
@@ -1837,7 +1837,7 @@ const SERVICES = [
     category: "Artists",
     blurb:
       "Memorial paw-print clay impressions and 3D-printed scans. Often booked for end-of-life keepsakes.",
-    area: "Geylang",
+    address: " Geylang",
     priceFrom: "$60",
     website: "https://foreverpaws.sg",
     phone: "+65 8234 9921",
@@ -1847,7 +1847,7 @@ const SERVICES = [
     category: "Cremation",
     blurb:
       "Compassionate individual cremation with home pick-up. Family viewings available; ashes returned in a hand-finished urn.",
-    area: "Mandai (collection)",
+    address: " Mandai (collection)",
     priceFrom: "$280",
     website: "https://mobileaftercare.sg",
     phone: "+65 6452 0500",
@@ -1857,7 +1857,7 @@ const SERVICES = [
     category: "Cremation",
     blurb:
       "Group and private cremation, scatter garden, paw-print impression service. Open daily including public holidays.",
-    area: "Ulu Pandan",
+    address: " Ulu Pandan",
     priceFrom: "$220",
     website: "https://petscremation.sg",
     phone: "+65 8101 8101",
@@ -1867,7 +1867,7 @@ const SERVICES = [
     category: "Cremation",
     blurb:
       "Memorial niches, annual remembrance day, and grief-support volunteers for families saying goodbye.",
-    area: "Mandai",
+    address: " Mandai",
     priceFrom: "$450",
     website: "https://petmemorial.sg",
   },
@@ -1876,7 +1876,7 @@ const SERVICES = [
     category: "Pet shops",
     blurb:
       "Independent shop carrying air-dried kibble, raw meals, and SG-made enrichment toys. Free delivery above $80.",
-    area: "Joo Chiat",
+    address: " Joo Chiat",
     website: "https://pawfectprovisions.sg",
     phone: "+65 6440 1188",
   },
@@ -1885,7 +1885,7 @@ const SERVICES = [
     category: "Pet shops",
     blurb:
       "Small but mighty — local brands, single-protein treats and harnesses fitted in-store by ex-vet-nurse Mei.",
-    area: "Tiong Bahru",
+    address: " Tiong Bahru",
     website: "https://tailwagshoppe.sg",
     phone: "+65 6555 2099",
   },
@@ -1894,7 +1894,7 @@ const SERVICES = [
     category: "Pet shops",
     blurb:
       "Subscription kibble (rotational proteins, freshly milled), cold-pressed treats, and the friendliest counter staff in town.",
-    area: "Holland Village",
+    address: " Holland Village",
     priceFrom: "$32/mo",
     website: "https://kibbleco.sg",
   },
@@ -1903,7 +1903,7 @@ const SERVICES = [
     category: "Small businesses",
     blurb:
       "Gently cooked fresh meals delivered weekly across the island. Vet-formulated; bowls portioned by your dog's weight.",
-    area: "Islandwide delivery",
+    address: " Islandwide delivery",
     priceFrom: "$18/wk",
     website: "https://pawfresh.sg",
     phone: "+65 8800 4733",
@@ -1913,7 +1913,7 @@ const SERVICES = [
     category: "Small businesses",
     blurb:
       "Birthday cakes, peanut-butter pupcakes, and biscuit tins decorated with your dog's name in soft icing.",
-    area: "East Coast",
+    address: " East Coast",
     priceFrom: "$28",
     website: "https://boneappetit.sg",
   },
@@ -1922,7 +1922,7 @@ const SERVICES = [
     category: "Small businesses",
     blurb:
       "SG-made shampoos, paw balms, and calming sprays in refillable amber bottles. Small-batch, fragrance-light.",
-    area: "Jurong East",
+    address: " Jurong East",
     priceFrom: "$14",
     website: "https://wagtailapothecary.sg",
   },
@@ -1931,7 +1931,7 @@ const SERVICES = [
     category: "Animal communication",
     blurb:
       "Intuitive sessions for behaviour issues, transitions, and end-of-life care. Sessions over video or in-person.",
-    area: "Online & home visits",
+    address: " Online & home visits",
     priceFrom: "$160/session",
     website: "https://quietconversations.sg",
   },
@@ -1940,7 +1940,7 @@ const SERVICES = [
     category: "Animal communication",
     blurb:
       "By Joanna Chan, certified by the Animal Spirit Network. Specialises in newly-adopted shelter dogs settling in.",
-    area: "Online",
+    address: " Online",
     priceFrom: "$120/session",
     website: "https://heart2heart.sg",
   },
@@ -1949,7 +1949,7 @@ const SERVICES = [
     category: "Pet laundromats",
     blurb:
       "Dedicated machines for pet bedding, harnesses, and cooling mats. Hot-rinse cycle for tick & flea removal.",
-    area: "Bedok",
+    address: " Bedok",
     priceFrom: "$8/load",
     website: "https://freshpaws.sg",
   },
@@ -1958,7 +1958,7 @@ const SERVICES = [
     category: "Pet laundromats",
     blurb:
       "Self-service pet textiles wash with pet-safe enzyme detergent. Drying rack and lint-removal station included.",
-    area: "Ang Mo Kio",
+    address: " Ang Mo Kio",
     priceFrom: "$10/load",
     website: "https://woofwash.sg",
   },
@@ -1967,7 +1967,7 @@ const SERVICES = [
     category: "Pet laundromats",
     blurb:
       "Drop-off service for heavily soiled crate liners and waterproof beds. 24-hour turnaround.",
-    area: "Kallang",
+    address: " Kallang",
     priceFrom: "$15/kg",
     website: "https://petlaundry.sg",
     phone: "+65 6244 5520",
@@ -1977,7 +1977,7 @@ const SERVICES = [
     category: "Boarding",
     blurb:
       "Annie hosts 6 dogs at a time in her landed home with a large garden. Daily walks, photo updates, no kennels.",
-    area: "Lim Chu Kang",
+    address: " Lim Chu Kang",
     priceFrom: "$55/night",
     website: "https://countryboarding.sg",
     phone: "+65 9888 3401",
@@ -1987,7 +1987,7 @@ const SERVICES = [
     category: "Boarding",
     blurb:
       "Boutique hotel suites with private patios. Webcam access, daily grooming, and pool sessions for water-lovers.",
-    area: "Cluny Court",
+    address: " Cluny Court",
     priceFrom: "$95/night",
     website: "https://wagington.com",
     phone: "+65 6471 5152",
@@ -1997,7 +1997,7 @@ const SERVICES = [
     category: "Boarding",
     blurb:
       "Specialised in older and medical-needs dogs. Quiet rooms, soft bedding, ex-vet-tech overnight on duty.",
-    area: "Sembawang",
+    address: " Sembawang",
     priceFrom: "$70/night",
     website: "https://seniorpetstay.sg",
     phone: "+65 6555 0142",
@@ -2007,7 +2007,7 @@ const SERVICES = [
     category: "Grooming",
     blurb:
       "One dog at a time, no cages, no dryers if your dog hates them. Specialises in anxious and elderly pups.",
-    area: "Tanjong Pagar",
+    address: " Tanjong Pagar",
     priceFrom: "$80",
     website: "https://patientgroomer.sg",
     phone: "+65 9221 7700",
@@ -2017,7 +2017,7 @@ const SERVICES = [
     category: "Grooming",
     blurb:
       "Self-contained grooming van comes to your block. Hydrobath, hand-finished cuts, quiet clippers.",
-    area: "Mobile, islandwide",
+    address: " Mobile, islandwide",
     priceFrom: "$95",
     website: "https://soapytails.sg",
     phone: "+65 8123 9090",
@@ -2027,7 +2027,7 @@ const SERVICES = [
     category: "Grooming",
     blurb:
       "Neighbourhood favourite by groomer Helen. Walk-in nail trims, breed-standard cuts, gentle senior packages.",
-    area: "Bishan",
+    address: " Bishan",
     priceFrom: "$55",
     website: "https://tailtrim.sg",
     phone: "+65 6258 4488",
@@ -2038,7 +2038,7 @@ const DOG_RUNS = [
   {
     sortOrder: 1,
     name: "Bishan-Ang Mo Kio Park Dog Run (It consists of two parts)",
-    area: "Central",
+    area: " Central",
     size: "Approximately 240 Sqm",
     description: "",
     address: "453 Ang Mo Kio Ave 1, Singapore 569972",
@@ -2309,7 +2309,8 @@ const BLOG_POSTS = [
     date: "12 May 2026",
     author: "Aishah, foster carer",
     cover: "https://placedog.net/800/500?id=401",
-    excerpt: "After three months in foster, our shy little Shih Tzu mix finally has a corner of her own. We visited her new family last weekend — and yes, she still squeaks when you scratch her chin.",
+    excerpt:
+      "After three months in foster, our shy little Shih Tzu mix finally has a corner of her own. We visited her new family last weekend — and yes, she still squeaks when you scratch her chin.",
     readTime: "4 min read",
     body: `<p>For her first eight weeks in foster, Mochi lived under my dining table. Not beside it — under it, behind a curtain of chair legs, where she could see the room without the room seeing her.</p>
 <p>She came to us from a hoarding case in the north of the island: one of fourteen dogs in a two-room flat, none of them socialised, all of them frightened of hands. Mochi was the smallest and the quietest, and for a long time we worried that quiet was all she had left.</p>
@@ -2325,7 +2326,8 @@ const BLOG_POSTS = [
     date: "06 May 2026",
     author: "Homeward Team",
     cover: "https://placedog.net/800/500?id=402",
-    excerpt: "A plain-English guide to Project ADORE, the Mixed Breed Scheme, and the height and weight rules that decide which dogs can call an HDB flat home. With examples and what to do if you're unsure.",
+    excerpt:
+      "A plain-English guide to Project ADORE, the Mixed Breed Scheme, and the height and weight rules that decide which dogs can call an HDB flat home. With examples and what to do if you're unsure.",
     readTime: "7 min read",
     body: `<p>"HDB-approved" is one of the most misunderstood phrases in Singapore dog adoption. People treat it like a single stamp of approval, when in reality it's a set of overlapping rules — and knowing the difference is what decides whether a dog can legally call a flat home.</p>
 <h2>Project ADORE, in plain English</h2>
@@ -2342,7 +2344,8 @@ const BLOG_POSTS = [
     date: "28 Apr 2026",
     author: "Marcus, adopter",
     cover: "https://placedog.net/800/500?id=403",
-    excerpt: "A Singapore Special who spent four years in a back lane is now hogging the air-con and judging the neighbours. We catch up with Biscuit and his adopter, twelve months on.",
+    excerpt:
+      "A Singapore Special who spent four years in a back lane is now hogging the air-con and judging the neighbours. We catch up with Biscuit and his adopter, twelve months on.",
     readTime: "6 min read",
     body: `<p>Biscuit spent the first four years of his life in a back lane in the west of Singapore, surviving on scraps and the kindness of one hawker who left water out. When we trapped him for sterilisation, he was so flat against the ground he looked like a shadow that had given up.</p>
 <h2>Twelve months later</h2>
@@ -2358,7 +2361,8 @@ const BLOG_POSTS = [
     date: "19 Apr 2026",
     author: "Dr. Lim, partner vet",
     cover: "https://placedog.net/800/500?id=404",
-    excerpt: "The 3-3-3 rule, decompression, the vet visit timeline, and what to actually do (and not do) in the first month. Required reading for new adopters.",
+    excerpt:
+      "The 3-3-3 rule, decompression, the vet visit timeline, and what to actually do (and not do) in the first month. Required reading for new adopters.",
     readTime: "9 min read",
     body: `<p>The first month with a rescue dog is the one that matters most — and the one most new adopters get wrong, usually out of love. Here's the framework we give every adopter before they take a dog home.</p>
 <h2>The 3-3-3 rule</h2>
@@ -2376,7 +2380,8 @@ const BLOG_POSTS = [
     date: "11 Apr 2026",
     author: "Homeward Team",
     cover: "https://placedog.net/800/500?id=405",
-    excerpt: "Pavement temperature, hydration, the seven-second tarmac test, and the best times to go out without melting your dog. A short, hot-weather field guide.",
+    excerpt:
+      "Pavement temperature, hydration, the seven-second tarmac test, and the best times to go out without melting your dog. A short, hot-weather field guide.",
     readTime: "5 min read",
     body: `<p>Singapore's pavements can hit 50°C on a sunny afternoon. Your dog walks on those pavements barefoot. The maths is not in their favour, and heatstroke in dogs can turn fatal faster than most owners expect.</p>
 <h2>The seven-second test</h2>
@@ -2392,7 +2397,8 @@ const BLOG_POSTS = [
     date: "02 Apr 2026",
     author: "Aishah, foster carer",
     cover: "https://placedog.net/800/500?id=406",
-    excerpt: "Some dogs choose their family. Pepper walked past six prospective adopters at our open day and sat on the seventh's foot. The rest, as they say, is history.",
+    excerpt:
+      "Some dogs choose their family. Pepper walked past six prospective adopters at our open day and sat on the seventh's foot. The rest, as they say, is history.",
     readTime: "5 min read",
     body: `<p>People assume adopters choose dogs. Anyone who's worked an open day knows it's often the other way around.</p>
 <h2>The open day</h2>
@@ -2408,7 +2414,8 @@ const BLOG_POSTS = [
     date: "24 Mar 2026",
     author: "Homeward Team",
     cover: "https://placedog.net/800/500?id=407",
-    excerpt: "Fostering isn't permanent adoption — but it's also not babysitting. A clear breakdown of the time, money and emotional commitment of being a foster carer, and why we need more of them.",
+    excerpt:
+      "Fostering isn't permanent adoption — but it's also not babysitting. A clear breakdown of the time, money and emotional commitment of being a foster carer, and why we need more of them.",
     readTime: "8 min read",
     body: `<p>Every welfare group in Singapore is short on the same thing: foster homes. And every group hears the same hesitations. So let's be clear about what fostering actually is — and isn't.</p>
 <h2>It isn't permanent</h2>
@@ -2424,7 +2431,8 @@ const BLOG_POSTS = [
     date: "15 Mar 2026",
     author: "Dr. Lim, partner vet",
     cover: "https://placedog.net/800/500?id=408",
-    excerpt: "Slow, neutral, no eye contact. A step-by-step plan for the first week of dog-to-dog and dog-to-cat introductions, with the warning signs to watch for.",
+    excerpt:
+      "Slow, neutral, no eye contact. A step-by-step plan for the first week of dog-to-dog and dog-to-cat introductions, with the warning signs to watch for.",
     readTime: "6 min read",
     body: `<p>Bringing a rescue dog into a home that already has a pet is where many adoptions wobble. Done slowly, it works almost every time. Done in a hurry, it can sour a relationship before it begins.</p>
 <h2>The three rules</h2>

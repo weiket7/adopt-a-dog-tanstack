@@ -95,10 +95,11 @@ type ServiceRow = {
   category: string;
   blurb: string;
   area: string;
-  priceFrom?: string;
+  address?: string;
   website?: string;
   instagram?: string;
-  phone?: string;
+  facebook?: string;
+  tiktok?: string;
   imageStorageId?: Id<"_storage">;
   imageUrl: string | null;
   featured: boolean | false;
@@ -109,10 +110,11 @@ type FormState = {
   category: string;
   blurb: string;
   area: string;
-  priceFrom: string;
+  address: string;
   website: string;
   instagram: string;
-  phone: string;
+  facebook: string;
+  tiktok: string;
   featured: boolean;
 };
 
@@ -121,10 +123,11 @@ const EMPTY_FORM: FormState = {
   category: CATEGORIES[0],
   blurb: "",
   area: "",
-  priceFrom: "",
+  address: "",
   website: "",
   instagram: "",
-  phone: "",
+  facebook: "",
+  tiktok: "",
   featured: false,
 };
 
@@ -256,25 +259,14 @@ function ServiceForm({
               />
             </div>
 
-            <div className="field">
-              <label htmlFor="f-price">Price from</label>
+            <div className="field full">
+              <label htmlFor="f-address">Address</label>
               <input
-                id="f-price"
+                id="f-address"
                 type="text"
-                value={d.priceFrom}
-                onChange={set("priceFrom")}
-                placeholder="e.g. $30"
-              />
-            </div>
-
-            <div className="field">
-              <label htmlFor="f-phone">Phone</label>
-              <input
-                id="f-phone"
-                type="text"
-                value={d.phone}
-                onChange={set("phone")}
-                placeholder="e.g. 9123 4567"
+                value={d.address}
+                onChange={set("address")}
+                placeholder="e.g. 123 Main Street"
               />
             </div>
 
@@ -296,6 +288,28 @@ function ServiceForm({
                 type="text"
                 value={d.instagram}
                 onChange={set("instagram")}
+                placeholder="https://…"
+              />
+            </div>
+
+            <div className="field full">
+              <label htmlFor="f-facebook">Facebook</label>
+              <input
+                id="f-facebook"
+                type="text"
+                value={d.facebook}
+                onChange={set("facebook")}
+                placeholder="https://…"
+              />
+            </div>
+
+            <div className="field full">
+              <label htmlFor="f-tiktok">TikTok</label>
+              <input
+                id="f-tiktok"
+                type="text"
+                value={d.tiktok}
+                onChange={set("tiktok")}
                 placeholder="https://…"
               />
             </div>
@@ -503,10 +517,11 @@ function ServicesAdminPage() {
         category: s.category,
         blurb: s.blurb,
         area: s.area,
-        priceFrom: s.priceFrom ?? "",
+        address: s.address ?? "",
         website: s.website ?? "",
         instagram: s.instagram ?? "",
-        phone: s.phone ?? "",
+        facebook: s.facebook ?? "",
+        tiktok: s.tiktok ?? "",
         featured: s.featured,
       },
       id: s._id,
@@ -533,9 +548,11 @@ function ServicesAdminPage() {
       category: form.category,
       blurb: form.blurb ? form.blurb.trim() : undefined,
       area: form.area ? form.area.trim() : undefined,
-      priceFrom: form.priceFrom ? form.priceFrom.trim() : undefined,
+      address: form.address ? form.address.trim() : undefined,
       website: form.website ? form.website.trim() : undefined,
-      phone: form.phone ? form.phone.trim() : undefined,
+      instagram: form.instagram ? form.instagram.trim() : undefined,
+      facebook: form.facebook ? form.facebook.trim() : undefined,
+      tiktok: form.tiktok ? form.tiktok.trim() : undefined,
       featured: form.featured,
     };
 

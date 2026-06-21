@@ -1,7 +1,8 @@
 export enum ServiceCategory {
   Artists = "Artists",
-  PetShop = "Pet shop",
+  PetSupplies = "Pet supplies",
   PetFood = "Pet food",
+  PetWellness = "Pet wellness",
   Training = "Training",
   //CakesAndTreats = "Cakes and treats",
   AnimalCommunication = "Animal communication",

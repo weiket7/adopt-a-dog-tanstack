@@ -5,6 +5,8 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { SERVICE_CATEGORIES } from "~/constants/serviceCategories";
+import { SocialLink } from "~/components/SocialLink";
+import { Icon } from "~/components/Icon";
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
@@ -297,9 +299,9 @@ function ServiceCard({
       <h3 className="svc-name">{service.name}</h3>
       <p className="svc-blurb">{service.blurb}</p>
       <div className="svc-meta">
-        {service.area && (
+        {service.address && (
           <span>
-            <PinIcon /> {service.area}
+            <PinIcon /> {service.address}
           </span>
         )}
         {service.phone && (
@@ -326,6 +328,20 @@ function ServiceCard({
           >
             <path d="M7 17 17 7M9 7h8v8" />
           </svg>
+        </a>
+      )}
+      {service.instagram && (
+        <a href={service.instagram} target="_blank" rel="noopener noreferrer">
+          <SocialLink href={service.instagram} label="Instagram">
+            <Icon.IG />
+          </SocialLink>
+        </a>
+      )}
+      {service.tiktok && (
+        <a href={service.tiktok} target="_blank" rel="noopener noreferrer">
+          <SocialLink href={service.tiktok} label="TikTok">
+            <Icon.TT />
+          </SocialLink>
         </a>
       )}
     </article>

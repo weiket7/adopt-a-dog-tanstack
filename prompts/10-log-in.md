@@ -39,3 +39,38 @@ Using Tanstack and Convex, ensure admin.dogs.index.tsx can be accessed when user
 refer to design/services.js, update convex/schema.js with new services table and add a seedServices function
 
 refer to design/app.jsx ServicesView(), implement a new page src/routes/services
+
+---
+
+## Vets
+
+1. Download PDF from https://avs.nparks.gov.sg/outreach/resources/public-registry-of-avs-licensed-veterinary-centres/
+2. Parse it into a table
+3. `refer to design/vets.xlsx, go to seeds.ts, replace existing VETS with the data`
+4. In Convex, run seedVets function
+
+## Dogs
+
+```
+refer to design/admin.jsx
+
+given src/styles/admin.css
+
+implement in src/routes/admin.dogs.index.tsx, ignore admin.dogs.$dogId.tsx
+```
+
+---
+
+given styles/app.css has relevant css already
+
+refer to design/app.jsx <ServicesView />
+
+implement featured services with an image, when tap the image, open the gallery
+
+---
+
+refer to design/app.jsx BlogView and data in design/blog.js
+
+given css exist in styles/app.css
+
+implement src/routes/blog.tsx

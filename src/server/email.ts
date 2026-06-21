@@ -41,15 +41,18 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
       throw new Error("Welfare Group email not found");
     }
 
+    const isDevelopment = process.env.NODE_ENV === "development";
+    const recipient = isDevelopment ? "weiket7@gmail.com" : group.email;
+    const sender = isDevelopment
+      ? "onboarding@resend.dev"
+      : "hello@adoptadog.sg";
+    console.log(`emailWelfareGroup - Sending email to: ${recipient}`);
+
     const resend = new Resend(apiKey);
 
-    console.log("Sending email to welfare group:", "wei_ket@hotmail.com");
-
     const { data: result, error } = await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: "weiket7@gmail.com",
-      //from: "adoptadogsg7@gmail.com",
-      //to: group.email,
+      from: sender,
+      to: recipient,
       replyTo: data.email,
       subject: `Interest in adopting ${dog.name} | Referral from adoptadog.sg`,
       html: `

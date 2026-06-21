@@ -539,7 +539,7 @@ function ServicesAdminPage() {
         headers: { "Content-Type": file.type },
         body: file,
       });
-      const { storageId } = await res.json();
+      const { storageId } = (await res.json()) as { storageId: Id<"_storage"> };
       imageStorageId = storageId;
     }
 

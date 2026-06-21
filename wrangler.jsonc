@@ -9,5 +9,8 @@
     "logs": {
       "enabled": true
     }
+  },
+  "vars": {
+    "RESEND_API_KEY": ""
   }
 }

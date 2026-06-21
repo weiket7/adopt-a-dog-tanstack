@@ -24,6 +24,9 @@
 
 ## Run in local
 
+`nvm install 23 --lts`
+`nvm use 23`
+
 `npx @convex-dev/auth generate-keys`
 
 `npx convex dev`

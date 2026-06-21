@@ -4,6 +4,7 @@ import z from "zod";
 import { getConvexServerClient } from "./convex";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
+import { env } from "cloudflare:workers";
 
 const apiKey = process.env.RESEND_API_KEY;
 if (!apiKey) {
@@ -11,7 +12,7 @@ if (!apiKey) {
 }
 
 export const emailWelfareGroup = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       dogId: z.string(),
       name: z.string(),
@@ -41,13 +42,16 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
       throw new Error("Welfare Group email not found");
     }
 
+    console.log("emailWelfareGroup process.env.RESEND_API_KEY: ", apiKey);
+    const resendApiKey = env.RESEND_API_KEY;
+    console.log("emailWelfareGroup env.RESEND_API_KEY: ", resendApiKey);
+
     const isDevelopment = process.env.NODE_ENV === "development";
     const recipient = isDevelopment ? "weiket7@gmail.com" : group.email;
     const sender = isDevelopment
       ? "onboarding@resend.dev"
       : "hello@adoptadog.sg";
     console.log(`emailWelfareGroup - Sending email to: ${recipient}`);
-
     const resend = new Resend(apiKey);
 
     try {

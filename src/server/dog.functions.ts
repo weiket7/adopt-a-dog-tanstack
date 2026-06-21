@@ -32,7 +32,7 @@ export const saveDogAction = createServerFn({ method: "POST" })
         headers: { "Content-Type": imageFile.type },
         body: imageFile,
       });
-      const json = await result.json();
+      const json = await result.json() as { storageId: Id<"_storage"> };
       storageId = json.storageId as Id<"_storage">;
     }
 

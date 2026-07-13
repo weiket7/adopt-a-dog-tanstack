@@ -2306,6 +2306,7 @@ const BLOG_POSTS = [
   {
     category: "Adoption Story",
     title: "Mochi finds a quiet flat in Tiong Bahru",
+    slug: "mochi-finds-a-quiet-flat-in-tiong-bahru",
     date: "12 May 2026",
     author: "Aishah, foster carer",
     cover: "https://placedog.net/800/500?id=401",
@@ -2323,6 +2324,7 @@ const BLOG_POSTS = [
   {
     category: "Guidelines",
     title: "What HDB approval actually means for your dog",
+    slug: "what-hdb-approval-actually-means-for-your-dog",
     date: "06 May 2026",
     author: "Homeward Team",
     cover: "https://placedog.net/800/500?id=402",
@@ -2341,6 +2343,7 @@ const BLOG_POSTS = [
   {
     category: "Adoption Story",
     title: "Biscuit's first year on a sofa",
+    slug: "biscuits-first-year-on-a-sofa",
     date: "28 Apr 2026",
     author: "Marcus, adopter",
     cover: "https://placedog.net/800/500?id=403",
@@ -2358,6 +2361,7 @@ const BLOG_POSTS = [
   {
     category: "Guidelines",
     title: "Your first 30 days with a rescue dog",
+    slug: "your-first-30-days-with-a-rescue-dog",
     date: "19 Apr 2026",
     author: "Dr. Lim, partner vet",
     cover: "https://placedog.net/800/500?id=404",
@@ -2377,6 +2381,7 @@ const BLOG_POSTS = [
   {
     category: "Tips",
     title: "Walking your dog in Singapore's heat",
+    slug: "walking-your-dog-in-singapores-heat",
     date: "11 Apr 2026",
     author: "Homeward Team",
     cover: "https://placedog.net/800/500?id=405",
@@ -2394,6 +2399,7 @@ const BLOG_POSTS = [
   {
     category: "Adoption Story",
     title: "Pepper, the senior schnauzer, picks her person",
+    slug: "pepper-the-senior-schnauzer-picks-her-person",
     date: "02 Apr 2026",
     author: "Aishah, foster carer",
     cover: "https://placedog.net/800/500?id=406",
@@ -2411,6 +2417,7 @@ const BLOG_POSTS = [
   {
     category: "Guidelines",
     title: "Fostering 101: what we're actually asking",
+    slug: "fostering-101-what-were-actually-asking",
     date: "24 Mar 2026",
     author: "Homeward Team",
     cover: "https://placedog.net/800/500?id=407",
@@ -2428,6 +2435,7 @@ const BLOG_POSTS = [
   {
     category: "Tips",
     title: "Introducing your rescue to a resident pet",
+    slug: "introducing-your-rescue-to-a-resident-pet",
     date: "15 Mar 2026",
     author: "Dr. Lim, partner vet",
     cover: "https://placedog.net/800/500?id=408",

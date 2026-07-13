@@ -100,11 +100,12 @@ export default defineSchema({
   blogPosts: defineTable({
     category: v.string(),
     title: v.string(),
+    slug: v.optional(v.string()),
     date: v.string(),
     author: v.string(),
     cover: v.optional(v.string()),
     excerpt: v.string(),
     readTime: v.string(),
     body: v.optional(v.string()),
-  }),
+  }).index("by_slug", ["slug"]),
 });

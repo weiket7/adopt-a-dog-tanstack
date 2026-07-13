@@ -1071,13 +1071,23 @@ function ServiceCard({ service, onOpenGallery }) {
       <p className="svc-blurb">{service.blurb}</p>
       <div className="svc-meta">
         <span><Icon.Pin/> {service.area}</span>
-        {service.phone && <span><Icon.Phone/> {service.phone}</span>}
       </div>
-      {service.website && (
-        <a className="svc-link" href={service.website} target="_blank" rel="noopener noreferrer">
-          Visit website
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
-        </a>
+      {(service.website || service.facebook || service.instagram || service.email || service.phone) && (
+        <div className="group-socials svc-socials">
+          <SocialLink href={service.website}   label="Website">  <Icon.Globe/></SocialLink>
+          <SocialLink href={service.facebook}  label="Facebook"> <Icon.FB/></SocialLink>
+          <SocialLink href={service.instagram} label="Instagram"><Icon.IG/></SocialLink>
+          {service.email && (
+            <a className="group-social" href={`mailto:${service.email}`} aria-label="Email" title={service.email}>
+              <Icon.Send/>
+            </a>
+          )}
+          {service.phone && (
+            <a className="group-social" href={`tel:${service.phone.replace(/\s/g, "")}`} aria-label="Call" title={service.phone}>
+              <Icon.Phone/>
+            </a>
+          )}
+        </div>
       )}
     </article>
   );

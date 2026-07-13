@@ -310,39 +310,44 @@ function ServiceCard({
           </span>
         )}
       </div>
-      {service.website && (
-        <a
-          className="svc-link"
-          href={service.website}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Visit website
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M7 17 17 7M9 7h8v8" />
-          </svg>
-        </a>
-      )}
-      {service.instagram && (
-        <a href={service.instagram} target="_blank" rel="noopener noreferrer">
+      {(service.website ||
+        service.facebook ||
+        service.instagram ||
+        service.email ||
+        service.phone) && (
+        <div className="group-socials svc-socials">
+          <SocialLink href={service.website} label="Website">
+            {" "}
+            <Icon.Globe />
+          </SocialLink>
+          <SocialLink href={service.facebook} label="Facebook">
+            {" "}
+            <Icon.FB />
+          </SocialLink>
           <SocialLink href={service.instagram} label="Instagram">
             <Icon.IG />
           </SocialLink>
-        </a>
-      )}
-      {service.tiktok && (
-        <a href={service.tiktok} target="_blank" rel="noopener noreferrer">
-          <SocialLink href={service.tiktok} label="TikTok">
-            <Icon.TT />
-          </SocialLink>
-        </a>
+          {service.email && (
+            <a
+              className="group-social"
+              href={`mailto:${service.email}`}
+              aria-label="Email"
+              title={service.email}
+            >
+              <Icon.Send />
+            </a>
+          )}
+          {service.phone && (
+            <a
+              className="group-social"
+              href={`tel:${service.phone.replace(/\s/g, "")}`}
+              aria-label="Call"
+              title={service.phone}
+            >
+              <Icon.Phone />
+            </a>
+          )}
+        </div>
       )}
     </article>
   );

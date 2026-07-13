@@ -1416,6 +1416,13 @@
   .svc-link svg { width: 12px; height: 12px; }
   .svc-link:hover { color: var(--accent-ink); }
 
+  .svc-socials {
+    margin-top: auto;
+    border-top: 1px dashed var(--line-2);
+    padding-top: 16px;
+    flex-wrap: wrap;
+  }
+
   /* services — list your business CTA */
   .pitch {
     display: grid;

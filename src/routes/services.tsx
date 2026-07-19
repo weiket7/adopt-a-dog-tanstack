@@ -247,7 +247,7 @@ function ServiceCard({
           Featured
         </span>
       )}
-      {featured && (
+      {service.imageUrl && (
         <button
           type="button"
           className="svc-photo"

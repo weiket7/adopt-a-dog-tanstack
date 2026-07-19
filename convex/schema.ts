@@ -50,7 +50,6 @@ export default defineSchema({
     link: v.optional(v.string()),
     kind: v.optional(v.string()),
     short: v.optional(v.string()),
-    cta: v.optional(v.string()),
     tag: v.optional(v.string()),
   }),
 
@@ -79,7 +78,7 @@ export default defineSchema({
     openingHours: v.string(),
     phone: v.string(),
     area: v.string(),
-    emergency: v.string(),
+    emergency: v.optional(v.string()),
     publicHolidays: v.boolean(),
     website: v.optional(v.string()),
     facebook: v.optional(v.string()),

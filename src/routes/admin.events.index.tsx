@@ -56,7 +56,6 @@ type EventDoc = {
   link?: string;
   kind?: string;
   short?: string;
-  cta?: string;
   tag?: string;
 };
 
@@ -67,7 +66,7 @@ type FormState = {
   location: string;
   dateTime: string;
   image: string;
-  cta: string;
+  link: string;
   short: string;
 };
 
@@ -78,7 +77,7 @@ const EMPTY_FORM: FormState = {
   location: "",
   dateTime: "",
   image: "",
-  cta: "Reserve a slot",
+  link: "",
   short: "",
 };
 
@@ -140,7 +139,6 @@ function EventForm({
         location: d.location.trim(),
         dateTime: d.dateTime.trim(),
         short: d.short.trim(),
-        cta: d.cta.trim() || "Learn more",
         tag: d.tag.trim(),
       });
     } catch (err) {
@@ -202,12 +200,10 @@ function EventForm({
               </div>
             </div>
 
-            <div className="field">
-              <label htmlFor="f-cta">CTA button label</label>
-              <input id="f-cta" type="text" value={d.cta} onChange={set("cta")} placeholder="e.g. Reserve a slot" />
+            <div className="field full">
+              <label htmlFor="f-link">Link</label>
+              <input id="f-link" type="text" value={d.link} onChange={set("link")} placeholder="https://…" />
             </div>
-
-            <div className="field" />
 
             <div className="field full">
               <label htmlFor="f-short">Description *</label>
@@ -318,7 +314,7 @@ function EventsAdminPage() {
         location: ev.location,
         dateTime: ev.dateTime,
         image: ev.image ?? "",
-        cta: ev.cta ?? "Reserve a slot",
+        link: ev.link ?? "",
         short: ev.short ?? "",
       },
       id: ev._id,
@@ -332,9 +328,9 @@ function EventsAdminPage() {
         location: form.location,
         dateTime: form.dateTime,
         image: form.image || undefined,
+        link: form.link || undefined,
         kind: form.kind,
         short: form.short,
-        cta: form.cta,
         tag: form.tag || undefined,
       });
       flash(`Added ${form.name}`);
@@ -345,9 +341,9 @@ function EventsAdminPage() {
         location: form.location,
         dateTime: form.dateTime,
         image: form.image || undefined,
+        link: form.link || undefined,
         kind: form.kind,
         short: form.short,
-        cta: form.cta,
         tag: form.tag || undefined,
       });
       flash(`Updated ${form.name}`);

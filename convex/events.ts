@@ -23,7 +23,6 @@ export const create = mutation({
     link: v.optional(v.string()),
     kind: v.optional(v.string()),
     short: v.optional(v.string()),
-    cta: v.optional(v.string()),
     tag: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -41,7 +40,6 @@ export const update = mutation({
     link: v.optional(v.string()),
     kind: v.optional(v.string()),
     short: v.optional(v.string()),
-    cta: v.optional(v.string()),
     tag: v.optional(v.string()),
   },
   handler: async (ctx, args) => {

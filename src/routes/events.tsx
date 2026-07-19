@@ -107,9 +107,17 @@ function EventCard({ ev }: { ev: Doc<"events"> }) {
           </span>
         </div>
         <p className="event-short">{ev.short}</p>
-        <button className="event-cta">
-          {ev.cta || "Learn more"} <ArrowRightIcon />
-        </button>
+        {ev.link && (
+          <button
+            className="event-cta"
+            onClick={() => {
+              if (ev.link)
+                window.open(ev.link, "_blank", "noopener,noreferrer");
+            }}
+          >
+            Learn more <ArrowRightIcon />
+          </button>
+        )}
       </div>
     </article>
   );

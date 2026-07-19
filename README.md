@@ -1,3 +1,5 @@
+# https://adoptadog.sg
+
 ## Tech stack
 
 1. Claude Design
@@ -14,13 +16,13 @@
      `npm install @convex-dev/auth`
    - Export
      `npx convex run vets:listAll --prod > vets-prod.json`
-
 6. [Resend](https://resend.com/)  
    `npm install resend @react-email/components`
 7. [Zod](https://zod.dev/)
 8. Google Maps Platform API
 
 - https://visgl.github.io/react-google-maps/
+- Restrict to localhost/\* and adoptadog.sg
 
 9. [Random images of dogs](https://placedog.net/)
 10. Hosted in Cloudflare  
@@ -45,7 +47,7 @@ In Convex, create environment variables `SITE_URL`, `JWT_PRIVATE_KEY`, `JWKS`
 
 `npx @convex-dev/auth --prod`
 
-`npx convex deploy`
+`npx convex deploy --prod`
 
 Ensure there's .env.production
 

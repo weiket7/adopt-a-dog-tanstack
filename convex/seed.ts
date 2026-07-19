@@ -2255,7 +2255,6 @@ const EVENTS = [
     dateTime: "5 Apr 2026 to 6 Apr 2026, 8am to 9pm daily",
     short:
       "Meet 30+ rescue dogs over one weekend. On-site adoption counsellors, free goodie bags, and a quiet room for shy doggos to mingle slowly with prospective families.",
-    cta: "Reserve a slot",
     tag: "Featured",
   },
   {
@@ -2266,7 +2265,6 @@ const EVENTS = [
     dateTime: "17 May 2026, 10am to 7pm",
     short:
       "Our biggest day of the year. 40+ small businesses, vet talks, training demos, paw-print art for the kids, and a live shelter dog showcase every hour on the hour.",
-    cta: "Get tickets",
   },
   {
     name: "Microchip & Vaccination Day",
@@ -2276,7 +2274,6 @@ const EVENTS = [
     dateTime: "22 Jun 2026, 9am to 1pm",
     short:
       "Subsidised microchipping ($15) and core vaccinations ($40) for adopted dogs and Singapore Specials. By appointment — limited to 60 slots.",
-    cta: "Book a slot",
   },
   {
     name: "Sunset Sembawang Walk",
@@ -2286,7 +2283,6 @@ const EVENTS = [
     dateTime: "12 Jul 2026, 5pm to 7pm",
     short:
       "A monthly community walk for adopters, fosters and curious dog-lovers. Bring water, bring your dog, bring a friend who's been thinking about adopting.",
-    cta: "RSVP",
   },
   {
     name: "Senior Dogs Meet & Greet",
@@ -2296,7 +2292,6 @@ const EVENTS = [
     dateTime: "3 Aug 2026 to 4 Aug 2026, 11am to 5pm daily",
     short:
       "Eight of our older residents need quiet homes for their best years yet. Drop by for a slow afternoon, a cup of tea, and the company of a very good old dog.",
-    cta: "Plan your visit",
   },
   {
     name: "Foster Carer Workshop",
@@ -2306,7 +2301,6 @@ const EVENTS = [
     dateTime: "14 Sep 2026, 2pm to 5pm",
     short:
       "Considering becoming a foster carer? Spend an afternoon with our team learning the basics — feeding, decompression, vet visits, and how to say goodbye.",
-    cta: "Sign up free",
   },
 ];
 

@@ -4,7 +4,7 @@ import z from "zod";
 import { getConvexServerClient } from "./convex";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
-import { env } from "cloudflare:workers";
+import { CONTACT_EMAIL } from "~/constants/settings";
 
 const apiKey = process.env.RESEND_API_KEY;
 if (!apiKey) {
@@ -42,16 +42,12 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
       throw new Error("Welfare Group email not found");
     }
 
-    console.log("emailWelfareGroup process.env.RESEND_API_KEY: ", apiKey);
-    const resendApiKey = env.RESEND_API_KEY;
-    console.log("emailWelfareGroup env.RESEND_API_KEY: ", resendApiKey);
-
     const isDevelopment = process.env.NODE_ENV === "development";
-    const recipient = isDevelopment ? "weiket7@gmail.com" : group.email;
+    const recipient = isDevelopment || data.email == CONTACT_EMAIL ? CONTACT_EMAIL : group.email;
     const sender = isDevelopment
       ? "onboarding@resend.dev"
       : "hello@adoptadog.sg";
-    console.log(`emailWelfareGroup - Sending email to: ${recipient}`);
+    console.log(`emailWelfareGroup - Sending email to ${recipient}`);
     const resend = new Resend(apiKey);
 
     try {
@@ -72,13 +68,13 @@ export const emailWelfareGroup = createServerFn({ method: "POST" })
         `,
       });
 
-      console.log(`emailWelfareGroup - result: ${JSON.stringify(result)}, error: ${error}`);
+      console.log(`emailWelfareGroup - result ${JSON.stringify(result)}, error ${error}`);
 
       if (error) {
         return console.error({ error });
       }
     } catch (err) {
-      console.error("emailWelfareGroup try catch err:", err);
+      console.error("emailWelfareGroup - error ", err);
     }
 
     return { success: true };

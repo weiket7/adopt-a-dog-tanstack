@@ -719,7 +719,6 @@ function DogsAdminPage() {
           <table>
             <thead>
               <tr>
-                <th className="col-photo"></th>
                 <th>Name</th>
                 <th className="col-meta">Gender</th>
                 <th className="col-birthday">Birthday</th>
@@ -732,13 +731,6 @@ function DogsAdminPage() {
             <tbody>
               {filtered.map((dog) => (
                 <tr key={dog._id}>
-                  <td className="col-photo">
-                    <span className="row-photo">
-                      {dog.imageUrl && (
-                        <img src={dog.imageUrl} alt={dog.name} loading="lazy" />
-                      )}
-                    </span>
-                  </td>
                   <td>
                     <div className="row-name">{dog.name}</div>
                     {dog.description && (

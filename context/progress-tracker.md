@@ -4,7 +4,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Feature 02 (Blog Post detail view) — complete
+- Prompts 01–16 (see `/prompts`) — complete
 
 ## Current Goal
 
@@ -12,9 +12,22 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Completed
 
-- Feature 01 (Event CRUD): schema, convex mutations, server functions, admin table + create/edit/delete form at `/admin/events`
-- Feature 02 (Blog Post detail view): click on blog card or "Read more" opens full article view (`BlogPost` component) with back navigation, Escape key support, and related posts section in `/blog`
-- Refactor: extracted `DogDetail` modal into `src/components/DogDetail.tsx`; both `index.tsx` and `welfare-groups.$welfareGroupId.tsx` now use the shared component. The welfare group page modal now also shows the "Cared for by" group panel with socials (matching the home page behaviour).
+- 01 implement-design: home page built from `/design` using `src/styles/app.css`
+- 02 welfare-groups: welfare group listing/detail pages
+- 03 services: services listing page
+- 04 dog-runs: dog runs listing page
+- 05 vets: vets listing page
+- 06 events: events listing page
+- 07 blog: blog listing/detail pages
+- 08 admin-dogs: admin dog CRUD
+- 09 log-in: login flow
+- 10 admin-events: admin event CRUD
+- 11 admin-services: admin services CRUD
+- 12 admin-dog-runs: admin dog runs CRUD
+- 13 admin-vets: admin vets CRUD
+- 14 admin-users: admin users CRUD
+- 15 services-add-gallery: gallery added to services
+- 16 welfare-log-in: welfare group login
 
 ## In Progress
 

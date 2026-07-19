@@ -3,11 +3,12 @@ title: Project Adore
 slug: project-adore
 category: Guidelines
 date: 15 Apr 2026
-author: Homeward Team
+author:
 cover: https://placedog.net/800/500?id=422
 excerpt: How Project ADORE lets local mixed-breed dogs under 55cm live in HDB flats, and what adopters need to sign up for under the scheme.
 readTime: 3 min read
 ---
+
 <h1 class="page-header">
     Project Adore
   </h1>

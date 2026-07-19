@@ -64,3 +64,10 @@ Logs
 
 Add secret  
 `npx wrangler secret put <SECRET_NAME>`
+
+## Resources
+
+6 file context
+https://github.com/adrianhajdin/ghost-ai/tree/main/context
+
+https://github.com/jeremymorgan/claude-code-reviewing-prompts

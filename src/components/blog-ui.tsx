@@ -91,7 +91,7 @@ export function BlogCard({
         <h3 className="post-title">{post.title}</h3>
         <p className="post-excerpt">{post.excerpt}</p>
         <div className="post-foot">
-          <span className="post-author">by {post.author}</span>
+          {post.author && <span className="post-author">by {post.author}</span>}
           <span className="post-cta">
             Read more <ArrowRightIcon />
           </span>
@@ -120,19 +120,23 @@ export function BlogArticle({
 
   return (
     <main className="page article-page">
-      <Link to="/blog" className="article-back">
+      {/* <Link to="/blog" className="article-back">
         <ArrowLeftIcon /> All posts
-      </Link>
+      </Link> */}
 
       <article className="article">
         <header className="article-head">
           <span className="article-category">{post.category}</span>
           <h1 className="article-title">{post.title}</h1>
           <div className="article-meta">
-            <span className="article-author">{post.author}</span>
-            <span className="dot" aria-hidden="true">
-              ·
-            </span>
+            {post.author && (
+              <>
+                <span className="article-author">{post.author}</span>
+                <span className="dot" aria-hidden="true">
+                  ·
+                </span>
+              </>
+            )}
             <span>{post.date}</span>
             <span className="dot" aria-hidden="true">
               ·

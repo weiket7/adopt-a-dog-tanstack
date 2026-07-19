@@ -3,15 +3,15 @@ title: Benefits of Pet Sterilisation
 slug: benefits-of-pet-sterilisation
 category: Guidelines
 date: 01 May 2026
-author: Dr. Lim, partner vet
+author:
 cover: https://placedog.net/800/500?id=421
 excerpt: Why sterilising your dog lowers health risks, reduces unwanted behaviour, and makes life easier for both of you — plus when to do it and what to expect afterwards.
 readTime: 4 min read
 ---
 
 <h1 class="page-header">
-    Benefits of Pet Sterilisation
-  </h1>
+  Benefits of Pet Sterilisation
+</h1>
 
 <div class='text'>
   <b>Beneficial to your pet’s health.</b><br>

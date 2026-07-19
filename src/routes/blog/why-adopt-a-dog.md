@@ -3,7 +3,7 @@ title: Why Adopt a Dog
 slug: why-adopt-a-dog
 category: Guidelines
 date: 15 May 2026
-author: Homeward Team
+author:
 cover: https://placedog.net/800/500?id=423
 excerpt: Five reasons adopting beats buying — from saving a life to steering clear of puppy mills.
 readTime: 6 min read

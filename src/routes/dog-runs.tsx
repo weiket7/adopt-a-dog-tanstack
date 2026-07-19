@@ -10,6 +10,23 @@ export const Route = createFileRoute("/dog-runs")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(convexQuery(api.dogRuns.listAll, {}));
   },
+  head: () => ({
+    meta: [
+      { title: "Dog Runs — Adopt A Dog Singapore" },
+      {
+        name: "description",
+        content:
+          "Find dog runs and off-leash parks across Singapore where your dog can play safely.",
+      },
+      { property: "og:title", content: "Dog Runs — Adopt A Dog Singapore" },
+      {
+        property: "og:description",
+        content:
+          "Find dog runs and off-leash parks across Singapore where your dog can play safely.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
 });
 
 const RUN_AREAS = ["Central", "East", "North", "North-East", "West"] as const;

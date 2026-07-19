@@ -13,6 +13,23 @@ export const Route = createFileRoute("/services")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(convexQuery(api.services.listAll, {}));
   },
+  head: () => ({
+    meta: [
+      { title: "Pet Services — Adopt A Dog Singapore" },
+      {
+        name: "description",
+        content:
+          "Find trusted pet groomers, trainers, sitters, and other services for your dog in Singapore.",
+      },
+      { property: "og:title", content: "Pet Services — Adopt A Dog Singapore" },
+      {
+        property: "og:description",
+        content:
+          "Find trusted pet groomers, trainers, sitters, and other services for your dog in Singapore.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
 });
 
 function SearchIcon() {

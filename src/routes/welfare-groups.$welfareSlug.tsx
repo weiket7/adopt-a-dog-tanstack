@@ -19,31 +19,31 @@ export const Route = createFileRoute("/welfare-groups/$welfareSlug")({
         convexQuery(api.dogs.listByWelfareGroup, { welfareGroupId: group._id }),
       );
     }
+    return { group };
+  },
+  head: ({ loaderData }) => {
+    const name = loaderData?.group?.name;
+    const title = name
+      ? `${name} — Adopt A Dog Singapore`
+      : "Welfare Group — Adopt A Dog Singapore";
+    const description = name
+      ? `Dogs available for adoption from ${name} in Singapore.`
+      : "Dogs available for adoption from this welfare group in Singapore.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+      ],
+    };
   },
 });
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
-
-const FINEPRINT = [
-  "House-trained, loves long walks at East Coast.",
-  "A little shy at first, completely devoted once she trusts you.",
-  "Knows sit, stay, paw. Working on 'leave it.'",
-  "Best as the only dog in the home.",
-  "Great with kids over 8. Calm around babies.",
-  "Loves car rides and rolling in fresh laundry.",
-  "Needs a patient owner — still learning the world.",
-  "Fully vaccinated, sterilised, microchipped.",
-  "Currently in foster. Visits by appointment.",
-  "Quiet apartment dog. Sleeps through the night.",
-  "Cuddles first, eats second. Always.",
-  "Walks beautifully on leash. No pulling.",
-  "Affectionate with everyone she meets, including the postman.",
-  "Would thrive with another playful dog at home.",
-  "Senior gentleman looking for a soft sofa.",
-  "Recovered from a rough start — now thriving.",
-];
 
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = arr.slice();
@@ -54,14 +54,6 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
-}
-
-function pickFine(dogId: string, seed: number): string {
-  let hash = seed;
-  for (let i = 0; i < dogId.length; i++) {
-    hash = (((hash * 31) >>> 0) + dogId.charCodeAt(i)) >>> 0;
-  }
-  return FINEPRINT[hash % FINEPRINT.length];
 }
 
 /* ------------------------------------------------------------------ */

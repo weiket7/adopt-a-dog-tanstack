@@ -12,6 +12,23 @@ export const Route = createFileRoute("/")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(convexQuery(api.dogs.listAll, {}));
   },
+  head: () => ({
+    meta: [
+      { title: "Adopt A Dog — Dogs for Adoption in Singapore" },
+      {
+        name: "description",
+        content:
+          "Browse dogs available for adoption from welfare groups across Singapore. Find your new best friend today.",
+      },
+      { property: "og:title", content: "Adopt A Dog — Dogs for Adoption in Singapore" },
+      {
+        property: "og:description",
+        content:
+          "Browse dogs available for adoption from welfare groups across Singapore. Find your new best friend today.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
 });
 
 /* ------------------------------------------------------------------ */

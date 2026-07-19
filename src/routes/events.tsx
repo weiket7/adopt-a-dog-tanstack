@@ -11,6 +11,23 @@ export const Route = createFileRoute("/events")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(convexQuery(api.events.list, {}));
   },
+  head: () => ({
+    meta: [
+      { title: "Events — Adopt A Dog Singapore" },
+      {
+        name: "description",
+        content:
+          "Upcoming adoption drives, pet fairs, clinics, and community meetups for dog lovers in Singapore.",
+      },
+      { property: "og:title", content: "Events — Adopt A Dog Singapore" },
+      {
+        property: "og:description",
+        content:
+          "Upcoming adoption drives, pet fairs, clinics, and community meetups for dog lovers in Singapore.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
 });
 
 function PawIcon() {

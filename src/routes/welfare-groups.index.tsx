@@ -10,6 +10,23 @@ export const Route = createFileRoute("/welfare-groups/")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(convexQuery(api.welfareGroups.list, {}));
   },
+  head: () => ({
+    meta: [
+      { title: "Welfare Groups — Adopt A Dog Singapore" },
+      {
+        name: "description",
+        content:
+          "Browse dog welfare groups and rescues in Singapore and the dogs they care for.",
+      },
+      { property: "og:title", content: "Welfare Groups — Adopt A Dog Singapore" },
+      {
+        property: "og:description",
+        content:
+          "Browse dog welfare groups and rescues in Singapore and the dogs they care for.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
 });
 
 function SearchIcon() {

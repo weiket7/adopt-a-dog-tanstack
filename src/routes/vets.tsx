@@ -19,6 +19,23 @@ export const Route = createFileRoute("/vets")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(convexQuery(api.vets.listAll, {}));
   },
+  head: () => ({
+    meta: [
+      { title: "Vets — Adopt A Dog Singapore" },
+      {
+        name: "description",
+        content:
+          "Find veterinary clinics across Singapore, complete with locations, opening hours, and emergency contacts.",
+      },
+      { property: "og:title", content: "Vets — Adopt A Dog Singapore" },
+      {
+        property: "og:description",
+        content:
+          "Find veterinary clinics across Singapore, complete with locations, opening hours, and emergency contacts.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
 });
 
 function SearchIcon() {

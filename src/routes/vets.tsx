@@ -38,90 +38,6 @@ export const Route = createFileRoute("/vets")({
   }),
 });
 
-function SearchIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" />
-    </svg>
-  );
-}
-function BoltIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />
-    </svg>
-  );
-}
-function SunIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
-    </svg>
-  );
-}
-function PinIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22s7-7 7-13a7 7 0 1 0-14 0c0 6 7 13 7 13z" />
-      <circle cx="12" cy="9" r="2.5" />
-    </svg>
-  );
-}
-function ClockIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v5l3 2" />
-    </svg>
-  );
-}
-function PhoneIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
-    </svg>
-  );
-}
-
 type Filter = "all" | "emergency" | "ph";
 
 function VetCard({ vet }: { vet: any }) {
@@ -132,12 +48,12 @@ function VetCard({ vet }: { vet: any }) {
         <div className="vet-flags">
           {vet.emergency && (
             <span className="vet-flag emerg" title={vet.emergency}>
-              <BoltIcon /> Emergency
+              <Icon.Bolt /> Emergency
             </span>
           )}
           {vet.publicHolidays && (
             <span className="vet-flag ph" title="Open on public holidays">
-              <SunIcon /> PH open
+              <Icon.Sun /> PH open
             </span>
           )}
         </div>
@@ -145,17 +61,17 @@ function VetCard({ vet }: { vet: any }) {
       <h3 className="vet-name">{vet.name}</h3>
       <div className="vet-meta">
         <span>
-          <PinIcon /> {vet.block} {vet.street}, #{vet.floor}-{vet.unit},
+          <Icon.Pin /> {vet.block} {vet.street}, #{vet.floor}-{vet.unit},
           Singapore {vet.postalCode}
         </span>
         {vet.openingHours && (
           <span>
-            <ClockIcon /> {vet.openingHours}
+            <Icon.Clock /> {vet.openingHours}
           </span>
         )}
         {vet.phone && (
           <span>
-            <PhoneIcon /> {vet.phone}
+            <Icon.Phone /> {vet.phone}
           </span>
         )}
         <span>
@@ -299,7 +215,7 @@ function VetsPage() {
 
       <div className="page-controls">
         <div className="search" style={{ maxWidth: 320 }}>
-          <SearchIcon />
+          <Icon.Search />
           <input
             type="text"
             placeholder="Search by name, area…"

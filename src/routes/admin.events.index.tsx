@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { useState, useMemo, useEffect } from "react";
 import adminCss from "~/styles/admin.css?url";
+import { Icon } from "~/components/Icon";
 
 export const Route = createFileRoute("/admin/events/")({
   head: () => ({
@@ -13,38 +14,6 @@ export const Route = createFileRoute("/admin/events/")({
 });
 
 const KINDS = ["Adoption", "Pet Fair", "Clinic", "Community", "Training", "Other"];
-
-/* ---------- icons ---------- */
-const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
-  </svg>
-);
-const PlusIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-    <path d="M12 5v14M5 12h14" />
-  </svg>
-);
-const EditIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-  </svg>
-);
-const TrashIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14" />
-  </svg>
-);
-const CloseIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <path d="M6 6l12 12M18 6 6 18" />
-  </svg>
-);
-const CheckIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="4 12 10 18 20 6" />
-  </svg>
-);
 
 /* ---------- types ---------- */
 type EventDoc = {
@@ -154,7 +123,7 @@ function EventForm({
         <div className="dialog-head">
           <h2>{isNew ? "Add a new event" : `Edit ${d.name}`}</h2>
           <button type="button" className="dialog-close" onClick={onClose} aria-label="Close">
-            <CloseIcon />
+            <Icon.Close />
           </button>
         </div>
 
@@ -219,7 +188,7 @@ function EventForm({
           <div className="right">
             <button type="button" className="btn ghost" onClick={onClose}>Cancel</button>
             <button type="submit" className="btn primary" disabled={saving}>
-              <CheckIcon /> {saving ? (isNew ? "Adding…" : "Saving…") : (isNew ? "Add event" : "Save changes")}
+              <Icon.Check /> {saving ? (isNew ? "Adding…" : "Saving…") : (isNew ? "Add event" : "Save changes")}
             </button>
           </div>
         </div>
@@ -250,7 +219,7 @@ function Confirm({
       <div className="dialog" onClick={e => e.stopPropagation()} style={{ maxWidth: 460 }}>
         <div className="dialog-head">
           <h2>{title}</h2>
-          <button type="button" className="dialog-close" onClick={onClose} aria-label="Close"><CloseIcon /></button>
+          <button type="button" className="dialog-close" onClick={onClose} aria-label="Close"><Icon.Close /></button>
         </div>
         <div className="dialog-body">
           <p className="confirm-text">{body}</p>
@@ -378,14 +347,14 @@ function EventsAdminPage() {
         </div>
         <div className="actions-row">
           <button className="btn primary" onClick={handleAdd}>
-            <PlusIcon /> Add an event
+            <Icon.Plus /> Add an event
           </button>
         </div>
       </div>
 
       <div className="toolbar">
         <div className="search">
-          <SearchIcon />
+          <Icon.Search />
           <input
             type="text"
             placeholder="Search by title, location, or kind…"
@@ -442,10 +411,10 @@ function EventsAdminPage() {
                   <td>
                     <div className="row-actions">
                       <button className="icon-btn" onClick={() => handleEdit(ev as EventDoc)} title="Edit" aria-label={`Edit ${ev.name}`}>
-                        <EditIcon />
+                        <Icon.Edit />
                       </button>
                       <button className="icon-btn danger" onClick={() => handleDelete(ev as EventDoc)} title="Delete" aria-label={`Delete ${ev.name}`}>
-                        <TrashIcon />
+                        <Icon.Trash />
                       </button>
                     </div>
                   </td>
@@ -474,7 +443,7 @@ function EventsAdminPage() {
 
       {toast && (
         <div className="toast">
-          <CheckIcon /> {toast}
+          <Icon.Check /> {toast}
         </div>
       )}
     </main>

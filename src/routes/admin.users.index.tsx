@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { useState, useMemo, useEffect } from "react";
 import adminCss from "~/styles/admin.css?url";
+import { Icon } from "~/components/Icon";
 
 export const Route = createFileRoute("/admin/users/")({
   head: () => ({
@@ -11,68 +12,6 @@ export const Route = createFileRoute("/admin/users/")({
   }),
   component: UsersAdminPage,
 });
-
-/* ---------- icons ---------- */
-const PlusIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.4"
-    strokeLinecap="round"
-  >
-    <path d="M12 5v14M5 12h14" />
-  </svg>
-);
-const TrashIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14" />
-  </svg>
-);
-const CloseIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-  >
-    <path d="M6 6l12 12M18 6 6 18" />
-  </svg>
-);
-const CheckIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="3"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="4 12 10 18 20 6" />
-  </svg>
-);
-const SearchIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-  >
-    <circle cx="11" cy="11" r="7" />
-    <path d="m20 20-3.5-3.5" />
-  </svg>
-);
 
 /* ---------- types ---------- */
 type WelfareGroupOption = { _id: Id<"welfareGroups">; name: string };
@@ -164,7 +103,7 @@ function CreateUserForm({
             onClick={onClose}
             aria-label="Close"
           >
-            <CloseIcon />
+            <Icon.Close />
           </button>
         </div>
 
@@ -232,7 +171,7 @@ function CreateUserForm({
               Cancel
             </button>
             <button type="submit" className="btn primary" disabled={saving}>
-              <CheckIcon /> {saving ? "Creating…" : "Create user"}
+              <Icon.Check /> {saving ? "Creating…" : "Create user"}
             </button>
           </div>
         </div>
@@ -280,7 +219,7 @@ function Confirm({
             onClick={onClose}
             aria-label="Close"
           >
-            <CloseIcon />
+            <Icon.Close />
           </button>
         </div>
         <div className="dialog-body">
@@ -393,14 +332,14 @@ function UsersAdminPage() {
             className="btn primary"
             onClick={() => setShowCreate(true)}
           >
-            <PlusIcon /> Create user
+            <Icon.Plus /> Create user
           </button>
         </div>
       </div>
 
       <div className="toolbar">
         <div className="search">
-          <SearchIcon />
+          <Icon.Search />
           <input
             type="text"
             placeholder="Search by email…"
@@ -474,7 +413,7 @@ function UsersAdminPage() {
                       title="Delete user"
                       onClick={() => handleDelete(user)}
                     >
-                      <TrashIcon />
+                      <Icon.Trash />
                     </button>
                   </td>
                 </tr>

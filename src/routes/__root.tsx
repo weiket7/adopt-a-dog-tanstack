@@ -15,6 +15,7 @@ import * as React from "react";
 import { api } from "../../convex/_generated/api";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
+import { Icon } from "~/components/Icon";
 import appCss from "~/styles/app.css?url";
 
 export const Route = createRootRouteWithContext<{
@@ -53,18 +54,6 @@ export const Route = createRootRouteWithContext<{
   shellComponent: RootComponent,
 });
 
-function PawIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <ellipse cx="6" cy="10" rx="2" ry="2.6" />
-      <ellipse cx="10" cy="6.5" rx="2" ry="2.6" />
-      <ellipse cx="14" cy="6.5" rx="2" ry="2.6" />
-      <ellipse cx="18" cy="10" rx="2" ry="2.6" />
-      <path d="M12 12c-3 0-5.5 2.4-5.5 5 0 1.8 1.3 3 3 3 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.7 0 3-1.2 3-3 0-2.6-2.5-5-5.5-5z" />
-    </svg>
-  );
-}
-
 function Nav() {
   const role = useQuery(api.users.role);
   const { isAuthenticated } = useConvexAuth();
@@ -98,7 +87,7 @@ function Nav() {
       <div className="nav-inner">
         <Link to="/" className="logo" onClick={close}>
           <span className="mark">
-            <PawIcon />
+            <Icon.Paw />
           </span>
           Adopt A Dog
           <small>Singapore</small>

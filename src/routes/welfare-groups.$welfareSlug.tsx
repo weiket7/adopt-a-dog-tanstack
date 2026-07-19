@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DogDetail } from "~/components/DogDetail";
+import { Icon } from "~/components/Icon";
 
 export const Route = createFileRoute("/welfare-groups/$welfareSlug")({
   component: WelfareGroupDogsPage,
@@ -60,52 +61,6 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
 /* Icons                                                               */
 /* ------------------------------------------------------------------ */
 
-const CheckIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="3"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    width="11"
-    height="11"
-  >
-    <polyline points="4 12 10 18 20 6" />
-  </svg>
-);
-const MarsIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="10" cy="14" r="5" />
-    <path d="m14.5 9.5 5-5" />
-    <path d="M15 4h5v5" />
-  </svg>
-);
-const VenusIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="9" r="5" />
-    <path d="M12 14v8" />
-    <path d="M9 19h6" />
-  </svg>
-);
-const ShuffleIcon = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M16 3h5v5" />
-    <path d="M4 20 21 3" />
-    <path d="M21 16v5h-5" />
-    <path d="m15 15 6 6" />
-    <path d="M4 4l5 5" />
-  </svg>
-);
 /* ------------------------------------------------------------------ */
 /* Filters                                                             */
 /* ------------------------------------------------------------------ */
@@ -134,7 +89,7 @@ function Filters({
           Search by name
         </label>
         <div className="search">
-          <SearchIcon />
+          <Icon.Search />
           <input
             id="dog-search"
             type="text"
@@ -233,7 +188,7 @@ function DogCard({ dog, onOpen }: { dog: any; onOpen: (dog: any) => void }) {
         <div className="badges">
           {dog.hdbApproved === "Yes" && (
             <span className="badge hdb">
-              <CheckIcon /> HDB
+              <Icon.Check /> HDB
             </span>
           )}
         </div>
@@ -242,7 +197,7 @@ function DogCard({ dog, onOpen }: { dog: any; onOpen: (dog: any) => void }) {
         <div className="card-name-row">
           <h3 className="card-name">{dog.name}</h3>
           <span className="card-gender">
-            {dog.gender === "Male" ? <MarsIcon /> : <VenusIcon />}
+            {dog.gender === "Male" ? <Icon.Mars /> : <Icon.Venus />}
             {dog.gender}
           </span>
         </div>
@@ -353,7 +308,7 @@ function WelfareGroupDogsPage() {
               onClick={() => setSeed(Math.floor(Math.random() * 1e6) + 1)}
               title="Shuffle order"
             >
-              <ShuffleIcon /> Shuffle
+              <Icon.Shuffle /> Shuffle
             </button>
           </div>
 

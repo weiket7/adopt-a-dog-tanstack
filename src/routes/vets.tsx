@@ -10,6 +10,7 @@ import {
   AdvancedMarker,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
+import { Icon } from "~/components/Icon";
 
 const SINGAPORE_CENTER = { lat: 1.3521, lng: 103.8198 };
 
@@ -113,7 +114,7 @@ function VetCard({ vet }: { vet: any }) {
         <span className="vet-area">{vet.area}</span>
         <div className="vet-flags">
           {vet.emergency && (
-            <span className="vet-flag emerg" title="24h emergency services">
+            <span className="vet-flag emerg" title={vet.emergency}>
               <BoltIcon /> Emergency
             </span>
           )}
@@ -130,11 +131,21 @@ function VetCard({ vet }: { vet: any }) {
           <PinIcon /> {vet.block} {vet.street}, #{vet.floor}-{vet.unit},
           Singapore {vet.postalCode}
         </span>
+        {vet.openingHours && (
+          <span>
+            <ClockIcon /> {vet.openingHours}
+          </span>
+        )}
+        {vet.phone && (
+          <span>
+            <PhoneIcon /> {vet.phone}
+          </span>
+        )}
         <span>
-          <ClockIcon /> {vet.hours}
-        </span>
-        <span>
-          <PhoneIcon /> {vet.phone}
+          <Icon.Globe />{" "}
+          <a href={vet.website} target="_blank">
+            {vet.website}
+          </a>
         </span>
       </div>
     </article>
@@ -267,6 +278,8 @@ function VetsPage() {
         </a>
       </aside>
 
+      <VetsMap vets={list} />
+
       <div className="page-controls">
         <div className="search" style={{ maxWidth: 320 }}>
           <SearchIcon />
@@ -309,8 +322,6 @@ function VetsPage() {
           {list.length} {list.length === 1 ? "result" : "results"}
         </span>
       </div>
-
-      <VetsMap vets={list} />
 
       <section className="vets-grid">
         {list.map((v) => (

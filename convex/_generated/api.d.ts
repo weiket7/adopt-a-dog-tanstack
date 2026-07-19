@@ -13,6 +13,7 @@ import type * as blogPosts from "../blogPosts.js";
 import type * as dogRuns from "../dogRuns.js";
 import type * as dogs from "../dogs.js";
 import type * as events from "../events.js";
+import type * as geocodeVets from "../geocodeVets.js";
 import type * as http from "../http.js";
 import type * as seed from "../seed.js";
 import type * as services from "../services.js";
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   dogRuns: typeof dogRuns;
   dogs: typeof dogs;
   events: typeof events;
+  geocodeVets: typeof geocodeVets;
   http: typeof http;
   seed: typeof seed;
   services: typeof services;

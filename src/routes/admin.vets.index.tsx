@@ -100,7 +100,7 @@ type VetRow = {
   openingHours: string;
   phone: string;
   area: string;
-  emergency: boolean;
+  emergency: string;
   publicHolidays: boolean;
   website?: string;
   facebook?: string;
@@ -119,7 +119,7 @@ type FormState = {
   openingHours: string;
   phone: string;
   area: string;
-  emergency: boolean;
+  emergency: string;
   publicHolidays: boolean;
   website: string;
   facebook: string;
@@ -138,7 +138,7 @@ const EMPTY_FORM: FormState = {
   openingHours: "",
   phone: "",
   area: "",
-  emergency: false,
+  emergency: "",
   publicHolidays: false,
   website: "",
   facebook: "",
@@ -349,27 +349,14 @@ function VetForm({
             </div>
 
             <div className="field">
-              <label>Emergency</label>
-              <div
-                className="seg-input cols-2"
-                role="radiogroup"
-                aria-label="Emergency"
-              >
-                <button
-                  type="button"
-                  aria-pressed={d.emergency === true}
-                  onClick={() => setD((p) => ({ ...p, emergency: true }))}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={d.emergency === false}
-                  onClick={() => setD((p) => ({ ...p, emergency: false }))}
-                >
-                  No
-                </button>
-              </div>
+              <label htmlFor="f-emergency">Emergency</label>
+              <input
+                id="f-emergency"
+                type="text"
+                value={d.emergency}
+                onChange={set("emergency")}
+                placeholder="e.g. 24 hours, or leave blank if none"
+              />
             </div>
 
             <div className="field">
@@ -736,7 +723,9 @@ function VetsAdminPage() {
                   <td style={{ color: "var(--muted)" }}>{vet.phone}</td>
                   <td>
                     {vet.emergency ? (
-                      <span className="pill hdb-yes">Yes</span>
+                      <span className="pill hdb-yes" title={vet.emergency}>
+                        {vet.emergency}
+                      </span>
                     ) : (
                       <span className="pill hdb-no">No</span>
                     )}

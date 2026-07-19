@@ -79,7 +79,7 @@ export default defineSchema({
     openingHours: v.string(),
     phone: v.string(),
     area: v.string(),
-    emergency: v.boolean(),
+    emergency: v.string(),
     publicHolidays: v.boolean(),
     website: v.optional(v.string()),
     facebook: v.optional(v.string()),

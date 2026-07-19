@@ -102,6 +102,10 @@ type VetRow = {
   area: string;
   emergency: boolean;
   publicHolidays: boolean;
+  website?: string;
+  facebook?: string;
+  instagram?: string;
+  email?: string;
 };
 
 type FormState = {
@@ -117,6 +121,10 @@ type FormState = {
   area: string;
   emergency: boolean;
   publicHolidays: boolean;
+  website: string;
+  facebook: string;
+  instagram: string;
+  email: string;
 };
 
 const EMPTY_FORM: FormState = {
@@ -132,6 +140,10 @@ const EMPTY_FORM: FormState = {
   area: "",
   emergency: false,
   publicHolidays: false,
+  website: "",
+  facebook: "",
+  instagram: "",
+  email: "",
 };
 
 const AREAS = ["Central", "East", "North", "North-East", "West"];
@@ -385,6 +397,50 @@ function VetForm({
                 </button>
               </div>
             </div>
+
+            <div className="field">
+              <label htmlFor="f-website">Website</label>
+              <input
+                id="f-website"
+                type="text"
+                value={d.website}
+                onChange={set("website")}
+                placeholder="e.g. https://example.com"
+              />
+            </div>
+
+            <div className="field">
+              <label htmlFor="f-email">Email</label>
+              <input
+                id="f-email"
+                type="text"
+                value={d.email}
+                onChange={set("email")}
+                placeholder="e.g. hello@example.com"
+              />
+            </div>
+
+            <div className="field">
+              <label htmlFor="f-facebook">Facebook</label>
+              <input
+                id="f-facebook"
+                type="text"
+                value={d.facebook}
+                onChange={set("facebook")}
+                placeholder="e.g. https://facebook.com/example"
+              />
+            </div>
+
+            <div className="field">
+              <label htmlFor="f-instagram">Instagram</label>
+              <input
+                id="f-instagram"
+                type="text"
+                value={d.instagram}
+                onChange={set("instagram")}
+                placeholder="e.g. https://instagram.com/example"
+              />
+            </div>
           </div>
         </div>
 
@@ -526,6 +582,10 @@ function VetsAdminPage() {
       area: vet.area,
       emergency: vet.emergency,
       publicHolidays: vet.publicHolidays,
+      website: vet.website ?? "",
+      facebook: vet.facebook ?? "",
+      instagram: vet.instagram ?? "",
+      email: vet.email ?? "",
     });
   };
 
@@ -545,6 +605,10 @@ function VetsAdminPage() {
       area: form.area,
       emergency: form.emergency,
       publicHolidays: form.publicHolidays,
+      website: form.website || undefined,
+      facebook: form.facebook || undefined,
+      instagram: form.instagram || undefined,
+      email: form.email || undefined,
     };
 
     if (!editing.id) {

@@ -8,6 +8,7 @@ cover: https://placedog.net/800/500?id=420
 excerpt: The step-by-step process for adopting a dog in Singapore, from browsing and contacting a welfare group through to bringing your new dog home.
 readTime: 3 min read
 ---
+
 <h1 class="page-header">
     Adoption Procedure
   </h1>
@@ -24,5 +25,5 @@ readTime: 3 min read
 
 <small>
   Reference:<br>
-  <a href='http://asdsingapore.com/wp/adoption-procedure/' target='_blank'>Action for Singapore Dogs adoption procedure</a>
+  <a href='https://asdsingapore.com/pages/adoption-procedure' target='_blank'>Action for Singapore Dogs adoption procedure</a>
 </small>

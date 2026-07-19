@@ -4,6 +4,14 @@ import { api } from "convex/_generated/api";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  InfoWindow,
+} from "@vis.gl/react-google-maps";
+
+const SINGAPORE_CENTER = { lat: 1.3521, lng: 103.8198 };
 
 export const Route = createFileRoute("/vets")({
   component: VetsPage,
@@ -133,6 +141,54 @@ function VetCard({ vet }: { vet: any }) {
   );
 }
 
+function VetsMap({ vets }: { vets: any[] }) {
+  const [selected, setSelected] = useState<any>(null);
+  const apiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
+  const mapId = import.meta.env.VITE_GOOGLE_MAP_ID;
+  const located = vets.filter((v) => v.lat != null && v.lng != null);
+
+  if (!apiKey) return null;
+
+  return (
+    <div className="vets-map">
+      <APIProvider apiKey={apiKey}>
+        <Map
+          mapId={mapId}
+          defaultCenter={SINGAPORE_CENTER}
+          defaultZoom={11}
+          gestureHandling="greedy"
+          disableDefaultUI={false}
+          style={{ width: "100%", height: "100%" }}
+        >
+          {located.map((v) => (
+            <AdvancedMarker
+              key={v._id}
+              position={{ lat: v.lat, lng: v.lng }}
+              onClick={() => setSelected(v)}
+              title={v.name}
+            />
+          ))}
+          {selected && (
+            <InfoWindow
+              position={{ lat: selected.lat, lng: selected.lng }}
+              onCloseClick={() => setSelected(null)}
+            >
+              <div className="vet-map-info">
+                <b>{selected.name}</b>
+                <div>
+                  {selected.block} {selected.street}, Singapore{" "}
+                  {selected.postalCode}
+                </div>
+                {selected.phone && <div>{selected.phone}</div>}
+              </div>
+            </InfoWindow>
+          )}
+        </Map>
+      </APIProvider>
+    </div>
+  );
+}
+
 function VetsPage() {
   const { data: allVets } = useSuspenseQuery(convexQuery(api.vets.listAll, {}));
   const [q, setQ] = useState("");
@@ -253,6 +309,8 @@ function VetsPage() {
           {list.length} {list.length === 1 ? "result" : "results"}
         </span>
       </div>
+
+      <VetsMap vets={list} />
 
       <section className="vets-grid">
         {list.map((v) => (

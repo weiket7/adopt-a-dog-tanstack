@@ -14,6 +14,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://aavcsg.wixsite.com/aavc",
   },
   {
     name: "Acacia Vet & Surgery",
@@ -28,6 +29,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://acaciavetandsurgery.wordpress.com/contact/",
   },
   {
     name: "Ace Vet Care",
@@ -40,6 +42,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://acevetcare.sg/",
   },
   {
     name: "Advanced Vetcare",
@@ -64,6 +67,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.advancedvetcare.sg/",
   },
   {
     name: "Advanced Vetcare",
@@ -75,6 +79,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.advancedvetcare.sg/",
   },
   {
     name: "Advanced Vetcare @ Balestier",
@@ -86,6 +91,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.advancedvetcare.sg/",
   },
   {
     name: "Allpets & Aqualife Vets Pte Ltd",
@@ -99,19 +105,21 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.advancedvetcare.sg/",
   },
-  {
-    name: "Amber Cat Vet Pte Ltd",
-    block: "48",
-    street: "BURNFOOT TERRACE",
-    building: "FRANKEL ESTATE",
-    postalCode: "459836",
-    openingHours: "",
-    phone: "",
-    area: "",
-    emergency: false,
-    publicHolidays: false,
-  },
+  // {
+  //   name: "Amber Cat Vet Pte Ltd",
+  //   block: "48",
+  //   street: "BURNFOOT TERRACE",
+  //   building: "FRANKEL ESTATE",
+  //   postalCode: "459836",
+  //   openingHours: "",
+  //   phone: "",
+  //   area: "",
+  //   emergency: false,
+  //   publicHolidays: false,
+  //   website: "https://ambercatvet.com/",
+  // },
   {
     name: "Amber Veterinary Practice Pte Ltd",
     block: "50",
@@ -122,6 +130,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://ambervet.com/"
   },
   {
     name: "Animal Medical Centre (Vet@Rv)",
@@ -135,6 +144,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetatrv.com/",
   },
   {
     name: "Animal Wellness Centre Pte Ltd",
@@ -149,6 +159,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://animalwellness.sg/",
   },
   {
     name: "Animal Wellness Referral Centre Pte Ltd",
@@ -163,6 +174,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.awrc.sg/",
   },
   {
     name: "Animal World Veterinary Clinic",
@@ -175,6 +187,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.animalworldclinic.com/",
   },
   {
     name: "Apex Veterinary Clinic",
@@ -187,6 +200,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.apexvetclinic.com/"
   },
   {
     name: "Apex Veterinary Medical Centre Pte Ltd Punggol",
@@ -200,20 +214,36 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.apexvetclinic.com/"
   },
   {
-    name: "Atlas Veterinary Clinic & Surgery",
-    block: "163",
-    street: "BUKIT MERAH CENTRAL",
-    floor: "3",
-    unit: "3579",
-    postalCode: "150163",
+    name: "Apex Veterinary Clinic",
+    block: "416",
+    street: "Ang Mo Kio Ave 10",
+    floor: "01",
+    unit: "973",
+    postalCode: "560416",
     openingHours: "",
     phone: "",
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.apexvetclinic.com/"
   },
+  // {
+  //   name: "Atlas Veterinary Clinic & Surgery",
+  //   block: "163",
+  //   street: "BUKIT MERAH CENTRAL",
+  //   floor: "3",
+  //   unit: "3579",
+  //   postalCode: "150163",
+  //   openingHours: "",
+  //   phone: "",
+  //   area: "",
+  //   emergency: false,
+  //   publicHolidays: false,
+  //   website: "https://www.atlasvet.com.sg/"
+  // },
   {
     name: "Atlas Veterinary Clinic & Surgery",
     block: "163",
@@ -226,6 +256,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.atlasvet.com.sg/"
   },
   {
     name: "Avh Animal Ark Veterinary Group",
@@ -239,6 +270,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.arkvet.com.sg/",
   },
   {
     name: "Avh Animal Ark Veterinary Group (Springleaf)",
@@ -250,6 +282,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.arkvet.com.sg/",
   },
   {
     name: "Barkway Pet Health Pte. Ltd.",
@@ -262,6 +295,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://barkway.sg/",
   },
   {
     name: "Beecroft Animal Specialist And Emergency Hospital",
@@ -275,6 +309,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://beecroft.com.sg/",
   },
   {
     name: "Bluewater Vet Acupuncture & Rehabilitation",
@@ -289,6 +324,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://bluewatervetacupuncture.sg/",
   },
   {
     name: "Brighton Vet Care (Bukit Timah)",
@@ -300,6 +336,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.brightonvetcare.com/",
   },
   {
     name: "Brighton Vet Care (Katong)",
@@ -311,6 +348,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://brightonvetcare.com/pages/katong",
   },
   {
     name: "Brighton Vet Care (Serangoon Garden)",
@@ -323,6 +361,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.brightonvetcare.com/",
   },
   {
     name: "Canopy Veterinary Centre",
@@ -337,6 +376,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://canopyvets.com/",
   },
   {
     name: "Care Veterinary Clinic Pte Ltd",
@@ -350,6 +390,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://carevetclinic.com.sg/wp/",
   },
   {
     name: "Clinic For Pets",
@@ -364,6 +405,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.facebook.com/457812597615354/",
   },
   {
     name: "Clover Vet",
@@ -377,6 +419,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.clovervet.sg/",
   },
   {
     name: "Companion Animal Surgery Pte Ltd",
@@ -390,6 +433,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.comvet.com/",
   },
   {
     name: "Dr Paws Vet Care",
@@ -402,6 +446,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://drpawsvetcare.com/",
   },
   {
     name: "Edmond Tan Veterinary Surgery",
@@ -415,6 +460,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.facebook.com/pages/Edmond-Tan-Veterinary-Surgery/194064770615689",
   },
   {
     name: "Evervet Veterinary Clinic",
@@ -428,6 +474,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.evervetsg.com/",
   },
   {
     name: "Evervet Veterinary Clinic Pte Ltd",
@@ -441,6 +488,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.evervetsg.com/",
   },
   {
     name: "Frankel Veterinary Centre",
@@ -453,6 +501,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://frankelvet.com.sg/",
   },
   {
     name: "Fur Folks Home",
@@ -465,6 +514,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetmobilesg.com/furfolkshome/",
   },
   {
     name: "Furiends Veterinary Clinic",
@@ -476,6 +526,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://furiends.com.sg/",
   },
   {
     name: "Furrytails Veterinary Clinic Pte Ltd",
@@ -488,6 +539,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://furrytailsvet.com.sg/",
   },
   {
     name: "Gaia Veterinary Centre (Jalan Besar)",
@@ -499,6 +551,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://gaiavets.com/vet-clinic-serangoon-road",
   },
   {
     name: "Gaia Veterinary Centre (Parksuites)",
@@ -513,6 +566,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://gaiavets.com/vet-clinic-holland-road",
   },
   {
     name: "Genesis Veterinary Clinic",
@@ -526,6 +580,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.genesisvet.com.sg/",
   },
   {
     name: "Gentle Oak Veterinary Clinic",
@@ -539,6 +594,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.gentleoakvet.com.sg/",
   },
   {
     name: "Hillside Veterinary Surgery",
@@ -550,6 +606,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.hillsidevets.com.sg/",
   },
   {
     name: "Hope Veterinary Care",
@@ -563,6 +620,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.hopeveterinarycare.sg/",
   },
   {
     name: "Island Veterinary Clinic Pte Ltd",
@@ -576,6 +634,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.ivc.com.sg/",
   },
   {
     name: "James Tan Veterinary Centre Pte Ltd",
@@ -588,6 +647,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://jtvet.com/",
   },
   {
     name: "Jireh Veterinary Clinic Pte Ltd",
@@ -601,6 +661,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://jirehvets.com/",
   },
   {
     name: "Kai Vets Pte Ltd",
@@ -614,6 +675,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://kaivets.com/",
   },
   {
     name: "Kin Veterinary Clinic",
@@ -625,6 +687,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.kinvet.sg/",
   },
   {
     name: "Landon Veterinary Specialist Hospital",
@@ -637,6 +700,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.lvs.com.sg/",
   },
   {
     name: "Light Of Life Veterinary Clinic And Services Llp",
@@ -650,6 +714,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.lightoflifeveterinaryclinic.com/",
   },
   {
     name: "Maranatha Veterinary Clinic",
@@ -663,6 +728,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.facebook.com/maranathavetclinic/",
   },
   {
     name: "Monster Pet Vet",
@@ -676,6 +742,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.monsterpetvet.com/",
   },
   {
     name: "Mount Pleasant Animal Medical Centre (Bedok)",
@@ -689,6 +756,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.mountpleasant.com.sg/locations/bedok/",
   },
   {
     name: "Mount Pleasant Animal Medical Centre (Clementi)",
@@ -703,6 +771,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.mountpleasant.com.sg/locations/clementi/",
   },
   {
     name: "Mount Pleasant Animal Medical Centre (Farrer)",
@@ -717,6 +786,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.mountpleasant.com.sg/locations/farrer/",
   },
   {
     name: "Mount Pleasant Veterinary Centre (2008)",
@@ -729,6 +799,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.mountpleasant.com.sg/locations/gelenggang/",
   },
   {
     name: "Mount Pleasant Veterinary Centre (East)",
@@ -740,6 +811,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://www.mpeast.com/",
   },
   {
     name: "Mount Pleasant Veterinary Centre (Yishun)",
@@ -754,6 +826,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.mountpleasant.com.sg/locations/yishun/",
   },
   {
     name: "My Animal Dispensary Pte Ltd",
@@ -768,6 +841,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.myanimaldispensary.com/",
   },
   {
     name: "My Family Vet Clinic And Surgery Pte Ltd",
@@ -781,6 +855,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://myfamilyvetclinicandsurgery.com/",
   },
   {
     name: "Nam Sang Veterinary Clinic Pte Ltd",
@@ -794,6 +869,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.namsangvetclinic.com/",
   },
   {
     name: "Namly Veterinary Surgery Pte Ltd",
@@ -806,6 +882,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://namlyvets.com.sg/",
   },
   {
     name: "Oasis Vet",
@@ -818,6 +895,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://oasis-vet.com/",
   },
   {
     name: "Ohana Vetcare",
@@ -831,6 +909,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.ohanavetcare.com.sg/",
   },
   {
     name: "Omnivet",
@@ -843,6 +922,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.instagram.com/omnivet.sg/",
   },
   {
     name: "P.A.W (People Animal Wellness) Veterinary Centre Pte Ltd",
@@ -856,6 +936,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.pawvetscentre.com/",
   },
   {
     name: "Passion Veterinary Clinic",
@@ -869,6 +950,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.passionvet.com/",
   },
   {
     name: "Passion Veterinary Clinic Pte Ltd",
@@ -882,6 +964,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.passionvet.com/",
   },
   {
     name: "Paws & Claws Veterinary Surgery",
@@ -896,6 +979,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://pawsnclawsvet.sg/",
   },
   {
     name: "Paws & Claws Veterinary Surgery",
@@ -910,6 +994,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://pawsnclawsvet.sg/",
   },
   {
     name: "Pet Care Centre And Clinic Pte Ltd",
@@ -922,6 +1007,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.facebook.com/p/Pet-Care-Centre-Clinic-Pte-Ltd-100071892131975/",
   },
   {
     name: "Pet Clinic Pte Ltd",
@@ -935,6 +1021,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://petclinic.sg/",
   },
   {
     name: "Pet Space (Singapore) Pte Ltd",
@@ -948,6 +1035,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.petspace.sg/",
   },
   {
     name: "Pets Avenue Veterinary Clinic (Beauty World)",
@@ -960,6 +1048,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.petsavenuevet.com/contact-us/beauty-world",
   },
   {
     name: "Pets Avenue Veterinary Clinic (Farrer)",
@@ -974,6 +1063,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.petsavenuevet.com/contact-us/farrer-road",
   },
   {
     name: "Pets Avenue Veterinary Clinic (River Valley)",
@@ -988,6 +1078,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.petsavenuevet.com/contact-us/river-valley",
   },
   {
     name: "Pets Avenue Veterinary Clinic (Upper Thomson)",
@@ -1000,6 +1091,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.petsavenuevet.com/",
   },
   {
     name: "Pets Avenue Veterinary Clinic And Referrals",
@@ -1014,6 +1106,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.pavcarvets.com/",
   },
   {
     name: "Point Veterinary Surgery",
@@ -1027,6 +1120,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://www.pointveterinarysurgery.com/",
   },
   {
     name: "Rehabvet Clinic",
@@ -1040,6 +1134,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://rehabvet.com/",
   },
   {
     name: "Singapore Turf Club Equine Hospital",
@@ -1051,6 +1146,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://racing.turfclub.com.sg/en/veterinary/",
   },
   {
     name: "Singapore Veterinary (Singvet) Animal Clinic Beauty World",
@@ -1063,6 +1159,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://singvet.sg/",
   },
   {
     name: "Singapore Veterinary (Singvet) Animal Clinic Pte Ltd",
@@ -1077,6 +1174,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://singvet.sg/",
   },
   {
     name: "Sora Vet",
@@ -1091,6 +1189,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    instagram: "https://www.instagram.com/soravet_sg",
   },
   {
     name: "Spca Community Animal Clinic",
@@ -1104,6 +1203,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://spca.org.sg/services/community-animal-clinic/",
   },
   {
     name: "Spring Veterinary Care",
@@ -1117,6 +1217,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.springvet.com.sg/",
   },
   {
     name: "Spring Veterinary Care Punggol",
@@ -1130,6 +1231,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.springvet.com.sg/",
   },
   {
     name: "Stars Veterinary Clinic (Hougang Village)",
@@ -1143,6 +1245,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://starsveterinaryclinic.com/",
   },
   {
     name: "Stars Veterinary Clinic Pte Ltd",
@@ -1156,6 +1259,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://starsveterinaryclinic.com/",
   },
   {
     name: "The Animal Clinic",
@@ -1169,6 +1273,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.animalclinic.com.sg/",
   },
   {
     name: "The Animal Clinic (Katong Branch)",
@@ -1183,6 +1288,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.animalclinic.com.sg/",
   },
   {
     name: "The Animal Doctors",
@@ -1197,6 +1303,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.theanimaldoctors.com.sg/",
   },
   {
     name: "The Animal Doctors (Tiong Bahru)",
@@ -1211,6 +1318,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.theanimaldoctors.com.sg/",
   },
   {
     name: "The Cat Vet",
@@ -1225,6 +1333,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://thecatvet.sg/",
   },
   {
     name: "The Eye Specialist For Animals",
@@ -1236,6 +1345,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://eyespecialistforanimals.com/",
   },
   {
     name: "The Gentle Vet",
@@ -1247,6 +1357,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://thegentlevet.sg/",
   },
   {
     name: "The Joyous Vet Pte Ltd",
@@ -1260,6 +1371,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://www.tjv.com.sg/",
   },
   {
     name: "The Pet Physician",
@@ -1272,6 +1384,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.thepetphysician.com.sg/",
   },
   {
     name: "The Vet Ward",
@@ -1286,6 +1399,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://thevetward.com/",
   },
   {
     name: "The Veterinary Clinic",
@@ -1298,6 +1412,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://vetclinic.sg/",
   },
   {
     name: "The Veterinary Clinic @ Tampines Pte Ltd",
@@ -1311,6 +1426,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "http://vetclinic.sg/",
   },
   {
     name: "The Visiting Vets Clinic",
@@ -1324,6 +1440,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://thevisitingvets.com.sg/",
   },
   {
     name: "Toa Payoh Vets Pte Ltd",
@@ -1337,6 +1454,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.toapayohvets.com/",
   },
   {
     name: "Town Vets Animal Clinic Pte Ltd",
@@ -1350,6 +1468,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.townvets.com.sg/",
   },
   {
     name: "Tp Animal Clinic & Wellness Centre",
@@ -1362,6 +1481,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.tp.edu.sg/research-and-industry/centres-of-excellence/centres-under-school-of-applied-science/tp-animal-clinic-wellness-tpacw.html",
   },
   {
     name: "United Veterinary Clinic Pte Ltd",
@@ -1376,6 +1496,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.unitedvetclinic.com/",
   },
   {
     name: "Ves Hospital",
@@ -1388,6 +1509,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.veshospital.com.sg/",
   },
   {
     name: "Vet Affinity Pte Ltd",
@@ -1401,6 +1523,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetaffinity.com.sg/",
   },
   {
     name: "Vet Central",
@@ -1413,6 +1536,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://vetcentral.com.sg/",
   },
   {
     name: "Vet Central (Swan Lake) Pte Ltd",
@@ -1425,6 +1549,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://vetcentral.com.sg/",
   },
   {
     name: "Vet Practice Pte Ltd",
@@ -1438,6 +1563,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://vetpractice.com.sg/",
   },
   {
     name: "Vet Practice Pte Ltd",
@@ -1452,6 +1578,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://vetpractice.com.sg/",
   },
   {
     name: "Vetmedic Animal Clinic And Surgery",
@@ -1464,6 +1591,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetmedic.com.sg/",
   },
   {
     name: "Vets For Life Animal Clinic",
@@ -1476,6 +1604,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetsforlife.com.sg/",
   },
   {
     name: "Vets For Life Animal Clinic",
@@ -1487,6 +1616,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetsforlife.com.sg/",
   },
   {
     name: "Vets For Life Animal Clinic Pte Ltd",
@@ -1500,6 +1630,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetsforlife.com.sg/",
   },
   {
     name: "Vets For Pets (Lengkok Bahru)",
@@ -1513,6 +1644,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetsforpetsclinic.com/",
   },
   {
     name: "Vets For Pets Pte Ltd",
@@ -1526,6 +1658,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.vetsforpetsclinic.com/",
   },
   {
     name: "West Coast Vetcare Pte Ltd",
@@ -1539,6 +1672,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.westcoastvetcare.com/",
   },
   {
     name: "Westwide Veterinary Emergency And Referral Hospital",
@@ -1551,6 +1685,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://www.westsideemergency.com.sg/",
   },
   {
     name: "Woodgrove Veterinary Services Pte Ltd",
@@ -1565,6 +1700,7 @@ const VETS = [
     area: "",
     emergency: false,
     publicHolidays: false,
+    website: "https://wvets.com.sg/",
   },
 ];
 

@@ -1568,6 +1568,27 @@
   }
 
   /* ---------- vets (info-first, no photo) ---------- */
+  .vets-map {
+    width: 100%;
+    height: 420px;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .vet-map-info {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 220px;
+  }
+  .vet-map-info b {
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
   .vets-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

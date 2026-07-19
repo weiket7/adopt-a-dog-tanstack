@@ -8,6 +8,7 @@ cover: https://placedog.net/800/500?id=421
 excerpt: Why sterilising your dog lowers health risks, reduces unwanted behaviour, and makes life easier for both of you — plus when to do it and what to expect afterwards.
 readTime: 4 min read
 ---
+
 <h1 class="page-header">
     Benefits of Pet Sterilisation
   </h1>
@@ -36,10 +37,8 @@ His metabolic rate will be slightly lower, you should feed him slightly less foo
 
   <small>
     References:<br>
-    <a href='http://www.fantasticfur.com.au/Importance-of-Sterilisation.html'>http://www.fantasticfur.com.au/Importance-of-Sterilisation.html</a><br>
     <a href='http://www.health24.com/Lifestyle/Pet-Health/Your-pets-health/Sterilising-your-pet-20120721'>http://www.health24.com/Lifestyle/Pet-Health/Your-pets-health/Sterilising-your-pet-20120721</a><br>
-    <a href='http://www.countryanimalclinic.co.za/BLOGNEWSMARCH2013.pdf'>http://www.countryanimalclinic.co.za/BLOGNEWSMARCH2013.pdf</a><br>
-    <a href='http://www.melvetanimalhospital.com.au/66470/2012/12/18/the-importance-of-sterilising-dogs-and-cats.html'>http://www.melvetanimalhospital.com.au/66470/2012/12/18/the-importance-of-sterilising-dogs-and-cats.html</a><br>
+    com.au/66470/2012/12/18/the-importance-of-sterilising-dogs-and-cats.html</a><br>
     <a href='http://www.vetwest.com.au/pet-library/desexing-about-the-sterilisation-procedure'>http://www.vetwest.com.au/pet-library/desexing-about-the-sterilisation-procedure</a>
   </small>
 

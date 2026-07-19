@@ -81,6 +81,12 @@ export default defineSchema({
     area: v.string(),
     emergency: v.boolean(),
     publicHolidays: v.boolean(),
+    website: v.optional(v.string()),
+    facebook: v.optional(v.string()),
+    instagram: v.optional(v.string()),
+    email: v.optional(v.string()),
+    lat: v.optional(v.number()),
+    lng: v.optional(v.number()),
   }),
 
   dogRuns: defineTable({

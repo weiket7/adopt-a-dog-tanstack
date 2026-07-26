@@ -12,5 +12,31 @@
   },
   "secrets": {
     "required": ["RESEND_API_KEY"]
+  },
+  "vars": {
+    "R2_PUBLIC_URL": "https://pub-3f368c1c07594b6ebed4714f2fec2c95.r2.dev"
+  },
+  "r2_buckets": [
+    {
+      "binding": "ADOPT_A_DOG_BUCKET",
+      "bucket_name": "adopt-a-dog-dev",
+      "remote": true
+    }
+  ],
+  "env": {
+    "production": {
+      "secrets": {
+        "required": ["RESEND_API_KEY"]
+      },
+      "vars": {
+        "R2_PUBLIC_URL": "https://pub-6b109a9f6d714dc1bcd8c4a418ac59df.r2.dev"
+      },
+      "r2_buckets": [
+        {
+          "binding": "ADOPT_A_DOG_BUCKET",
+          "bucket_name": "adopt-a-dog-prod"
+        }
+      ]
+    }
   }
 }

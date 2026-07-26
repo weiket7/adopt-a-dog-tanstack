@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation, useAction } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { useState, useMemo, useEffect, useRef } from "react";
 import adminCss from "~/styles/admin.css?url";
 import { SERVICE_CATEGORIES as CATEGORIES } from "~/constants/serviceCategories";
 import { Icon } from "~/components/Icon";
+import { uploadServiceImage } from "~/server/upload";
 
 export const Route = createFileRoute("/admin/services/")({
   head: () => ({
@@ -26,7 +27,7 @@ type ServiceRow = {
   instagram?: string;
   facebook?: string;
   tiktok?: string;
-  imageStorageId?: Id<"_storage">;
+  image?: string;
   imageUrl: string | null;
   featured: boolean | false;
 };
@@ -397,7 +398,6 @@ function ServicesAdminPage() {
   const createService = useMutation(api.services.create);
   const updateService = useMutation(api.services.update);
   const removeService = useMutation(api.services.remove);
-  const generateUploadUrl = useAction(api.services.generateUploadUrl);
 
   const [q, setQ] = useState("");
   const [catFilter, setCatFilter] = useState("all");
@@ -457,16 +457,12 @@ function ServicesAdminPage() {
   const handleSave = async (form: FormState, file: File | null) => {
     if (!editing) return;
 
-    let imageStorageId: Id<"_storage"> | undefined;
+    let image: string | undefined;
     if (file) {
-      const uploadUrl = await generateUploadUrl();
-      const res = await fetch(uploadUrl, {
-        method: "POST",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-      const { storageId } = (await res.json()) as { storageId: Id<"_storage"> };
-      imageStorageId = storageId;
+      const formData = new FormData();
+      formData.set("file", file);
+      const result = await uploadServiceImage({ data: formData });
+      image = result.url;
     }
 
     const payload = {
@@ -485,14 +481,14 @@ function ServicesAdminPage() {
     if (editing.id === null) {
       await createService({
         ...payload,
-        ...(imageStorageId ? { imageStorageId } : {}),
+        ...(image ? { image } : {}),
       });
       flash(`Added ${form.name}`);
     } else {
       await updateService({
         id: editing.id,
         ...payload,
-        ...(imageStorageId ? { imageStorageId } : {}),
+        ...(image ? { image } : {}),
       });
       flash(`Updated ${form.name}`);
     }

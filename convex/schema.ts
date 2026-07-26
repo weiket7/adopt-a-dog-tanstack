@@ -64,7 +64,7 @@ export default defineSchema({
     facebook: v.optional(v.string()),
     tiktok: v.optional(v.string()),
     featured: v.optional(v.boolean()),
-    imageStorageId: v.optional(v.id("_storage")),
+    image: v.optional(v.string()),
   }),
 
   vets: defineTable({

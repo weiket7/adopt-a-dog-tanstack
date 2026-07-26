@@ -1,21 +1,13 @@
-import { query, mutation, action } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
-
-export const generateUploadUrl = action(async (ctx) => {
-  return await ctx.storage.generateUploadUrl();
-});
 
 export const listAll = query({
   handler: async (ctx) => {
     const services = await ctx.db.query("services").collect();
-    return await Promise.all(
-      services.map(async (service) => ({
-        ...service,
-        imageUrl: service.imageStorageId
-          ? await ctx.storage.getUrl(service.imageStorageId)
-          : null,
-      })),
-    );
+    return services.map((service) => ({
+      ...service,
+      imageUrl: service.image ?? null,
+    }));
   },
 });
 
@@ -31,7 +23,7 @@ export const create = mutation({
     facebook: v.optional(v.string()),
     tiktok: v.optional(v.string()),
     featured: v.optional(v.boolean()),
-    imageStorageId: v.optional(v.id("_storage")),
+    image: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("services", args);
@@ -51,7 +43,7 @@ export const update = mutation({
     facebook: v.optional(v.string()),
     tiktok: v.optional(v.string()),
     featured: v.optional(v.boolean()),
-    imageStorageId: v.optional(v.id("_storage")),
+    image: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;
@@ -63,11 +55,6 @@ export const update = mutation({
 export const remove = mutation({
   args: { id: v.id("services") },
   handler: async (ctx, { id }) => {
-    const service = await ctx.db.get(id);
-    if (!service) return;
-    if (service.imageStorageId) {
-      await ctx.storage.delete(service.imageStorageId);
-    }
     await ctx.db.delete(id);
   },
 });

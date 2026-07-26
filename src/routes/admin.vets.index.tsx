@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { useState, useMemo, useEffect } from "react";
@@ -446,6 +446,7 @@ function VetsAdminPage() {
   const addVet = useMutation(api.vets.add);
   const updateVet = useMutation(api.vets.update);
   const removeVet = useMutation(api.vets.remove);
+  const geocode = useAction(api.geocode.geocode);
 
   const [q, setQ] = useState("");
   const [areaFilter, setAreaFilter] = useState("all");
@@ -505,6 +506,18 @@ function VetsAdminPage() {
   const handleSave = async (form: FormState) => {
     if (!editing) return;
 
+    let coords: { lat: number; lng: number } | null = null;
+    try {
+      coords = await geocode({
+        block: form.block,
+        street: form.street,
+        building: form.building || undefined,
+        postalCode: form.postalCode,
+      });
+    } catch (err) {
+      console.error("Geocoding failed", err);
+    }
+
     const fields = {
       name: form.name,
       block: form.block,
@@ -522,6 +535,7 @@ function VetsAdminPage() {
       facebook: form.facebook || undefined,
       instagram: form.instagram || undefined,
       email: form.email || undefined,
+      ...(coords ? { lat: coords.lat, lng: coords.lng } : {}),
     };
 
     if (!editing.id) {

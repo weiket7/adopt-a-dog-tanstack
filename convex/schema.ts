@@ -25,7 +25,7 @@ export default defineSchema({
     birthday: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
     description: v.optional(v.string()),
-    imageStorageId: v.optional(v.id("_storage")), // The reference to the file
+    image: v.optional(v.string()), // R2 public URL
   }),
   welfareGroups: defineTable({
     name: v.string(),

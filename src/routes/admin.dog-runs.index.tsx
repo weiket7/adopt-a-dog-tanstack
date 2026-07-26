@@ -2,9 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import adminCss from "~/styles/admin.css?url";
 import { Icon } from "~/components/Icon";
+import { uploadDogRunImage } from "~/server/upload";
 
 export const Route = createFileRoute("/admin/dog-runs/")({
   head: () => ({
@@ -38,7 +39,6 @@ type FormState = {
   waterPoint: boolean;
   description: string;
   openingHours: string;
-  image: string;
   map: string;
   website: string;
 };
@@ -52,7 +52,6 @@ const EMPTY_FORM: FormState = {
   waterPoint: false,
   description: "",
   openingHours: "",
-  image: "",
   map: "",
   website: "",
 };
@@ -62,16 +61,20 @@ const AREAS = ["Central", "East", "North", "North-East", "West"];
 /* ---------- DogRunForm modal ---------- */
 function DogRunForm({
   initial,
+  initialImageUrl,
   onSave,
   onClose,
 }: {
   initial: FormState & { id?: Id<"dogRuns"> };
-  onSave: (form: FormState) => Promise<void>;
+  initialImageUrl: string | null;
+  onSave: (form: FormState, file: File | null) => Promise<void>;
   onClose: () => void;
 }) {
   const [d, setD] = useState<FormState>(initial);
   const [errs, setErrs] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const isNew = !initial.id;
 
   useEffect(() => {
@@ -107,11 +110,13 @@ function DogRunForm({
     if (Object.keys(nextErrs).length) return;
     setSaving(true);
     try {
-      await onSave(d);
+      await onSave(d, file);
     } finally {
       setSaving(false);
     }
   };
+
+  const previewUrl = file ? URL.createObjectURL(file) : initialImageUrl;
 
   return (
     <div className="backdrop" onClick={onClose}>
@@ -229,14 +234,24 @@ function DogRunForm({
             </div>
 
             <div className="field full">
-              <label htmlFor="f-image">Image URL</label>
-              <input
-                id="f-image"
-                type="text"
-                value={d.image}
-                onChange={set("image")}
-                placeholder="https://…"
-              />
+              <label>Image</label>
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                {previewUrl && (
+                  <span
+                    className="row-photo"
+                    style={{ width: 56, height: 56, flexShrink: 0 }}
+                  >
+                    <img src={previewUrl} alt="preview" />
+                  </span>
+                )}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ flex: 1 }}
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                />
+              </div>
             </div>
 
             <div className="field full">
@@ -366,7 +381,7 @@ function DogRunsAdminPage() {
   const [q, setQ] = useState("");
   const [areaFilter, setAreaFilter] = useState("all");
   const [editing, setEditing] = useState<
-    (FormState & { id?: Id<"dogRuns"> }) | null
+    (FormState & { id?: Id<"dogRuns">; imageUrl: string | null }) | null
   >(null);
   const [confirm, setConfirm] = useState<{
     title: string;
@@ -393,7 +408,7 @@ function DogRunsAdminPage() {
   }, [dogRuns, q, areaFilter]);
 
   const handleAdd = () => {
-    setEditing({ ...EMPTY_FORM });
+    setEditing({ ...EMPTY_FORM, imageUrl: null });
   };
 
   const handleEdit = (run: DogRunRow) => {
@@ -407,14 +422,23 @@ function DogRunsAdminPage() {
       waterPoint: run.waterPoint,
       description: run.description ?? "",
       openingHours: run.openingHours ?? "",
-      image: run.image ?? "",
       map: run.map ?? "",
       website: run.website ?? "",
+      imageUrl: run.image ?? null,
     });
   };
 
-  const handleSave = async (form: FormState) => {
+  const handleSave = async (form: FormState, file: File | null) => {
     if (!editing) return;
+
+    let image: string | undefined;
+    if (file) {
+      const formData = new FormData();
+      formData.set("file", file);
+      formData.set("name", form.name.trim());
+      const result = await uploadDogRunImage({ data: formData });
+      image = result.url;
+    }
 
     const fields = {
       sortOrder: Number(form.sortOrder),
@@ -425,16 +449,19 @@ function DogRunsAdminPage() {
       waterPoint: form.waterPoint,
       description: form.description || undefined,
       openingHours: form.openingHours || undefined,
-      image: form.image || undefined,
       map: form.map || undefined,
       website: form.website || undefined,
     };
 
     if (!editing.id) {
-      await addDogRun(fields);
+      await addDogRun({ ...fields, ...(image ? { image } : {}) });
       flash(`Added ${form.name}`);
     } else {
-      await updateDogRun({ id: editing.id, ...fields });
+      await updateDogRun({
+        id: editing.id,
+        ...fields,
+        ...(image ? { image } : {}),
+      });
       flash(`Updated ${form.name}`);
     }
     setEditing(null);
@@ -600,6 +627,7 @@ function DogRunsAdminPage() {
       {editing && (
         <DogRunForm
           initial={editing}
+          initialImageUrl={editing.imageUrl}
           onSave={handleSave}
           onClose={() => setEditing(null)}
         />

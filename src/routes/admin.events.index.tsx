@@ -2,9 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import adminCss from "~/styles/admin.css?url";
 import { Icon } from "~/components/Icon";
+import { uploadEventImage } from "~/server/upload";
 
 export const Route = createFileRoute("/admin/events/")({
   head: () => ({
@@ -34,7 +35,6 @@ type FormState = {
   tag: string;
   location: string;
   dateTime: string;
-  image: string;
   link: string;
   short: string;
 };
@@ -45,7 +45,6 @@ const EMPTY_FORM: FormState = {
   tag: "",
   location: "",
   dateTime: "",
-  image: "",
   link: "",
   short: "",
 };
@@ -58,19 +57,23 @@ function kindClass(kind?: string) {
 /* ---------- EventForm ---------- */
 function EventForm({
   initial,
+  initialImageUrl,
   isNew,
   onSave,
   onClose,
 }: {
   initial: FormState;
+  initialImageUrl: string | null;
   isNew: boolean;
-  onSave: (form: FormState) => Promise<void>;
+  onSave: (form: FormState, file: File | null) => Promise<void>;
   onClose: () => void;
 }) {
   const [d, setD] = useState<FormState>(initial);
   const [errs, setErrs] = useState<Partial<Record<keyof FormState, string>>>({});
   const [serverErr, setServerErr] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -102,20 +105,25 @@ function EventForm({
     setServerErr(null);
     setSaving(true);
     try {
-      await onSave({
-        ...d,
-        name: d.name.trim(),
-        location: d.location.trim(),
-        dateTime: d.dateTime.trim(),
-        short: d.short.trim(),
-        tag: d.tag.trim(),
-      });
+      await onSave(
+        {
+          ...d,
+          name: d.name.trim(),
+          location: d.location.trim(),
+          dateTime: d.dateTime.trim(),
+          short: d.short.trim(),
+          tag: d.tag.trim(),
+        },
+        file,
+      );
     } catch (err) {
       setServerErr(err instanceof Error ? err.message : "Failed to save");
     } finally {
       setSaving(false);
     }
   };
+
+  const previewUrl = file ? URL.createObjectURL(file) : initialImageUrl;
 
   return (
     <div className="backdrop" onClick={onClose}>
@@ -160,12 +168,23 @@ function EventForm({
             </div>
 
             <div className="field full">
-              <label htmlFor="f-image">Banner image URL</label>
-              <input id="f-image" type="text" value={d.image} onChange={set("image")} placeholder="https://…" />
-              <div className="banner-preview">
-                {d.image
-                  ? <img src={d.image} alt="" onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
-                  : <span>Preview will appear here</span>}
+              <label>Banner image</label>
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                {previewUrl && (
+                  <span
+                    className="row-photo"
+                    style={{ width: 56, height: 56, flexShrink: 0 }}
+                  >
+                    <img src={previewUrl} alt="preview" />
+                  </span>
+                )}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ flex: 1 }}
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                />
               </div>
             </div>
 
@@ -244,7 +263,11 @@ function EventsAdminPage() {
 
   const [q, setQ] = useState("");
   const [kindFilter, setKindFilter] = useState("all");
-  const [editing, setEditing] = useState<{ form: FormState; id: Id<"events"> | null } | null>(null);
+  const [editing, setEditing] = useState<{
+    form: FormState;
+    id: Id<"events"> | null;
+    imageUrl: string | null;
+  } | null>(null);
   const [confirm, setConfirm] = useState<{
     title: string;
     body: React.ReactNode;
@@ -272,7 +295,7 @@ function EventsAdminPage() {
     });
   }, [events, q, kindFilter]);
 
-  const handleAdd = () => setEditing({ form: EMPTY_FORM, id: null });
+  const handleAdd = () => setEditing({ form: EMPTY_FORM, id: null, imageUrl: null });
 
   const handleEdit = (ev: EventDoc) =>
     setEditing({
@@ -282,38 +305,46 @@ function EventsAdminPage() {
         tag: ev.tag ?? "",
         location: ev.location,
         dateTime: ev.dateTime,
-        image: ev.image ?? "",
         link: ev.link ?? "",
         short: ev.short ?? "",
       },
       id: ev._id,
+      imageUrl: ev.image ?? null,
     });
 
-  const handleSave = async (form: FormState) => {
+  const handleSave = async (form: FormState, file: File | null) => {
     if (!editing) return;
+
+    let image: string | undefined;
+    if (file) {
+      const formData = new FormData();
+      formData.set("file", file);
+      formData.set("name", form.name);
+      const result = await uploadEventImage({ data: formData });
+      image = result.url;
+    }
+
+    const payload = {
+      name: form.name,
+      location: form.location,
+      dateTime: form.dateTime,
+      link: form.link || undefined,
+      kind: form.kind,
+      short: form.short,
+      tag: form.tag || undefined,
+    };
+
     if (editing.id === null) {
       await createEvent({
-        name: form.name,
-        location: form.location,
-        dateTime: form.dateTime,
-        image: form.image || undefined,
-        link: form.link || undefined,
-        kind: form.kind,
-        short: form.short,
-        tag: form.tag || undefined,
+        ...payload,
+        ...(image ? { image } : {}),
       });
       flash(`Added ${form.name}`);
     } else {
       await updateEvent({
         id: editing.id,
-        name: form.name,
-        location: form.location,
-        dateTime: form.dateTime,
-        image: form.image || undefined,
-        link: form.link || undefined,
-        kind: form.kind,
-        short: form.short,
-        tag: form.tag || undefined,
+        ...payload,
+        ...(image ? { image } : {}),
       });
       flash(`Updated ${form.name}`);
     }
@@ -428,6 +459,7 @@ function EventsAdminPage() {
       {editing !== null && (
         <EventForm
           initial={editing.form}
+          initialImageUrl={editing.imageUrl}
           isNew={editing.id === null}
           onSave={handleSave}
           onClose={() => setEditing(null)}

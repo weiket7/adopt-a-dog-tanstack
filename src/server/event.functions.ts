@@ -5,7 +5,7 @@ import { Id } from "convex/_generated/dataModel";
 import z from "zod";
 
 export const saveEventAction = createServerFn({ method: "POST" })
-  .inputValidator((data: FormData) => {
+  .validator((data: FormData) => {
     if (!(data instanceof FormData)) throw new Error("Invalid form data");
     return data;
   })
@@ -33,7 +33,7 @@ export const saveEventAction = createServerFn({ method: "POST" })
   });
 
 export const deleteEventAction = createServerFn({ method: "POST" })
-  .inputValidator(z.string())
+  .validator(z.string())
   .handler(async ({ data: eventId }) => {
     const convex = getConvexServerClient();
     await convex.mutation(api.events.remove, { id: eventId as Id<"events"> });

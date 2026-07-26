@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation, useAction } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { useState, useMemo, useEffect, useRef } from "react";
 import adminCss from "~/styles/admin.css?url";
 import { Icon } from "~/components/Icon";
+import { uploadDogImage } from "~/server/upload";
 
 export const Route = createFileRoute("/admin/dogs/")({
   head: () => ({
@@ -75,7 +76,6 @@ type DogRow = {
   birthday?: string;
   description?: string;
   welfareGroupId?: Id<"welfareGroups">;
-  imageStorageId?: Id<"_storage">;
   imageUrl: string | null;
   status: "Active" | "Inactive";
 };
@@ -431,7 +431,6 @@ function DogsAdminPage() {
   const addDog = useMutation(api.dogs.add);
   const updateDog = useMutation(api.dogs.update);
   const removeDog = useMutation(api.dogs.remove);
-  const generateUploadUrl = useAction(api.dogs.generateUploadUrl);
 
   const [q, setQ] = useState("");
   const [groupFilter, setGroupFilter] = useState("all");
@@ -497,17 +496,13 @@ function DogsAdminPage() {
   };
 
   const handleSave = async (form: FormState, file: File | null) => {
-    let imageStorageId: Id<"_storage"> | undefined;
+    let image: string | undefined;
 
     if (file) {
-      const uploadUrl = await generateUploadUrl();
-      const res = await fetch(uploadUrl, {
-        method: "POST",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-      const { storageId } = await res.json() as { storageId: Id<"_storage"> };
-      imageStorageId = storageId;
+      const formData = new FormData();
+      formData.set("file", file);
+      const result = await uploadDogImage({ data: formData });
+      image = result.url;
     }
 
     if (!editing) return;
@@ -522,7 +517,7 @@ function DogsAdminPage() {
         birthday: form.birthday || undefined,
         description: form.description || undefined,
         welfareGroupId,
-        imageStorageId,
+        image,
         status: form.status,
       });
       flash(`Added ${form.name}`);
@@ -535,7 +530,7 @@ function DogsAdminPage() {
         birthday: form.birthday || undefined,
         description: form.description || undefined,
         welfareGroupId,
-        ...(imageStorageId ? { imageStorageId } : {}),
+        ...(image ? { image } : {}),
         status: form.status,
       });
       flash(`Updated ${form.name}`);

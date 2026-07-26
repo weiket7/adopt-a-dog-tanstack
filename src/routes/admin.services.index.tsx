@@ -461,6 +461,7 @@ function ServicesAdminPage() {
     if (file) {
       const formData = new FormData();
       formData.set("file", file);
+      formData.set("name", form.name.trim());
       const result = await uploadServiceImage({ data: formData });
       image = result.url;
     }

@@ -1,12 +1,8 @@
-import { query, mutation, action } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { Id } from "./_generated/dataModel";
-
-export const generateUploadUrl = action(async (ctx) => {
-  return await ctx.storage.generateUploadUrl();
-});
 
 export const all = query({
   handler: async (ctx) => {
@@ -26,14 +22,7 @@ export const all = query({
     }
 
     const dogs = await dogsQuery.collect();
-    return await Promise.all(
-      dogs.map(async (dog) => ({
-        ...dog,
-        imageUrl: dog.imageStorageId
-          ? await ctx.storage.getUrl(dog.imageStorageId)
-          : null,
-      })),
-    );
+    return dogs.map((dog) => ({ ...dog, imageUrl: dog.image ?? null }));
   },
 });
 
@@ -43,14 +32,7 @@ export const listAll = query({
       .query("dogs")
       .filter((q) => q.eq(q.field("status"), "Active"))
       .collect();
-    return await Promise.all(
-      dogs.map(async (dog) => ({
-        ...dog,
-        imageUrl: dog.imageStorageId
-          ? await ctx.storage.getUrl(dog.imageStorageId)
-          : null,
-      })),
-    );
+    return dogs.map((dog) => ({ ...dog, imageUrl: dog.image ?? null }));
   },
 });
 
@@ -78,14 +60,10 @@ export const list = query({
 
     const results = await q.paginate(args.paginationOpts);
 
-    const pageWithUrls = await Promise.all(
-      results.page.map(async (dog) => ({
-        ...dog,
-        imageUrl: dog.imageStorageId
-          ? await ctx.storage.getUrl(dog.imageStorageId)
-          : "/img/products/product-grey-4.jpg",
-      })),
-    );
+    const pageWithUrls = results.page.map((dog) => ({
+      ...dog,
+      imageUrl: dog.image ?? "/img/products/product-grey-4.jpg",
+    }));
 
     return { ...results, page: pageWithUrls };
   },
@@ -103,14 +81,7 @@ export const listByWelfareGroup = query({
         ),
       )
       .collect();
-    return await Promise.all(
-      dogs.map(async (dog) => ({
-        ...dog,
-        imageUrl: dog.imageStorageId
-          ? await ctx.storage.getUrl(dog.imageStorageId)
-          : null,
-      })),
-    );
+    return dogs.map((dog) => ({ ...dog, imageUrl: dog.image ?? null }));
   },
 });
 
@@ -120,12 +91,7 @@ export const get = query({
     const dog = await ctx.db.get(id);
     if (!dog) return null;
 
-    return {
-      ...dog,
-      imageUrl: dog.imageStorageId
-        ? await ctx.storage.getUrl(dog.imageStorageId)
-        : null,
-    };
+    return { ...dog, imageUrl: dog.image ?? null };
   },
 });
 
@@ -137,7 +103,7 @@ export const add = mutation({
     birthday: v.optional(v.string()),
     description: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
-    imageStorageId: v.optional(v.id("_storage")),
+    image: v.optional(v.string()),
     status: v.optional(v.union(v.literal("Active"), v.literal("Inactive"))),
   },
   handler: async (ctx, args) => {
@@ -164,7 +130,7 @@ export const update = mutation({
     birthday: v.optional(v.string()),
     description: v.optional(v.string()),
     welfareGroupId: v.optional(v.id("welfareGroups")),
-    imageStorageId: v.optional(v.id("_storage")),
+    image: v.optional(v.string()),
     status: v.union(v.literal("Active"), v.literal("Inactive")),
   },
   handler: async (ctx, args) => {
@@ -205,10 +171,6 @@ export const remove = mutation({
   handler: async (ctx, args) => {
     const dog = await ctx.db.get(args.id);
     if (!dog) return;
-
-    if (dog.imageStorageId) {
-      await ctx.storage.delete(dog.imageStorageId);
-    }
 
     await ctx.db.delete(args.id);
 

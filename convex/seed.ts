@@ -2129,8 +2129,6 @@ export const seedDogs = internalMutation({
         hdbApproved: Math.random() > 0.5 ? "Yes" : "No",
         welfareGroupId: randomGroup._id,
         status: "Active",
-        // Using a placeholder image from your logic
-        imageStorageId: undefined,
         description:
           "This is a generated dog description for testing purposes.",
       });

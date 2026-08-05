@@ -8,7 +8,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Goal
 
-- Next feature TBD
+- ADO-5: add blog post for HDB approved breeds
 
 ## Completed
 
@@ -28,6 +28,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - 14 admin-users: admin users CRUD
 - 15 services-add-gallery: gallery added to services
 - 16 welfare-log-in: welfare group login
+- ADO-5: added blog post `hdb-approved-breeds.md` with official HDB keeping pets reference
 
 ## In Progress
 
@@ -35,7 +36,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- TBD
+- Next feature TBD
 
 ## Open Questions
 
@@ -47,4 +48,4 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Session Notes
 
-- TBD
+- 2026-07-21: Implemented ADO-5 by adding HDB approved breeds blog post in `src/routes/blog/`.
